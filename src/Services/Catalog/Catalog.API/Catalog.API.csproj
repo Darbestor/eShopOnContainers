@@ -50,4 +50,8 @@
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
     <ProjectReference Include="..\..\Services.Common\Services.Common.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageVersion Update="AspNetCore.HealthChecks.NpgSql" Version="7.0.0" />
+  </ItemGroup>
 </Project>
