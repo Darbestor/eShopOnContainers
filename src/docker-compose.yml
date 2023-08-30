@@ -8,6 +8,9 @@ services:
   sqldata:
     image: mcr.microsoft.com/mssql/server:2019-latest 
 
+  postgres:
+    image: postgres:15-alpine
+  
   nosqldata:
     image: mongo
 

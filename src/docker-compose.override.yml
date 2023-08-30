@@ -22,6 +22,15 @@ services:
     volumes:
       - eshop-sqldata:/var/opt/mssql
 
+  postgres:
+    environment:
+      - POSTGRES_PASSWORD=Pass@word
+      - POSTGRES_USER=eshop
+    ports:
+      - "5432:5432"
+    volumes:
+      - eshop-postgres:/var/lib/postgresql/data
+
   nosqldata:
     ports:
       - "27017:27017"
@@ -304,4 +313,5 @@ volumes:
     external: false
   eshop-basketdata:
     external: false
-
+  eshop-postgres:
+    external: false

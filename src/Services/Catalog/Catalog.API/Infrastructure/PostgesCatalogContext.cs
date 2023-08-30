@@ -5,7 +5,7 @@ namespace Catalog.API.Infrastructure;
 
 public class PostgresCatalogContext : DbContext
 {
-    public PostgresCatalogContext(DbContextOptions<CatalogContext> options) : base(options)
+    public PostgresCatalogContext(DbContextOptions<PostgresCatalogContext> options) : base(options)
     {
     }
     public DbSet<CatalogItem> CatalogItems { get; set; }
