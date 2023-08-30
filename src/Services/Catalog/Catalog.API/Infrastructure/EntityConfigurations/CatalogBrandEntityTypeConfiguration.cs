@@ -1,5 +1,6 @@
 ﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations;
 
+using Microsoft.EntityFrameworkCore.SqlServer;
 class CatalogBrandEntityTypeConfiguration
     : IEntityTypeConfiguration<CatalogBrand>
 {
@@ -9,8 +10,7 @@ class CatalogBrandEntityTypeConfiguration
 
         builder.HasKey(ci => ci.Id);
 
-        builder.Property(ci => ci.Id)
-            .UseHiLo("catalog_brand_hilo")
+        SqlServerPropertyBuilderExtensions.UseHiLo(builder.Property(ci => ci.Id), "catalog_brand_hilo")
             .IsRequired();
 
         builder.Property(cb => cb.Brand)

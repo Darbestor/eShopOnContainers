@@ -223,6 +223,7 @@ public class CatalogController : ControllerBase
             await _catalogContext.SaveChangesAsync();
         }
 
+        // ReSharper disable once Mvc.ActionNotResolved
         return CreatedAtAction(nameof(ItemByIdAsync), new { id = productToUpdate.Id }, null);
     }
 
@@ -246,6 +247,7 @@ public class CatalogController : ControllerBase
 
         await _catalogContext.SaveChangesAsync();
 
+        // ReSharper disable once Mvc.ActionNotResolved
         return CreatedAtAction(nameof(ItemByIdAsync), new { id = item.Id }, null);
     }
 
