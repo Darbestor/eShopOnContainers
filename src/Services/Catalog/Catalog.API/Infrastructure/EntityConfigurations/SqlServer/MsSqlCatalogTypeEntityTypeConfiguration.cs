@@ -1,6 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations;
+﻿namespace Catalog.API.Infrastructure.EntityConfigurations.SqlServer;
 
-class CatalogTypeEntityTypeConfiguration
+class MsSqlCatalogTypeEntityTypeConfiguration
     : IEntityTypeConfiguration<CatalogType>
 {
     public void Configure(EntityTypeBuilder<CatalogType> builder)

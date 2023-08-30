@@ -1,16 +1,22 @@
 ﻿using Catalog.API.Infrastructure.EntityConfigurations.Postgres;
 using Catalog.API.Infrastructure.EntityConfigurations.SqlServer;
 
-namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
+namespace Catalog.API.Infrastructure;
 
-public class CatalogContext : DbContext
+public class PostgresCatalogContext : DbContext
 {
-    public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
+    public PostgresCatalogContext(DbContextOptions<CatalogContext> options) : base(options)
     {
     }
     public DbSet<CatalogItem> CatalogItems { get; set; }
     public DbSet<CatalogBrand> CatalogBrands { get; set; }
     public DbSet<CatalogType> CatalogTypes { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseSnakeCaseNamingConvention();
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -19,15 +25,3 @@ public class CatalogContext : DbContext
         builder.ApplyConfiguration(new PostgreCatalogItemEntityTypeConfiguration());
     }
 }
-
-
-// public class CatalogContextDesignFactory : IDesignTimeDbContextFactory<CatalogContext>
-// {
-//     public CatalogContext CreateDbContext(string[] args)
-//     {
-//         var optionsBuilder = new DbContextOptionsBuilder<CatalogContext>()
-//             .UseSqlServer("Server=.;Initial Catalog=Microsoft.eShopOnContainers.Services.CatalogDb;Integrated Security=true");
-//
-//         return new CatalogContext(optionsBuilder.Options);
-//     }
-// }

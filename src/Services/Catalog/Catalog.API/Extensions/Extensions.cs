@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Catalog.API.Infrastructure;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 public static class Extensions
 {
@@ -49,6 +50,13 @@ public static class Extensions
             var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
 
             options.UseSqlServer(connectionString, ConfigureSqlOptions);
+        });
+
+        services.AddDbContext<PostgresCatalogContext>(options =>
+        {
+            var connectionString = configuration.GetRequiredConnectionString("PostgresCatalogDB");
+
+            options.UseNpgsql(connectionString);
         });
 
         return services;
