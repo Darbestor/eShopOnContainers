@@ -1,4 +1,6 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Catalog.API.Infrastructure;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
@@ -8,6 +10,8 @@ builder.Services.AddControllers();
 // Application specific services
 builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
+// TODO remove then postgres migrations done
+builder.Services.AddScoped<CatalogContext, PostgresCatalogContext>();
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
 
@@ -30,12 +34,15 @@ eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedT
 // REVIEW: This is done for development ease but shouldn't be here in production
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
+    var mssqlContext = scope.ServiceProvider.GetRequiredService<MsSqlCatalogContext>();
+    var postgresContext = scope.ServiceProvider.GetRequiredService<PostgresCatalogContext>();
     var settings = app.Services.GetService<IOptions<CatalogSettings>>();
     var logger = app.Services.GetService<ILogger<CatalogContextSeed>>();
-    await context.Database.MigrateAsync();
+    await mssqlContext.Database.MigrateAsync();
+    await postgresContext.Database.MigrateAsync();
 
-    await new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger);
+    await new CatalogContextSeed().SeedAsync(mssqlContext, app.Environment, settings, logger);
+    await new CatalogContextSeed().SeedAsync(postgresContext, app.Environment, settings, logger);
     var integrationEventLogContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
     await integrationEventLogContext.Database.MigrateAsync();
 }

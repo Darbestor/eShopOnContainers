@@ -38,7 +38,7 @@ public static class Extensions
             sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
         };
 
-        services.AddDbContext<CatalogContext>(options =>
+        services.AddDbContext<MsSqlCatalogContext>(options =>
         {
             var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
 

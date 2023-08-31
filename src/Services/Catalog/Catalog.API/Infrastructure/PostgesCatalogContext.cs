@@ -3,14 +3,11 @@ using Catalog.API.Infrastructure.EntityConfigurations.SqlServer;
 
 namespace Catalog.API.Infrastructure;
 
-public class PostgresCatalogContext : DbContext
+public class PostgresCatalogContext : CatalogContext
 {
     public PostgresCatalogContext(DbContextOptions<PostgresCatalogContext> options) : base(options)
     {
     }
-    public DbSet<CatalogItem> CatalogItems { get; set; }
-    public DbSet<CatalogBrand> CatalogBrands { get; set; }
-    public DbSet<CatalogType> CatalogTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -23,5 +20,6 @@ public class PostgresCatalogContext : DbContext
         builder.ApplyConfiguration(new PostgreCatalogBrandEntityTypeConfiguration());
         builder.ApplyConfiguration(new PostgreCatalogTypeEntityTypeConfiguration());
         builder.ApplyConfiguration(new PostgreCatalogItemEntityTypeConfiguration());
+        base.OnModelCreating(builder);
     }
 }

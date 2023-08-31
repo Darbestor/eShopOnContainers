@@ -3,18 +3,19 @@ using Catalog.API.Infrastructure.EntityConfigurations.SqlServer;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
 
-public class CatalogContext : DbContext
+public class MsSqlCatalogContext : CatalogContext
 {
-    public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
+    public MsSqlCatalogContext(DbContextOptions<MsSqlCatalogContext> options) : base(options)
     {
     }
 
-    protected CatalogContext(DbContextOptions options) : base(options)
-    {}
-
-    public virtual DbSet<CatalogItem> CatalogItems { get; set; }
-    public virtual DbSet<CatalogBrand> CatalogBrands { get; set; }
-    public virtual DbSet<CatalogType> CatalogTypes { get; set; }
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfiguration(new MsSqlCatalogBrandEntityTypeConfiguration());
+        builder.ApplyConfiguration(new MsSqlCatalogItemEntityTypeConfiguration());
+        builder.ApplyConfiguration(new MsSqlCatalogTypeEntityTypeConfiguration());
+        base.OnModelCreating(builder);
+    }
 }
 
 
