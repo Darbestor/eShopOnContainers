@@ -1,4 +1,6 @@
-﻿using Catalog.API.Infrastructure;
+﻿
+
+using Catalog.API.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

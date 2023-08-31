@@ -18,6 +18,7 @@ global using Microsoft.eShopOnContainers.Services.Catalog.API;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Extensions;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Grpc;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
+global using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.Exceptions;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling;

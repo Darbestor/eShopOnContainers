@@ -1,7 +1,6 @@
-﻿using Catalog.API.Infrastructure.EntityConfigurations.Postgres;
-using Catalog.API.Infrastructure.EntityConfigurations.SqlServer;
+﻿using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations.Postgres;
 
-namespace Catalog.API.Infrastructure;
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
 
 public class PostgresCatalogContext : CatalogContext
 {

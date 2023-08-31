@@ -1,4 +1,4 @@
-﻿namespace Catalog.API.Infrastructure.EntityConfigurations.SqlServer;
+﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations.Postgres;
 
 class PostgreCatalogTypeEntityTypeConfiguration
     : IEntityTypeConfiguration<CatalogType>
