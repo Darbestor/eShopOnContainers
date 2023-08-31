@@ -34,15 +34,19 @@ eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedT
 // REVIEW: This is done for development ease but shouldn't be here in production
 using (var scope = app.Services.CreateScope())
 {
-    var mssqlContext = scope.ServiceProvider.GetRequiredService<MsSqlCatalogContext>();
-    var postgresContext = scope.ServiceProvider.GetRequiredService<PostgresCatalogContext>();
     var settings = app.Services.GetService<IOptions<CatalogSettings>>();
     var logger = app.Services.GetService<ILogger<CatalogContextSeed>>();
-    await mssqlContext.Database.MigrateAsync();
-    await postgresContext.Database.MigrateAsync();
-
-    await new CatalogContextSeed().SeedAsync(mssqlContext, app.Environment, settings, logger);
-    await new CatalogContextSeed().SeedAsync(postgresContext, app.Environment, settings, logger);
+    scope.ServiceProvider.MigrateDbContext<MsSqlCatalogContext>((context, sp) =>
+    {
+        context.Database.Migrate();
+        new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger).Wait();
+    });
+    scope.ServiceProvider.MigrateDbContext<PostgresCatalogContext>((context, sp) =>
+    {
+        context.Database.Migrate();
+        new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger).Wait();
+    });
+    
     var integrationEventLogContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
     await integrationEventLogContext.Database.MigrateAsync();
 }
