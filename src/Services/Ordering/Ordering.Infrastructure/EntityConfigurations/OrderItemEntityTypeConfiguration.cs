@@ -14,6 +14,9 @@ class OrderItemEntityTypeConfiguration
         orderItemConfiguration.Property(o => o.Id)
             .UseHiLo("orderitemseq");
 
+        // Shadow property
+        // Foreign key for 1 to many relationship with order,
+        // because Order contains list of OrderItem
         orderItemConfiguration.Property<int>("OrderId")
             .IsRequired();
 
