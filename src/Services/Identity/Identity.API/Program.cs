@@ -4,11 +4,11 @@ builder.AddServiceDefaults();
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityDB")));
+builder.Services.AddDbContext<ApplicationPgDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityDB")));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddEntityFrameworkStores<ApplicationPgDbContext>()
         .AddDefaultTokenProviders();
 
 builder.Services.AddIdentityServer(options =>
