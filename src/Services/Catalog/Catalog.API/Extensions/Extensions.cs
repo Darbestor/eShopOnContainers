@@ -9,7 +9,7 @@ public static class Extensions
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddSqlServer(_ => configuration.GetRequiredConnectionString("CatalogDB"),
+            .AddNpgSql(_ => configuration.GetRequiredConnectionString("CatalogDB"),
                 name: "CatalogDB-check",
                 tags: new string[] { "ready" });
 
@@ -41,7 +41,7 @@ public static class Extensions
 
         services.AddDbContext<CatalogContext>(options =>
         {
-            var connectionString = configuration.GetRequiredConnectionString("PostgresCatalogDB");
+            var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
 
             options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
         });
@@ -85,9 +85,7 @@ public static class Extensions
 
     public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
     {
-        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
-            sp => (DbConnection c) => new IntegrationEventLogService(c));
-
+        services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
         services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
         return services;

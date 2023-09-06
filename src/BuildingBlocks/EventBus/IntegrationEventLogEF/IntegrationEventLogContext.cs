@@ -8,6 +8,12 @@ public class IntegrationEventLogContext : DbContext
 
     public DbSet<IntegrationEventLogEntry> IntegrationEventLogs { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseSnakeCaseNamingConvention();
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<IntegrationEventLogEntry>(ConfigureIntegrationEventLogEntry);
@@ -15,7 +21,7 @@ public class IntegrationEventLogContext : DbContext
 
     void ConfigureIntegrationEventLogEntry(EntityTypeBuilder<IntegrationEventLogEntry> builder)
     {
-        builder.ToTable("IntegrationEventLog");
+        builder.ToTable("integration-event-log");
 
         builder.HasKey(e => e.EventId);
 
