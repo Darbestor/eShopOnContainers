@@ -12,7 +12,7 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Facto
 
             var optionsBuilder = new DbContextOptionsBuilder<OrderingContext>();
 
-            optionsBuilder.UseSqlServer(config["ConnectionString"], sqlServerOptionsAction: o => o.MigrationsAssembly("Ordering.API"));
+            optionsBuilder.UseNpgsql(config["ConnectionString"], o => o.MigrationsAssembly("Ordering.API"));
 
             return new OrderingContext(optionsBuilder.Options);
         }

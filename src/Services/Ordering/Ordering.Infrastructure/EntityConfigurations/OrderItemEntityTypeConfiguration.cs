@@ -5,7 +5,7 @@ class OrderItemEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<OrderItem> orderItemConfiguration)
     {
-        orderItemConfiguration.ToTable("orderItems", OrderingContext.DEFAULT_SCHEMA);
+        orderItemConfiguration.ToTable("order-items");
 
         orderItemConfiguration.HasKey(o => o.Id);
 
@@ -23,7 +23,7 @@ class OrderItemEntityTypeConfiguration
         orderItemConfiguration
             .Property<decimal>("_discount")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("Discount")
+            .HasColumnName("discount")
             .IsRequired();
 
         orderItemConfiguration.Property<int>("ProductId")
@@ -32,25 +32,25 @@ class OrderItemEntityTypeConfiguration
         orderItemConfiguration
             .Property<string>("_productName")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("ProductName")
+            .HasColumnName("product-name")
             .IsRequired();
 
         orderItemConfiguration
             .Property<decimal>("_unitPrice")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("UnitPrice")
+            .HasColumnName("unit-price")
             .IsRequired();
 
         orderItemConfiguration
             .Property<int>("_units")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("Units")
+            .HasColumnName("units")
             .IsRequired();
 
         orderItemConfiguration
             .Property<string>("_pictureUrl")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("PictureUrl")
+            .HasColumnName("picture-url")
             .IsRequired(false);
     }
 }

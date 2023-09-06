@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 internal static class Extensions
 {
@@ -7,7 +7,7 @@ internal static class Extensions
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddSqlServer(_ =>
+            .AddNpgSql(_ =>
                 configuration.GetRequiredConnectionString("OrderingDB"),
                 name: "OrderingDB-check",
                 tags: new string[] { "ready" });
@@ -17,23 +17,23 @@ internal static class Extensions
 
     public static IServiceCollection AddDbContexts(this IServiceCollection services, IConfiguration configuration)
     {
-        static void ConfigureSqlOptions(SqlServerDbContextOptionsBuilder sqlOptions)
+        static void ConfigurePgOptions(NpgsqlDbContextOptionsBuilder options)
         {
-            sqlOptions.MigrationsAssembly(typeof(Program).Assembly.FullName);
+            options.MigrationsAssembly(typeof(Program).Assembly.FullName);
 
             // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
 
-            sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+            options.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
         };
 
         services.AddDbContext<OrderingContext>(options =>
         {
-            options.UseSqlServer(configuration.GetRequiredConnectionString("OrderingDB"), ConfigureSqlOptions);
+            options.UseNpgsql(configuration.GetRequiredConnectionString("OrderingDB"), ConfigurePgOptions);
         });
 
         services.AddDbContext<IntegrationEventLogContext>(options =>
         {
-            options.UseSqlServer(configuration.GetRequiredConnectionString("OrderingDB"), ConfigureSqlOptions);
+            options.UseNpgsql(configuration.GetRequiredConnectionString("OrderingDB"), ConfigurePgOptions);
         });
 
         return services;
@@ -42,9 +42,7 @@ internal static class Extensions
     public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
     {
         services.AddTransient<IIdentityService, IdentityService>();
-        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
-            sp => (DbConnection c) => new IntegrationEventLogService(c));
-
+        services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
         services.AddTransient<IOrderingIntegrationEventService, OrderingIntegrationEventService>();
 
         return services;

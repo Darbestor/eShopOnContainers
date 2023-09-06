@@ -5,14 +5,14 @@ class BuyerEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<Buyer> buyerConfiguration)
     {
-        buyerConfiguration.ToTable("buyers", OrderingContext.DEFAULT_SCHEMA);
+        buyerConfiguration.ToTable("buyers");
 
         buyerConfiguration.HasKey(b => b.Id);
 
         buyerConfiguration.Ignore(b => b.DomainEvents);
 
         buyerConfiguration.Property(b => b.Id)
-            .UseHiLo("buyerseq", OrderingContext.DEFAULT_SCHEMA);
+            .UseHiLo("buyerseq");
 
         buyerConfiguration.Property(b => b.IdentityGuid)
             .HasMaxLength(200)
@@ -25,7 +25,7 @@ class BuyerEntityTypeConfiguration
 
         buyerConfiguration.HasMany(b => b.PaymentMethods)
             .WithOne()
-            .HasForeignKey("BuyerId")
+            .HasForeignKey("buyer-id")
             .OnDelete(DeleteBehavior.Cascade);
 
         var navigation = buyerConfiguration.Metadata.FindNavigation(nameof(Buyer.PaymentMethods));
