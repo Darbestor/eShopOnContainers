@@ -6,7 +6,6 @@ public class CatalogIntegrationEventService : ICatalogIntegrationEventService
     private readonly CatalogContext _catalogContext;
     private readonly IIntegrationEventLogService _eventLogService;
     private readonly ILogger<CatalogIntegrationEventService> _logger;
-    private volatile bool disposedValue;
 
     public CatalogIntegrationEventService(
         ILogger<CatalogIntegrationEventService> logger,

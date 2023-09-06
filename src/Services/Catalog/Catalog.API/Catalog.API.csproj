@@ -54,4 +54,8 @@
   <ItemGroup>
     <PackageVersion Update="AspNetCore.HealthChecks.NpgSql" Version="7.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructure\IntegrationEventMigrations\" />
+  </ItemGroup>
 </Project>
