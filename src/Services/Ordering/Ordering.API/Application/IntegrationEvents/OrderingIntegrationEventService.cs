@@ -2,6 +2,7 @@
 
 public class OrderingIntegrationEventService : IOrderingIntegrationEventService
 {
+    private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
     private readonly IEventBus _eventBus;
     private readonly OrderingContext _orderingContext;
     private readonly IIntegrationEventLogService _eventLogService;
@@ -9,12 +10,14 @@ public class OrderingIntegrationEventService : IOrderingIntegrationEventService
 
     public OrderingIntegrationEventService(IEventBus eventBus,
         OrderingContext orderingContext,
-        IIntegrationEventLogService eventLogService,
+        IntegrationEventLogContext eventLogContext,
+        Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory,
         ILogger<OrderingIntegrationEventService> logger)
     {
         _orderingContext = orderingContext ?? throw new ArgumentNullException(nameof(orderingContext));
+        _integrationEventLogServiceFactory = integrationEventLogServiceFactory ?? throw new ArgumentNullException(nameof(integrationEventLogServiceFactory));
         _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
-        _eventLogService = eventLogService ?? throw new ArgumentNullException(nameof(eventLogService));
+        _eventLogService = _integrationEventLogServiceFactory(_orderingContext.Database.GetDbConnection());
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 

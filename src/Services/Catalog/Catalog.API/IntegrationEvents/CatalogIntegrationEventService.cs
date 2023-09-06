@@ -1,22 +1,25 @@
 ﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents;
 
-public class CatalogIntegrationEventService : ICatalogIntegrationEventService
+public class CatalogIntegrationEventService : ICatalogIntegrationEventService, IDisposable
 {
+    private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
     private readonly IEventBus _eventBus;
     private readonly CatalogContext _catalogContext;
     private readonly IIntegrationEventLogService _eventLogService;
     private readonly ILogger<CatalogIntegrationEventService> _logger;
+    private volatile bool disposedValue;
 
     public CatalogIntegrationEventService(
         ILogger<CatalogIntegrationEventService> logger,
         IEventBus eventBus,
         CatalogContext catalogContext,
-        IIntegrationEventLogService eventLogService)
+        Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _catalogContext = catalogContext ?? throw new ArgumentNullException(nameof(catalogContext));
+        _integrationEventLogServiceFactory = integrationEventLogServiceFactory ?? throw new ArgumentNullException(nameof(integrationEventLogServiceFactory));
         _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
-        _eventLogService = eventLogService ?? throw new ArgumentNullException(nameof(eventLogService));
+        _eventLogService = _integrationEventLogServiceFactory(_catalogContext.Database.GetDbConnection());
     }
 
     public async Task PublishThroughEventBusAsync(IntegrationEvent evt)
@@ -48,5 +51,24 @@ public class CatalogIntegrationEventService : ICatalogIntegrationEventService
             await _catalogContext.SaveChangesAsync();
             await _eventLogService.SaveEventAsync(evt, _catalogContext.Database.CurrentTransaction);
         });
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposedValue)
+        {
+            if (disposing)
+            {
+                (_eventLogService as IDisposable)?.Dispose();
+            }
+
+            disposedValue = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

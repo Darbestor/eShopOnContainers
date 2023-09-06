@@ -83,7 +83,9 @@ public static class Extensions
 
     public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
     {
-        services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
+        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+            sp => (DbConnection c) => new IntegrationEventLogService(c));
+
         services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
         return services;
