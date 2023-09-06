@@ -1,6 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations.Postgres;
+﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations;
 
-class PostgreCatalogTypeEntityTypeConfiguration
+class CatalogTypeEntityTypeConfiguration
     : IEntityTypeConfiguration<CatalogType>
 {
     public void Configure(EntityTypeBuilder<CatalogType> builder)

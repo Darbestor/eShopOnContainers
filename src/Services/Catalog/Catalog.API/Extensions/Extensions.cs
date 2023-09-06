@@ -1,5 +1,6 @@
 ﻿using Catalog.API.Infrastructure;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 public static class Extensions
 {
@@ -29,35 +30,29 @@ public static class Extensions
 
     public static IServiceCollection AddDbContexts(this IServiceCollection services, IConfiguration configuration)
     {
-        static void ConfigureSqlOptions(SqlServerDbContextOptionsBuilder sqlOptions)
+        static void ConfigureNpgsqlOptions(NpgsqlDbContextOptionsBuilder options)
         {
-            sqlOptions.MigrationsAssembly(typeof(Program).Assembly.FullName);
+            options.MigrationsAssembly(typeof(Program).Assembly.FullName);
 
             // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
 
-            sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+            options.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
         };
 
-        services.AddDbContext<MsSqlCatalogContext>(options =>
+        services.AddDbContext<CatalogContext>(options =>
         {
-            var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
+            var connectionString = configuration.GetRequiredConnectionString("PostgresCatalogDB");
 
-            options.UseSqlServer(connectionString, ConfigureSqlOptions);
+            options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
         });
-
+        
         services.AddDbContext<IntegrationEventLogContext>(options =>
         {
             var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
 
-            options.UseSqlServer(connectionString, ConfigureSqlOptions);
+            options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
         });
 
-        services.AddDbContext<PostgresCatalogContext>(options =>
-        {
-            var connectionString = configuration.GetRequiredConnectionString("PostgresCatalogDB");
-
-            options.UseNpgsql(connectionString);
-        });
 
         return services;
     }

@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Catalog.API.Infrastructure.CatalogMigrations.Postgres
 {
-    [DbContext(typeof(PostgresCatalogContext))]
+    [DbContext(typeof(CatalogContext))]
     partial class PostgresCatalogContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

@@ -8,8 +8,6 @@ builder.Services.AddControllers();
 // Application specific services
 builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
-// TODO remove then postgres migrations done
-builder.Services.AddScoped<CatalogContext, PostgresCatalogContext>();
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
 
@@ -34,12 +32,7 @@ using (var scope = app.Services.CreateScope())
 {
     var settings = app.Services.GetService<IOptions<CatalogSettings>>();
     var logger = app.Services.GetService<ILogger<CatalogContextSeed>>();
-    scope.ServiceProvider.MigrateDbContext<MsSqlCatalogContext>((context, sp) =>
-    {
-        context.Database.Migrate();
-        new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger).Wait();
-    });
-    scope.ServiceProvider.MigrateDbContext<PostgresCatalogContext>((context, sp) =>
+    scope.ServiceProvider.MigrateDbContext<CatalogContext>((context, sp) =>
     {
         context.Database.Migrate();
         new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger).Wait();

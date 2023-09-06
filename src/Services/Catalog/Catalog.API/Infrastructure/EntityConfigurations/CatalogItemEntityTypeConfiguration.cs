@@ -1,13 +1,13 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations.SqlServer;
+﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations;
 
-class MsSqlCatalogItemEntityTypeConfiguration
+class CatalogItemEntityTypeConfiguration
     : IEntityTypeConfiguration<CatalogItem>
 {
     public void Configure(EntityTypeBuilder<CatalogItem> builder)
     {
-        builder.ToTable("Catalog");
+        builder.ToTable("catalog");
 
-        SqlServerPropertyBuilderExtensions.UseHiLo(builder.Property(ci => ci.Id), "catalog_hilo")
+        NpgsqlPropertyBuilderExtensions.UseHiLo(builder.Property(ci => ci.Id), "catalog_hilo")
             .IsRequired();
 
         builder.Property(ci => ci.Name)

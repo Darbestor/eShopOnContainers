@@ -12,6 +12,20 @@ public class CatalogContext : DbContext
     public virtual DbSet<CatalogItem> CatalogItems { get; set; }
     public virtual DbSet<CatalogBrand> CatalogBrands { get; set; }
     public virtual DbSet<CatalogType> CatalogTypes { get; set; }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseSnakeCaseNamingConvention();
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfiguration(new CatalogBrandEntityTypeConfiguration());
+        builder.ApplyConfiguration(new CatalogTypeEntityTypeConfiguration());
+        builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
+        base.OnModelCreating(builder);
+    }
 }
 
 
