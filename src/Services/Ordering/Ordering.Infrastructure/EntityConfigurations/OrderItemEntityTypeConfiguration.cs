@@ -32,13 +32,13 @@ class OrderItemEntityTypeConfiguration
         orderItemConfiguration
             .Property<string>("_productName")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("product-name")
+            .HasColumnName("product_name")
             .IsRequired();
 
         orderItemConfiguration
             .Property<decimal>("_unitPrice")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("unit-price")
+            .HasColumnName("unit_price")
             .IsRequired();
 
         orderItemConfiguration
@@ -50,7 +50,7 @@ class OrderItemEntityTypeConfiguration
         orderItemConfiguration
             .Property<string>("_pictureUrl")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("picture-url")
+            .HasColumnName("picture_url")
             .IsRequired(false);
     }
 }

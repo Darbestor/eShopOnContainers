@@ -85,7 +85,6 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Migra
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
@@ -105,26 +104,22 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Migra
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)")
-                        .HasColumnName("card-holder-name");
+                        .HasColumnName("card_holder_name");
 
                     b.Property<string>("_cardNumber")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("character varying(25)")
-                        .HasColumnName("card-number");
+                        .HasColumnName("card_number");
 
                     b.Property<int>("_cardTypeId")
                         .HasColumnType("integer")
-                        .HasColumnName("card-type-id");
+                        .HasColumnName("card_type_id");
 
                     b.Property<DateTime>("_expiration")
                         .HasMaxLength(25)
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("expiration");
-
-                    b.Property<int>("buyer-id")
-                        .HasColumnType("integer")
-                        .HasColumnName("buyer_id");
 
                     b.HasKey("Id")
                         .HasName("pk_paymentmethods");
@@ -132,14 +127,7 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Migra
                     b.HasIndex("_cardTypeId")
                         .HasDatabaseName("ix_paymentmethods_card_type_id");
 
-                    b.HasIndex("buyer-id")
-                        .HasDatabaseName("ix_paymentmethods_buyer_id");
-
-                    b.ToTable("paymentmethods", null, t =>
-                        {
-                            t.Property("buyer-id")
-                                .HasColumnName("buyer_id1");
-                        });
+                    b.ToTable("paymentmethods", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order", b =>
@@ -157,19 +145,19 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Migra
 
                     b.Property<int?>("_buyerId")
                         .HasColumnType("integer")
-                        .HasColumnName("buyer-id");
+                        .HasColumnName("buyer_id");
 
                     b.Property<DateTime>("_orderDate")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("order-date");
+                        .HasColumnName("order_date");
 
                     b.Property<int>("_orderStatusId")
                         .HasColumnType("integer")
-                        .HasColumnName("order-status-id");
+                        .HasColumnName("order_status_id");
 
                     b.Property<int?>("_paymentMethodId")
                         .HasColumnType("integer")
-                        .HasColumnName("payment-method-id");
+                        .HasColumnName("payment_method_id");
 
                     b.HasKey("Id")
                         .HasName("pk_orders");
@@ -209,16 +197,16 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Migra
 
                     b.Property<string>("_pictureUrl")
                         .HasColumnType("text")
-                        .HasColumnName("picture-url");
+                        .HasColumnName("picture_url");
 
                     b.Property<string>("_productName")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("product-name");
+                        .HasColumnName("product_name");
 
                     b.Property<decimal>("_unitPrice")
                         .HasColumnType("numeric")
-                        .HasColumnName("unit-price");
+                        .HasColumnName("unit_price");
 
                     b.Property<int>("_units")
                         .HasColumnType("integer")
@@ -276,19 +264,19 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Migra
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.PaymentMethod", b =>
                 {
+                    b.HasOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.Buyer", null)
+                        .WithMany("PaymentMethods")
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_paymentmethods_buyers_buyer_id");
+
                     b.HasOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.CardType", "CardType")
                         .WithMany()
                         .HasForeignKey("_cardTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_paymentmethods_card_types_card_type_id");
-
-                    b.HasOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.Buyer", null)
-                        .WithMany("PaymentMethods")
-                        .HasForeignKey("buyer-id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_paymentmethods_buyers_buyer_id");
 
                     b.Navigation("CardType");
                 });

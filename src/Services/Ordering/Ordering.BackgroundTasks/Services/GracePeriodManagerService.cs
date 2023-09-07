@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.Extensions.Options;
+using Npgsql;
 using Ordering.BackgroundTasks.Events;
 
 namespace Ordering.BackgroundTasks.Services
@@ -59,7 +60,7 @@ namespace Ordering.BackgroundTasks.Services
         {
             IEnumerable<int> orderIds = new List<int>();
 
-            using var conn = new SqlConnection(_settings.ConnectionString);
+            using var conn = new NpgsqlConnection(_settings.ConnectionString);
             try
             {
                 conn.Open();
@@ -69,7 +70,7 @@ namespace Ordering.BackgroundTasks.Services
                         AND [OrderStatusId] = 1",
                     new { _settings.GracePeriodTime });
             }
-            catch (SqlException exception)
+            catch (NpgsqlException exception)
             {
                 _logger.LogCritical(exception, "Fatal error establishing database connection");
             }

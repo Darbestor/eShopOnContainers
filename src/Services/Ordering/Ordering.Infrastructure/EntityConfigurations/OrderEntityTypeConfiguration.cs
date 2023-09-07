@@ -27,26 +27,26 @@ class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
         orderConfiguration
             .Property<int?>("_buyerId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("buyer-id")
+            .HasColumnName("buyer_id")
             .IsRequired(false);
 
         orderConfiguration
             .Property<DateTime>("_orderDate")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("order-date")
+            .HasColumnName("order_date")
             .IsRequired();
 
         orderConfiguration
             .Property<int>("_orderStatusId")
             // .HasField("_orderStatusId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("order-status-id")
+            .HasColumnName("order_status_id")
             .IsRequired();
 
         orderConfiguration
             .Property<int?>("_paymentMethodId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("payment-method-id")
+            .HasColumnName("payment_method_id")
             .IsRequired(false);
 
         orderConfiguration.Property<string>("Description").IsRequired(false);

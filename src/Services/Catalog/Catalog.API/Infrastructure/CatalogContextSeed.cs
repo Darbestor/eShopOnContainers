@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
+﻿using Npgsql;
+
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
 
 public class CatalogContextSeed
 {
@@ -355,7 +357,7 @@ public class CatalogContextSeed
 
     private AsyncRetryPolicy CreatePolicy(ILogger<CatalogContextSeed> logger, string prefix, int retries = 3)
     {
-        return Policy.Handle<SqlException>().
+        return Policy.Handle<NpgsqlException>().
             WaitAndRetryAsync(
                 retryCount: retries,
                 sleepDurationProvider: retry => TimeSpan.FromSeconds(5),

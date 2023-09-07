@@ -25,7 +25,7 @@ class BuyerEntityTypeConfiguration
 
         buyerConfiguration.HasMany(b => b.PaymentMethods)
             .WithOne()
-            .HasForeignKey("buyer-id")
+            .HasForeignKey(b => b.Id)
             .OnDelete(DeleteBehavior.Cascade);
 
         var navigation = buyerConfiguration.Metadata.FindNavigation(nameof(Buyer.PaymentMethods));

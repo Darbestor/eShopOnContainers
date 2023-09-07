@@ -20,7 +20,7 @@ class PaymentMethodEntityTypeConfiguration
         paymentConfiguration
             .Property<string>("_cardHolderName")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("card-holder-name")
+            .HasColumnName("card_holder_name")
             .HasMaxLength(200)
             .IsRequired();
 
@@ -34,7 +34,7 @@ class PaymentMethodEntityTypeConfiguration
         paymentConfiguration
             .Property<string>("_cardNumber")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("card-number")
+            .HasColumnName("card_number")
             .HasMaxLength(25)
             .IsRequired();
 
@@ -48,7 +48,7 @@ class PaymentMethodEntityTypeConfiguration
         paymentConfiguration
             .Property<int>("_cardTypeId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("card-type-id")
+            .HasColumnName("card_type_id")
             .IsRequired();
 
         paymentConfiguration.HasOne(p => p.CardType)
