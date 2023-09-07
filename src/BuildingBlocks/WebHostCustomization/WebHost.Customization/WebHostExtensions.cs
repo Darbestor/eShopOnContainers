@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using Polly;
 
 namespace Microsoft.AspNetCore.Hosting;
@@ -36,7 +37,7 @@ public static class IWebHostExtensions
             else
             {
                 var retries = 10;
-                var retry = Policy.Handle<SqlException>()
+                var retry = Policy.Handle<NpgsqlException>()
                     .WaitAndRetry(
                         retryCount: retries,
                         sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
