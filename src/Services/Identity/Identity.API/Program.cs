@@ -29,7 +29,7 @@ builder.Services.AddIdentityServer(options =>
 .AddDeveloperSigningCredential(); // Not recommended for production - you need to store your key material somewhere secure
 
 builder.Services.AddHealthChecks()
-        .AddSqlServer(_ =>
+        .AddNpgSql(_ =>
             builder.Configuration.GetRequiredConnectionString("IdentityDB"),
             name: "IdentityDB-check",
             tags: new string[] { "IdentityDB" });
