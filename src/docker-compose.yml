@@ -50,6 +50,7 @@ services:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
     depends_on:
+      - identity-api
       - postgres
       - rabbitmq
 

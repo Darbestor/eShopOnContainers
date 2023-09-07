@@ -46,7 +46,7 @@ public class OrderQueries
                     LEFT JOIN order_items oi ON  o.id = oi.order_id 
                     LEFT JOIN orderstatus os on o.order_status_id = os.id                     
                     LEFT JOIN buyers ob on o.buyer_id = ob.id
-                    WHERE ob.identity_guid = @userId
+                    WHERE ob.identity_guid::uuid = @userId
                     GROUP BY o.id, o.order_date, os.name 
                     ORDER BY o.id", new { userId });
     }
