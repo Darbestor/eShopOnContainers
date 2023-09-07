@@ -13,15 +13,6 @@ services:
     ports:
       - "5340:80"
 
-  sqldata:
-    environment:
-      - SA_PASSWORD=Pass@word
-      - ACCEPT_EULA=Y
-    ports:
-      - "5433:1433"
-    volumes:
-      - eshop-sqldata:/var/opt/mssql
-
   postgres:
     environment:
       - POSTGRES_PASSWORD=Pass@word
@@ -53,7 +44,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - SpaClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5104
       - XamarinCallback=http://${ESHOP_PROD_EXTERNAL_DNS_NAME_OR_IP}:5105/xamarincallback
-      - ConnectionStrings__IdentityDb=${ESHOP_AZURE_IDENTITY_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Service.IdentityDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
+      - ConnectionStrings__IdentityDb=Host=postgres;Database=identity;Username=eshop;Password=Pass@word
       - MvcClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5100
       - BasketApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5103
       - OrderingApiClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5102
@@ -93,7 +84,7 @@ services:
       - Kestrel__Endpoints__HTTP__Url=http://0.0.0.0:80
       - Kestrel__Endpoints__GRPC__Url=http://0.0.0.0:81
       - Kestrel__Endpoints__GRPC__Protocols=Http2
-      - ConnectionStrings__CatalogDb=${ESHOP_AZURE_CATALOG_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.CatalogDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
+      - ConnectionStrings__CatalogDb=Host=postgres;Database=catalog;Username=eshop;Password=Pass@word
       - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - PicBaseUrl=${ESHOP_STORAGE_CATALOG_URL}
       - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -115,7 +106,7 @@ services:
       - Kestrel__Endpoints__HTTP__Url=http://0.0.0.0:80
       - Kestrel__Endpoints__GRPC__Url=http://0.0.0.0:81
       - Kestrel__Endpoints__GRPC__Protocols=Http2
-      - ConnectionStrings__OrderingDb=${ESHOP_AZURE_ORDERING_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.OrderingDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
+      - ConnectionStrings__OrderingDb=Host=postgres;Database=ordering;Username=eshop;Password=Pass@word
       - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - Identity__Url=http://identity-api
       - Identity__ExternalUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -138,7 +129,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionStrings__OrderingDb=${ESHOP_AZURE_ORDERING_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.OrderingDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
+      - ConnectionStrings__OrderingDb=Host=postgres;Database=ordering;Username=eshop;Password=Pass@word
       - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
@@ -169,7 +160,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionStrings__WebhooksDb=${ESHOP_AZURE_WEBHOOKS_DB:-Server=sqldata;Database=Microsoft.eShopOnContainers.Services.WebhooksDb;User Id=sa;Password=Pass@word;Encrypt=False;TrustServerCertificate=true}
+      - ConnectionStrings__WebhooksDb=Host=postgres;Database=webhooks;Username=eshop;Password=Pass@word
       - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
