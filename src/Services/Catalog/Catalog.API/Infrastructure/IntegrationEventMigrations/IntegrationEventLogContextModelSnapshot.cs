@@ -2,11 +2,13 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Catalog.API.Migrations
+#nullable disable
+
+namespace Catalog.API.Infrastructure.IntegrationEventMigrations
 {
     [DbContext(typeof(IntegrationEventLogContext))]
     partial class IntegrationEventLogContextModelSnapshot : ModelSnapshot
@@ -15,32 +17,48 @@ namespace Catalog.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.3-servicing-35854")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF.IntegrationEventLogEntry", b =>
                 {
                     b.Property<Guid>("EventId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("event_id");
 
                     b.Property<string>("Content")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("content");
 
-                    b.Property<DateTime>("CreationTime");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creation_time");
 
                     b.Property<string>("EventTypeName")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("event_type_name");
 
-                    b.Property<int>("State");
+                    b.Property<int>("State")
+                        .HasColumnType("integer")
+                        .HasColumnName("state");
 
-                    b.Property<int>("TimesSent");
+                    b.Property<int>("TimesSent")
+                        .HasColumnType("integer")
+                        .HasColumnName("times_sent");
 
-                    b.Property<string>("TransactionId");
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("text")
+                        .HasColumnName("transaction_id");
 
-                    b.HasKey("EventId");
+                    b.HasKey("EventId")
+                        .HasName("pk_integration_event_log");
 
-                    b.ToTable("IntegrationEventLog");
+                    b.ToTable("integration-event-log", (string)null);
                 });
 #pragma warning restore 612, 618
         }

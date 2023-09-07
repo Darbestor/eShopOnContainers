@@ -1,19 +1,30 @@
-﻿internal static class Extensions
+﻿using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
+
+internal static class Extensions
 {
     public static IServiceCollection AddDbContexts(this IServiceCollection services, IConfiguration configuration)
     {
+        void ConfigurePgOptions(NpgsqlDbContextOptionsBuilder options)
+        {
+            options.MigrationsAssembly(typeof(Program).Assembly.FullName);
+
+            //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+            options.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorCodesToAdd: null);
+            
+        }
+
         services.AddDbContext<WebhooksContext>(options =>
         {
-            options.UseSqlServer(configuration.GetRequiredConnectionString("WebHooksDB"),
-                                sqlServerOptionsAction: sqlOptions =>
-                                {
-                                    sqlOptions.MigrationsAssembly(typeof(Program).Assembly.FullName);
-
-                                    //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
-                                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                                });
+            options.UseNpgsql(configuration.GetRequiredConnectionString("WebHooksDB"),
+                npgsqlOptionsAction: ConfigurePgOptions);
         });
-
+        services.AddDbContext<IntegrationEventLogContext>(options =>
+        {
+            options.UseNpgsql(configuration.GetRequiredConnectionString("WebHooksDB"),
+                npgsqlOptionsAction: ConfigurePgOptions);
+        });
         return services;
     }
 
@@ -22,10 +33,10 @@
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddSqlServer(_ =>
+            .AddNpgSql(_ =>
                 configuration.GetRequiredConnectionString("WebHooksDB"),
-                name: "WebhooksApiDb-check",
-                tags: new string[] { "ready" });
+            name: "WebhooksApiDb-check",
+            tags: new string[] { "ready" });
 
         return services;
     }
@@ -34,14 +45,13 @@
     {
         // Add http client services
         services.AddHttpClient("GrantClient")
-                .SetHandlerLifetime(TimeSpan.FromMinutes(5));
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5));
 
         return services;
     }
 
     public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
     {
-        return services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
-                sp => (DbConnection c) => new IntegrationEventLogService(c));
+        return services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure;
+﻿using Npgsql;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure;
 
 using Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate;
 
@@ -161,7 +163,7 @@ public class OrderingContextSeed
 
     private AsyncRetryPolicy CreatePolicy(ILogger<OrderingContextSeed> logger, string prefix, int retries = 3)
     {
-        return Policy.Handle<SqlException>().
+        return Policy.Handle<NpgsqlException>().
             WaitAndRetryAsync(
                 retryCount: retries,
                 sleepDurationProvider: retry => TimeSpan.FromSeconds(5),

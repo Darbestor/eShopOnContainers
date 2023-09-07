@@ -5,7 +5,7 @@ builder.AddServiceDefaults();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityDB")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("IdentityDB")));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -29,7 +29,7 @@ builder.Services.AddIdentityServer(options =>
 .AddDeveloperSigningCredential(); // Not recommended for production - you need to store your key material somewhere secure
 
 builder.Services.AddHealthChecks()
-        .AddSqlServer(_ =>
+        .AddNpgSql(_ =>
             builder.Configuration.GetRequiredConnectionString("IdentityDB"),
             name: "IdentityDB-check",
             tags: new string[] { "IdentityDB" });

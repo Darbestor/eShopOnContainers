@@ -4,14 +4,14 @@ class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> orderConfiguration)
     {
-        orderConfiguration.ToTable("orders", OrderingContext.DEFAULT_SCHEMA);
+        orderConfiguration.ToTable("orders");
 
         orderConfiguration.HasKey(o => o.Id);
 
         orderConfiguration.Ignore(b => b.DomainEvents);
 
         orderConfiguration.Property(o => o.Id)
-            .UseHiLo("orderseq", OrderingContext.DEFAULT_SCHEMA);
+            .UseHiLo("orderseq");
 
         //Address value object persisted as owned entity type supported since EF Core 2.0
         orderConfiguration
@@ -19,34 +19,34 @@ class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             {
                 // Explicit configuration of the shadow key property in the owned type 
                 // as a workaround for a documented issue in EF Core 5: https://github.com/dotnet/efcore/issues/20740
-                a.Property<int>("OrderId")
-                .UseHiLo("orderseq", OrderingContext.DEFAULT_SCHEMA);
+                a.Property<int>("id")
+                .UseHiLo("orderseq");
                 a.WithOwner();
             });
 
         orderConfiguration
             .Property<int?>("_buyerId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("BuyerId")
+            .HasColumnName("buyer_id")
             .IsRequired(false);
 
         orderConfiguration
             .Property<DateTime>("_orderDate")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("OrderDate")
+            .HasColumnName("order_date")
             .IsRequired();
 
         orderConfiguration
             .Property<int>("_orderStatusId")
             // .HasField("_orderStatusId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("OrderStatusId")
+            .HasColumnName("order_status_id")
             .IsRequired();
 
         orderConfiguration
             .Property<int?>("_paymentMethodId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("PaymentMethodId")
+            .HasColumnName("payment_method_id")
             .IsRequired(false);
 
         orderConfiguration.Property<string>("Description").IsRequired(false);

@@ -5,9 +5,9 @@ services:
   seq:
     image: datalust/seq:latest
 
-  sqldata:
-    image: mcr.microsoft.com/mssql/server:2019-latest 
-
+  postgres:
+    image: postgres:15-alpine
+  
   nosqldata:
     image: mongo
 
@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: Services/Identity/Identity.API/Dockerfile
     depends_on:
-      - sqldata
+      - postgres
 
   basket-api:
     image: ${REGISTRY:-eshop}/basket.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -41,7 +41,7 @@ services:
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
     depends_on:
-      - sqldata
+      - postgres
       - rabbitmq
 
   ordering-api:
@@ -50,7 +50,8 @@ services:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
     depends_on:
-      - sqldata
+      - identity-api
+      - postgres
       - rabbitmq
 
   ordering-backgroundtasks:
@@ -59,7 +60,7 @@ services:
       context: .
       dockerfile: Services/Ordering/Ordering.BackgroundTasks/Dockerfile
     depends_on:
-      - sqldata
+      - postgres
       - rabbitmq
 
   payment-api:
@@ -76,7 +77,7 @@ services:
       context: .
       dockerfile: Services/Webhooks/Webhooks.API/Dockerfile
     depends_on:
-      - sqldata
+      - postgres
 
   mobileshoppingagg:
     image: ${REGISTRY:-eshop}/mobileshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
@@ -85,7 +86,7 @@ services:
       dockerfile: ApiGateways/Mobile.Bff.Shopping/aggregator/Dockerfile
     depends_on:
       - nosqldata
-      - sqldata
+      - postgres
       - identity-api
       - rabbitmq
       - ordering-api
@@ -99,7 +100,7 @@ services:
       dockerfile: ApiGateways/Web.Bff.Shopping/aggregator/Dockerfile
     depends_on:
       - nosqldata
-      - sqldata
+      - postgres
       - identity-api
       - rabbitmq
       - ordering-api
@@ -113,7 +114,7 @@ services:
       dockerfile: Services/Ordering/Ordering.SignalrHub/Dockerfile
     depends_on:
       - nosqldata
-      - sqldata
+      - postgres
       - identity-api
       - rabbitmq
       - ordering-api

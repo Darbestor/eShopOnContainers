@@ -5,14 +5,14 @@ class PaymentMethodEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<PaymentMethod> paymentConfiguration)
     {
-        paymentConfiguration.ToTable("paymentmethods", OrderingContext.DEFAULT_SCHEMA);
+        paymentConfiguration.ToTable("paymentmethods");
 
         paymentConfiguration.HasKey(b => b.Id);
 
         paymentConfiguration.Ignore(b => b.DomainEvents);
 
         paymentConfiguration.Property(b => b.Id)
-            .UseHiLo("paymentseq", OrderingContext.DEFAULT_SCHEMA);
+            .UseHiLo("paymentseq");
 
         paymentConfiguration.Property<int>("BuyerId")
             .IsRequired();
@@ -20,35 +20,35 @@ class PaymentMethodEntityTypeConfiguration
         paymentConfiguration
             .Property<string>("_cardHolderName")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("CardHolderName")
+            .HasColumnName("card_holder_name")
             .HasMaxLength(200)
             .IsRequired();
 
         paymentConfiguration
             .Property<string>("_alias")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("Alias")
+            .HasColumnName("alias")
             .HasMaxLength(200)
             .IsRequired();
 
         paymentConfiguration
             .Property<string>("_cardNumber")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("CardNumber")
+            .HasColumnName("card_number")
             .HasMaxLength(25)
             .IsRequired();
 
         paymentConfiguration
             .Property<DateTime>("_expiration")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("Expiration")
+            .HasColumnName("expiration")
             .HasMaxLength(25)
             .IsRequired();
 
         paymentConfiguration
             .Property<int>("_cardTypeId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("CardTypeId")
+            .HasColumnName("card_type_id")
             .IsRequired();
 
         paymentConfiguration.HasOne(p => p.CardType)

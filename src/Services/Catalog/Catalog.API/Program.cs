@@ -30,12 +30,14 @@ eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedT
 // REVIEW: This is done for development ease but shouldn't be here in production
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
     var settings = app.Services.GetService<IOptions<CatalogSettings>>();
     var logger = app.Services.GetService<ILogger<CatalogContextSeed>>();
-    await context.Database.MigrateAsync();
-
-    await new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger);
+    scope.ServiceProvider.MigrateDbContext<CatalogContext>((context, sp) =>
+    {
+        context.Database.Migrate();
+        new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger).Wait();
+    });
+    
     var integrationEventLogContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
     await integrationEventLogContext.Database.MigrateAsync();
 }

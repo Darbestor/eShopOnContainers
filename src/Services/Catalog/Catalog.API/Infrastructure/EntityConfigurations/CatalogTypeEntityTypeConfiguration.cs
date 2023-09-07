@@ -5,12 +5,11 @@ class CatalogTypeEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<CatalogType> builder)
     {
-        builder.ToTable("CatalogType");
+        builder.ToTable("catalog-type");
 
         builder.HasKey(ci => ci.Id);
 
-        builder.Property(ci => ci.Id)
-            .UseHiLo("catalog_type_hilo")
+        NpgsqlPropertyBuilderExtensions.UseHiLo(builder.Property(ci => ci.Id), "catalog_type_hilo")
             .IsRequired();
 
         builder.Property(cb => cb.Type)

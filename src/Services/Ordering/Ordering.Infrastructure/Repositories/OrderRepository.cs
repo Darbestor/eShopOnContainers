@@ -22,6 +22,9 @@ public class OrderRepository
     {
         var order = await _context
                             .Orders
+                                // TODO Book says that owned entities are eager loaded
+                            // therefore there is no need to Include
+                            // check that
                             .Include(x => x.Address)
                             .FirstOrDefaultAsync(o => o.Id == orderId);
         if (order == null)

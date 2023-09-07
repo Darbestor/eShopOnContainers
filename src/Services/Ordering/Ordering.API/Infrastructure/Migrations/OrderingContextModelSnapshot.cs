@@ -2,11 +2,13 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Ordering.API.Migrations
+#nullable disable
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
     partial class OrderingContextModelSnapshot : ModelSnapshot
@@ -15,225 +17,335 @@ namespace Ordering.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0-preview7.19362.6")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("Relational:Sequence:.orderitemseq", "'orderitemseq', '', '1', '10', '', '', 'Int64', 'False'")
-                .HasAnnotation("Relational:Sequence:ordering.buyerseq", "'buyerseq', 'ordering', '1', '10', '', '', 'Int64', 'False'")
-                .HasAnnotation("Relational:Sequence:ordering.orderseq", "'orderseq', 'ordering', '1', '10', '', '', 'Int64', 'False'")
-                .HasAnnotation("Relational:Sequence:ordering.paymentseq", "'paymentseq', 'ordering', '1', '10', '', '', 'Int64', 'False'")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.HasSequence("buyerseq")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("orderitemseq")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("orderseq")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("paymentseq")
+                .IncrementsBy(10);
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.Buyer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:HiLoSequenceName", "buyerseq")
-                        .HasAnnotation("SqlServer:HiLoSequenceSchema", "ordering")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "buyerseq");
 
                     b.Property<string>("IdentityGuid")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("identity_guid");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_buyers");
 
                     b.HasIndex("IdentityGuid")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_buyers_identity_guid");
 
-                    b.ToTable("buyers","ordering");
+                    b.ToTable("buyers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.CardType", b =>
                 {
                     b.Property<int>("Id")
-                        .HasDefaultValue(1);
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_cardtypes");
 
-                    b.ToTable("cardtypes","ordering");
+                    b.ToTable("cardtypes", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.PaymentMethod", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:HiLoSequenceName", "paymentseq")
-                        .HasAnnotation("SqlServer:HiLoSequenceSchema", "ordering")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    b.Property<string>("Alias")
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "paymentseq");
+
+                    b.Property<int>("BuyerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("buyer_id");
+
+                    b.Property<string>("_alias")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("alias");
 
-                    b.Property<int>("BuyerId");
-
-                    b.Property<string>("CardHolderName")
+                    b.Property<string>("_cardHolderName")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("card_holder_name");
 
-                    b.Property<string>("CardNumber")
+                    b.Property<string>("_cardNumber")
                         .IsRequired()
-                        .HasMaxLength(25);
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
+                        .HasColumnName("card_number");
 
-                    b.Property<int>("CardTypeId");
+                    b.Property<int>("_cardTypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("card_type_id");
 
-                    b.Property<DateTime>("Expiration");
+                    b.Property<DateTime>("_expiration")
+                        .HasMaxLength(25)
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expiration");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_paymentmethods");
 
-                    b.HasIndex("BuyerId");
+                    b.HasIndex("_cardTypeId")
+                        .HasDatabaseName("ix_paymentmethods_card_type_id");
 
-                    b.HasIndex("CardTypeId");
-
-                    b.ToTable("paymentmethods","ordering");
+                    b.ToTable("paymentmethods", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:HiLoSequenceName", "orderseq")
-                        .HasAnnotation("SqlServer:HiLoSequenceSchema", "ordering")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    b.Property<int?>("BuyerId");
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "orderseq");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
-                    b.Property<DateTime>("OrderDate");
+                    b.Property<int?>("_buyerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("buyer_id");
 
-                    b.Property<int>("OrderStatusId");
+                    b.Property<DateTime>("_orderDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("order_date");
 
-                    b.Property<int?>("PaymentMethodId");
+                    b.Property<int>("_orderStatusId")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_status_id");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("_paymentMethodId")
+                        .HasColumnType("integer")
+                        .HasColumnName("payment_method_id");
 
-                    b.HasIndex("BuyerId");
+                    b.HasKey("Id")
+                        .HasName("pk_orders");
 
-                    b.HasIndex("OrderStatusId");
+                    b.HasIndex("_buyerId")
+                        .HasDatabaseName("ix_orders_buyer_id");
 
-                    b.HasIndex("PaymentMethodId");
+                    b.HasIndex("_orderStatusId")
+                        .HasDatabaseName("ix_orders_order_status_id");
 
-                    b.ToTable("orders","ordering");
+                    b.HasIndex("_paymentMethodId")
+                        .HasDatabaseName("ix_orders_payment_method_id");
+
+                    b.ToTable("orders", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:HiLoSequenceName", "orderitemseq")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
-                    b.Property<decimal>("Discount");
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "orderitemseq");
 
-                    b.Property<int>("OrderId");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_id");
 
-                    b.Property<string>("PictureUrl");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer")
+                        .HasColumnName("product_id");
 
-                    b.Property<int>("ProductId");
+                    b.Property<decimal>("_discount")
+                        .HasColumnType("numeric")
+                        .HasColumnName("discount");
 
-                    b.Property<string>("ProductName")
-                        .IsRequired();
+                    b.Property<string>("_pictureUrl")
+                        .HasColumnType("text")
+                        .HasColumnName("picture_url");
 
-                    b.Property<decimal>("UnitPrice");
+                    b.Property<string>("_productName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("product_name");
 
-                    b.Property<int>("Units");
+                    b.Property<decimal>("_unitPrice")
+                        .HasColumnType("numeric")
+                        .HasColumnName("unit_price");
 
-                    b.HasKey("Id");
+                    b.Property<int>("_units")
+                        .HasColumnType("integer")
+                        .HasColumnName("units");
 
-                    b.HasIndex("OrderId");
+                    b.HasKey("Id")
+                        .HasName("pk_order_items");
 
-                    b.ToTable("orderItems","ordering");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("ix_order_items_order_id");
+
+                    b.ToTable("order_items", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.OrderStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .HasDefaultValue(1);
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1)
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_orderstatus");
 
-                    b.ToTable("orderstatus","ordering");
+                    b.ToTable("orderstatus", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency.ClientRequest", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.Property<DateTime>("Time");
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("time");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_requests");
 
-                    b.ToTable("requests","ordering");
+                    b.ToTable("requests", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.PaymentMethod", b =>
                 {
                     b.HasOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.Buyer", null)
                         .WithMany("PaymentMethods")
-                        .HasForeignKey("BuyerId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_paymentmethods_buyers_buyer_id");
 
                     b.HasOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.CardType", "CardType")
                         .WithMany()
-                        .HasForeignKey("CardTypeId")
+                        .HasForeignKey("_cardTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_paymentmethods_card_types_card_type_id");
+
+                    b.Navigation("CardType");
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order", b =>
                 {
                     b.HasOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.Buyer", null)
                         .WithMany()
-                        .HasForeignKey("BuyerId");
+                        .HasForeignKey("_buyerId")
+                        .HasConstraintName("fk_orders_buyers_buyer_id");
 
                     b.HasOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.OrderStatus", "OrderStatus")
                         .WithMany()
-                        .HasForeignKey("OrderStatusId")
+                        .HasForeignKey("_orderStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_orders_order_status_order_status_id");
 
                     b.HasOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.PaymentMethod", null)
                         .WithMany()
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("_paymentMethodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_orders_paymentmethods_payment_method_id");
 
                     b.OwnsOne("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Address", "Address", b1 =>
                         {
-                            b1.Property<int>("OrderId");
+                            b1.Property<int>("OrderId")
+                                .HasColumnType("integer")
+                                .HasColumnName("id");
 
-                            b1.Property<string>("City");
+                            b1.Property<string>("City")
+                                .HasColumnType("text")
+                                .HasColumnName("address_city");
 
-                            b1.Property<string>("Country");
+                            b1.Property<string>("Country")
+                                .HasColumnType("text")
+                                .HasColumnName("address_country");
 
-                            b1.Property<string>("State");
+                            b1.Property<string>("State")
+                                .HasColumnType("text")
+                                .HasColumnName("address_state");
 
-                            b1.Property<string>("Street");
+                            b1.Property<string>("Street")
+                                .HasColumnType("text")
+                                .HasColumnName("address_street");
 
-                            b1.Property<string>("ZipCode");
+                            b1.Property<string>("ZipCode")
+                                .HasColumnType("text")
+                                .HasColumnName("address_zip_code");
+
+                            b1.Property<int>("id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasColumnName("address_id");
+
+                            NpgsqlPropertyBuilderExtensions.UseHiLo(b1.Property<int>("id"), "orderseq");
 
                             b1.HasKey("OrderId");
 
                             b1.ToTable("orders");
 
                             b1.WithOwner()
-                                .HasForeignKey("OrderId");
+                                .HasForeignKey("OrderId")
+                                .HasConstraintName("fk_orders_orders_id");
                         });
+
+                    b.Navigation("Address");
+
+                    b.Navigation("OrderStatus");
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.OrderItem", b =>
@@ -242,7 +354,18 @@ namespace Ordering.API.Migrations
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_order_items_orders_order_id");
+                });
+
+            modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.BuyerAggregate.Buyer", b =>
+                {
+                    b.Navigation("PaymentMethods");
+                });
+
+            modelBuilder.Entity("Microsoft.eShopOnContainers.Services.Ordering.Domain.AggregatesModel.OrderAggregate.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

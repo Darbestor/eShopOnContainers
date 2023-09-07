@@ -3,17 +3,12 @@
 public class IntegrationEventLogService : IIntegrationEventLogService, IDisposable
 {
     private readonly IntegrationEventLogContext _integrationEventLogContext;
-    private readonly DbConnection _dbConnection;
     private readonly List<Type> _eventTypes;
     private volatile bool _disposedValue;
 
-    public IntegrationEventLogService(DbConnection dbConnection)
+    public IntegrationEventLogService(IntegrationEventLogContext integrationContext)
     {
-        _dbConnection = dbConnection ?? throw new ArgumentNullException(nameof(dbConnection));
-        _integrationEventLogContext = new IntegrationEventLogContext(
-            new DbContextOptionsBuilder<IntegrationEventLogContext>()
-                .UseSqlServer(_dbConnection)
-                .Options);
+        _integrationEventLogContext = integrationContext;
 
         _eventTypes = Assembly.Load(Assembly.GetEntryAssembly().FullName)
             .GetTypes()

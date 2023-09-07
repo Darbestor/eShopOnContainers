@@ -6,7 +6,7 @@ public static class CustomExtensionMethods
     {
         var hcBuilder = services.AddHealthChecks();
 
-        hcBuilder.AddSqlServer(_ =>
+        hcBuilder.AddNpgSql(_ =>
                 configuration.GetRequiredConnectionString("OrderingDB"),
                 name: "OrderingTaskDB-check",
                 tags: new string[] { "live", "ready" });

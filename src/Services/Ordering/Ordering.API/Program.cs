@@ -12,10 +12,16 @@ builder.Services.AddIntegrationServices();
 
 var services = builder.Services;
 
+// MediatR is something like in-memory message bus
+// that can dynamically map event to handlers
+// based on event types
 services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssemblyContaining(typeof(Program));
 
+    // Interceptors between event and event handler class
+    // It's a Decorator pattern that applied additional logic before
+    // executing main method
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
     cfg.AddOpenBehavior(typeof(ValidatorBehavior<,>));
     cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));

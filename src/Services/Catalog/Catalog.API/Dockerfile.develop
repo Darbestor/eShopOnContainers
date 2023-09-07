@@ -12,6 +12,10 @@ COPY ["BuildingBlocks/EventBus/EventBusServiceBus/EventBusServiceBus.csproj", "B
 COPY ["BuildingBlocks/EventBus/IntegrationEventLogEF/IntegrationEventLogEF.csproj", "BuildingBlocks/EventBus/IntegrationEventLogEF/"]
 COPY ["BuildingBlocks/WebHostCustomization/WebHost.Customization/WebHost.Customization.csproj", "BuildingBlocks/WebHostCustomization/WebHost.Customization/"]
 COPY ["Services/Catalog/Catalog.API/Catalog.API.csproj", "Services/Catalog/Catalog.API/"]
+COPY ["Services/Services.Common/Services.Common.csproj", "Services/Services.Common/"]
+COPY ["BuildingBlocks/WebHostCustomization/WebHost.Customization/WebHost.Customization.csproj", "BuildingBlocks/WebHostCustomization/WebHost.Customization/"]
+
+COPY "Directory.Packages.props" "Directory.Packages.props"
 COPY ["NuGet.config", "NuGet.config"]
 
 RUN dotnet restore Services/Catalog/Catalog.API/Catalog.API.csproj -nowarn:msb3202,nu1503

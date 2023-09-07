@@ -5,10 +5,9 @@ class CatalogItemEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<CatalogItem> builder)
     {
-        builder.ToTable("Catalog");
+        builder.ToTable("catalog");
 
-        builder.Property(ci => ci.Id)
-            .UseHiLo("catalog_hilo")
+        NpgsqlPropertyBuilderExtensions.UseHiLo(builder.Property(ci => ci.Id), "catalog_hilo")
             .IsRequired();
 
         builder.Property(ci => ci.Name)

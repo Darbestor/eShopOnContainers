@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Catalog.API.Infrastructure;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 public static class Extensions
 {
@@ -7,7 +9,7 @@ public static class Extensions
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddSqlServer(_ => configuration.GetRequiredConnectionString("CatalogDB"),
+            .AddNpgSql(_ => configuration.GetRequiredConnectionString("CatalogDB"),
                 name: "CatalogDB-check",
                 tags: new string[] { "ready" });
 
@@ -28,28 +30,29 @@ public static class Extensions
 
     public static IServiceCollection AddDbContexts(this IServiceCollection services, IConfiguration configuration)
     {
-        static void ConfigureSqlOptions(SqlServerDbContextOptionsBuilder sqlOptions)
+        static void ConfigureNpgsqlOptions(NpgsqlDbContextOptionsBuilder options)
         {
-            sqlOptions.MigrationsAssembly(typeof(Program).Assembly.FullName);
+            options.MigrationsAssembly(typeof(Program).Assembly.FullName);
 
             // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
 
-            sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+            options.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
         };
 
         services.AddDbContext<CatalogContext>(options =>
         {
             var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
 
-            options.UseSqlServer(connectionString, ConfigureSqlOptions);
+            options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
         });
-
+        
         services.AddDbContext<IntegrationEventLogContext>(options =>
         {
             var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
 
-            options.UseSqlServer(connectionString, ConfigureSqlOptions);
+            options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
         });
+
 
         return services;
     }
@@ -82,9 +85,7 @@ public static class Extensions
 
     public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
     {
-        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
-            sp => (DbConnection c) => new IntegrationEventLogService(c));
-
+        services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
         services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
         return services;

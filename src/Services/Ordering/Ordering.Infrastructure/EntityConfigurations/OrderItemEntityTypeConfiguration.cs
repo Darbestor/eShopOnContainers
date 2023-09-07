@@ -5,7 +5,7 @@ class OrderItemEntityTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<OrderItem> orderItemConfiguration)
     {
-        orderItemConfiguration.ToTable("orderItems", OrderingContext.DEFAULT_SCHEMA);
+        orderItemConfiguration.ToTable("order_items");
 
         orderItemConfiguration.HasKey(o => o.Id);
 
@@ -14,13 +14,16 @@ class OrderItemEntityTypeConfiguration
         orderItemConfiguration.Property(o => o.Id)
             .UseHiLo("orderitemseq");
 
+        // Shadow property
+        // Foreign key for 1 to many relationship with order,
+        // because Order contains list of OrderItem
         orderItemConfiguration.Property<int>("OrderId")
             .IsRequired();
 
         orderItemConfiguration
             .Property<decimal>("_discount")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("Discount")
+            .HasColumnName("discount")
             .IsRequired();
 
         orderItemConfiguration.Property<int>("ProductId")
@@ -29,25 +32,25 @@ class OrderItemEntityTypeConfiguration
         orderItemConfiguration
             .Property<string>("_productName")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("ProductName")
+            .HasColumnName("product_name")
             .IsRequired();
 
         orderItemConfiguration
             .Property<decimal>("_unitPrice")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("UnitPrice")
+            .HasColumnName("unit_price")
             .IsRequired();
 
         orderItemConfiguration
             .Property<int>("_units")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("Units")
+            .HasColumnName("units")
             .IsRequired();
 
         orderItemConfiguration
             .Property<string>("_pictureUrl")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("PictureUrl")
+            .HasColumnName("picture_url")
             .IsRequired(false);
     }
 }
