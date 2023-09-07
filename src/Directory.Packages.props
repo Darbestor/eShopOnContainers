@@ -8,6 +8,7 @@
     <PackageVersion Include="AspNetCore.HealthChecks.AzureStorage" Version="6.1.2" />
     <PackageVersion Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
     <PackageVersion Include="AspNetCore.HealthChecks.Redis" Version="6.0.4" />
+    <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="7.0.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI" Version="6.0.5" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.5" />
@@ -79,12 +80,10 @@
     <PackageVersion Include="Moq" Version="4.18.4" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0" />
-    <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="7.0.0" />
     <PackageVersion Include="Polly" Version="7.2.3" />
     <PackageVersion Include="RabbitMQ.Client" Version="6.4.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
-    <PackageVersion Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="6.27.0" />
     <PackageVersion Include="System.Reflection.TypeExtensions" Version="4.7.0" />
     <PackageVersion Include="xunit" Version="2.4.2" />

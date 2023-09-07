@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries;
+﻿using Npgsql;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Queries;
 
 public class OrderQueries
     : IOrderQueries
@@ -13,7 +15,7 @@ public class OrderQueries
 
     public async Task<Order> GetOrderAsync(int id)
     {
-        using var connection = new SqlConnection(_connectionString);
+        using var connection = new NpgsqlConnection(_connectionString);
         connection.Open();
 
         var result = await connection.QueryAsync<dynamic>(
@@ -36,7 +38,7 @@ public class OrderQueries
 
     public async Task<IEnumerable<OrderSummary>> GetOrdersFromUserAsync(Guid userId)
     {
-        using var connection = new SqlConnection(_connectionString);
+        using var connection = new NpgsqlConnection(_connectionString);
         connection.Open();
 
         return await connection.QueryAsync<OrderSummary>(@"SELECT o.[Id] as ordernumber,o.[OrderDate] as [date],os.[Name] as [status], SUM(oi.units*oi.unitprice) as total
@@ -51,7 +53,7 @@ public class OrderQueries
 
     public async Task<IEnumerable<CardType>> GetCardTypesAsync()
     {
-        using var connection = new SqlConnection(_connectionString);
+        using var connection = new NpgsqlConnection(_connectionString);
         connection.Open();
 
         return await connection.QueryAsync<CardType>("SELECT * FROM ordering.cardtypes");

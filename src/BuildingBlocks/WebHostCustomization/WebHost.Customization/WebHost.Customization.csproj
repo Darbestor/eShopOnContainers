@@ -12,7 +12,6 @@
   <ItemGroup>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="Polly" />
-    <PackageReference Include="System.Data.SqlClient" />
   </ItemGroup>
 
 </Project>
