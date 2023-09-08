@@ -7,9 +7,7 @@ internal static class Extensions
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddNpgSql(_ =>
-                configuration.GetRequiredConnectionString("OrderingDB"),
-                name: "OrderingDB-check",
+            .AddDbContextCheck<OrderingContext>(name: "OrderingDB-check",
                 tags: new string[] { "ready" });
 
         return services;

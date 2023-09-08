@@ -9,9 +9,7 @@ public static class Extensions
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddNpgSql(_ => configuration.GetRequiredConnectionString("CatalogDB"),
-                name: "CatalogDB-check",
-                tags: new string[] { "ready" });
+            .AddDbContextCheck<CatalogContext>(name:"CatalogDB-check", tags:new string[] { "ready" });
 
         var accountName = configuration["AzureStorageAccountName"];
         var accountKey = configuration["AzureStorageAccountKey"];

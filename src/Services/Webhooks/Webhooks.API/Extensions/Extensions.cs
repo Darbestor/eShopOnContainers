@@ -33,8 +33,7 @@ internal static class Extensions
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddNpgSql(_ =>
-                configuration.GetRequiredConnectionString("WebHooksDB"),
+            .AddDbContextCheck<WebhooksContext>(
             name: "WebhooksApiDb-check",
             tags: new string[] { "ready" });
 

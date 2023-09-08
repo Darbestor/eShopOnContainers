@@ -29,10 +29,8 @@ builder.Services.AddIdentityServer(options =>
 .AddDeveloperSigningCredential(); // Not recommended for production - you need to store your key material somewhere secure
 
 builder.Services.AddHealthChecks()
-        .AddNpgSql(_ =>
-            builder.Configuration.GetRequiredConnectionString("IdentityDB"),
-            name: "IdentityDB-check",
-            tags: new string[] { "IdentityDB" });
+    .AddDbContextCheck<ApplicationDbContext>(name: "IdentityDB-check",
+        tags: new [] { "IdentityDB" });
 
 builder.Services.AddTransient<IProfileService, ProfileService>();
 builder.Services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();

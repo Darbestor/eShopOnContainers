@@ -65,9 +65,11 @@ namespace Ordering.BackgroundTasks.Services
             {
                 conn.Open();
                 orderIds = conn.Query<int>(
-                    @"SELECT Id FROM [ordering].[orders] 
-                        WHERE DATEDIFF(minute, [OrderDate], GETDATE()) >= @GracePeriodTime
-                        AND [OrderStatusId] = 1",
+                    @"SELECT id FROM orders 
+                        WHERE ((DATE_PART('Day', NOW() - order_date) * 24 +
+                              DATE_PART('Hour', NOW() - order_date)) * 60 + 
+                              DATE_PART('Minute', NOW() - order_date)) >= @GracePeriodTime
+                        AND order_status_id = 1",
                     new { _settings.GracePeriodTime });
             }
             catch (NpgsqlException exception)

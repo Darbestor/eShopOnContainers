@@ -6,8 +6,12 @@ public static class CustomExtensionMethods
     {
         var hcBuilder = services.AddHealthChecks();
 
-        hcBuilder.AddNpgSql(_ =>
-                configuration.GetRequiredConnectionString("OrderingDB"),
+        hcBuilder
+            .AddNpgSql(_ =>
+                {
+                    var conn = configuration.GetRequiredConnectionString("OrderingDB");
+                    return conn + (conn.EndsWith(';') ? "" : ";") + "Pooling=false";
+                },
                 name: "OrderingTaskDB-check",
                 tags: new string[] { "live", "ready" });
 

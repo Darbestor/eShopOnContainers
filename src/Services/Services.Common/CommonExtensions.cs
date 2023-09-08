@@ -431,6 +431,71 @@ public static class CommonExtensions
         return services;
     }
 
+    public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
+    {
+        //  {
+        //    "ConnectionStrings": {
+        //      "Kafka": "..."
+        //    },
+
+        // {
+        //   "Kafka": {
+        //     "TopicName": "...",
+        //     "UserName": "...",
+        //     "Password": "...",
+        //     "RetryCount": 1
+        //   }
+        // }
+
+
+        var eventBusSection = configuration.GetSection("Kafka");
+
+        if (!eventBusSection.Exists())
+        {
+            return services;
+        }
+
+        services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+        {
+            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+            var factory = new ConnectionFactory()
+            {
+                HostName = configuration.GetRequiredConnectionString("EventBus"), DispatchConsumersAsync = true
+            };
+
+            if (!string.IsNullOrEmpty(eventBusSection["UserName"]))
+            {
+                factory.UserName = eventBusSection["UserName"];
+            }
+
+            if (!string.IsNullOrEmpty(eventBusSection["Password"]))
+            {
+                factory.Password = eventBusSection["Password"];
+            }
+
+            var retryCount = eventBusSection.GetValue("RetryCount", 5);
+
+            return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+        });
+
+        services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+        {
+            var subscriptionClientName = eventBusSection.GetRequiredValue("SubscriptionClientName");
+            var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+            var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+            var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            var retryCount = eventBusSection.GetValue("RetryCount", 5);
+
+            return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, sp, eventBusSubscriptionsManager,
+                subscriptionClientName, retryCount);
+        });
+
+
+        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+        return services;
+    }
+    
     public static void MapDefaultHealthChecks(this IEndpointRouteBuilder routes)
     {
         routes.MapHealthChecks("/hc", new HealthCheckOptions()
