@@ -15,14 +15,7 @@ class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
 
         //Address value object persisted as owned entity type supported since EF Core 2.0
         orderConfiguration
-            .OwnsOne(o => o.Address, a =>
-            {
-                // Explicit configuration of the shadow key property in the owned type 
-                // as a workaround for a documented issue in EF Core 5: https://github.com/dotnet/efcore/issues/20740
-                a.Property<int>("id")
-                .UseHiLo("orderseq");
-                a.WithOwner();
-            });
+            .OwnsOne(o => o.Address);
 
         orderConfiguration
             .Property<int?>("_buyerId")

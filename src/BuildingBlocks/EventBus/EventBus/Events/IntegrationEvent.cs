@@ -5,7 +5,7 @@ public record IntegrationEvent
     public IntegrationEvent()
     {
         Id = Guid.NewGuid();
-        CreationDate = DateTime.UtcNow;
+        CreationDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
     }
 
     [JsonConstructor]

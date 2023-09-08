@@ -27,7 +27,7 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.Domain.Events
             CardNumber = cardNumber;
             CardSecurityNumber = cardSecurityNumber;
             CardHolderName = cardHolderName;
-            CardExpiration = cardExpiration;
+            CardExpiration = DateTime.SpecifyKind(cardExpiration, DateTimeKind.Utc);
         }
     }
 }
