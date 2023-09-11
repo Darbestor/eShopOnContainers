@@ -1,7 +1,4 @@
-﻿using Confluent.Kafka.SyncOverAsync;
-using Confluent.SchemaRegistry.Serdes;
-
-namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+﻿namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
 // TODO REMOVE
 public interface IEventBusTemp {}

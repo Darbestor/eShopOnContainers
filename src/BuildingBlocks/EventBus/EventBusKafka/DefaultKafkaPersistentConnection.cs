@@ -3,7 +3,7 @@
 public class DefaultKafkaPersistentConnection
     : IKafkaPersistentConnection
 {
-    private readonly ClientConfig _config;
+    private readonly KafkaConfiguration _config;
     private readonly ILogger<DefaultKafkaPersistentConnection> _logger;
     private readonly int _retryCount;
     public bool Disposed;
@@ -11,14 +11,14 @@ public class DefaultKafkaPersistentConnection
     readonly object _syncRoot = new();
     private readonly IProducer<byte[], byte[]> _producer;
 
-    public DefaultKafkaPersistentConnection(ClientConfig config, ILogger<DefaultKafkaPersistentConnection> logger, int retryCount = 5)
+    public DefaultKafkaPersistentConnection(KafkaConfiguration config, ILogger<DefaultKafkaPersistentConnection> logger, int retryCount = 5)
     {
         _config = config ?? throw new ArgumentNullException(nameof(config));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _retryCount = retryCount;
         try
         {
-            _producer = new ProducerBuilder<byte[], byte[]>(_config)
+            _producer = new ProducerBuilder<byte[], byte[]>(_config.Producer)
                 .SetErrorHandler(OnErrorHandle)
                 .Build();
         }
@@ -27,11 +27,10 @@ public class DefaultKafkaPersistentConnection
             Console.WriteLine(e);
             throw;
         }
-        
     }
 
     public Handle Handle { get => _producer.Handle; }
-    public ClientConfig ClientConfig { get => _config; }
+    public KafkaConfiguration KafkaConfig { get => _config; }
 
     public void Dispose()
     {

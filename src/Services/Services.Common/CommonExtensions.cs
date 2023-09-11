@@ -458,26 +458,32 @@ public static class CommonExtensions
             return services;
         }
 
-        services.Configure<ClientConfig>(kafkaSection);
-
+        services.Configure<KafkaConfiguration>(kafkaSection).PostConfigure<KafkaConfiguration>(x =>
+        {
+            x.Producer.BootstrapServers = x.BootstrapServers;
+            x.Consumer.BootstrapServers = x.BootstrapServers;
+            x.Producer.Debug = x.Debug;
+            x.Consumer.Debug = x.Debug;
+        });
+        
         services.AddSingleton<IKafkaPersistentConnection>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<DefaultKafkaPersistentConnection>>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
-            var config = sp.GetRequiredService<IOptions<ClientConfig>>();
+            var config = sp.GetRequiredService<IOptions<KafkaConfiguration>>();
             
             return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
         });
 
-        services.AddSingleton<EventBusKafka>(sp =>
+        services.AddSingleton<Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.EventBusKafka>(sp =>
         {
             var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
-            var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();
+            var logger = sp.GetRequiredService<ILogger<Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.EventBusKafka>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
             var topicName = kafkaSection.GetRequiredValue("ProducerTopic");
 
-            return new EventBusKafka(kafkaPersistentConnection, logger, sp, eventBusSubscriptionsManager,
+            return new Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.EventBusKafka(kafkaPersistentConnection, logger, sp, eventBusSubscriptionsManager,
                 topicName, retryCount);
         });
 
