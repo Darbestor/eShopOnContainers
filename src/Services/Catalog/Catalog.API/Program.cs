@@ -1,4 +1,6 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
@@ -24,6 +26,7 @@ app.MapPicApi();
 app.MapControllers();
 app.MapGrpcService<CatalogService>();
 
+var bus = app.Services.GetRequiredService<IEventBusTemp>();
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 
 eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();

@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 
@@ -463,9 +464,9 @@ public static class CommonExtensions
         {
             var logger = sp.GetRequiredService<ILogger<DefaultKafkaPersistentConnection>>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
-            var config = sp.GetRequiredService<ClientConfig>();
+            var config = sp.GetRequiredService<IOptions<ClientConfig>>();
             
-            return new DefaultKafkaPersistentConnection(config, logger, retryCount);
+            return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
         });
 
         services.AddSingleton<IEventBusTemp, EventBusKafka>(sp =>
@@ -480,7 +481,7 @@ public static class CommonExtensions
                 topicName, retryCount);
         });
 
-        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+        //services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
         return services;
     }
     

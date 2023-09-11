@@ -16,10 +16,18 @@ public class DefaultKafkaPersistentConnection
         _config = config ?? throw new ArgumentNullException(nameof(config));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _retryCount = retryCount;
-        _producer = new ProducerBuilder<byte[], byte[]>(_config)
-            .SetErrorHandler(OnErrorHandle)
-            .SetLogHandler(OnLogHandler)
-            .Build();
+        try
+        {
+            _producer = new ProducerBuilder<byte[], byte[]>(_config)
+                .SetErrorHandler(OnErrorHandle)
+                .Build();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        
     }
 
     public Handle Handle { get => _producer.Handle; }
@@ -40,21 +48,6 @@ public class DefaultKafkaPersistentConnection
         {
             _logger.LogCritical(ex.ToString());
         }
-    }
-
-    private void OnLogHandler(IProducer<byte[], byte[]> producer, LogMessage log)
-    {
-        if (Disposed) return;
-            var logLevel = log.Level switch
-            {
-                SyslogLevel.Critical or SyslogLevel.Alert or SyslogLevel.Emergency => LogLevel.Critical,
-                SyslogLevel.Error => LogLevel.Error,
-                SyslogLevel.Warning => LogLevel.Warning,
-                SyslogLevel.Notice or SyslogLevel.Info => LogLevel.Information,
-                SyslogLevel.Debug => LogLevel.Debug,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-            _logger.Log(logLevel, "A Kafka client {Name} reports: {Message}", log.Name, log.Message);
     }
     
     private void OnErrorHandle(IProducer<byte[], byte[]> producer, Error error)

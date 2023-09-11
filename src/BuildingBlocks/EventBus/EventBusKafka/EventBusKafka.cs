@@ -1,5 +1,7 @@
-﻿namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Confluent.Kafka.SyncOverAsync;
+using Confluent.SchemaRegistry.Serdes;
+
+namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
 // TODO REMOVE
 public interface IEventBusTemp: IEventBus {}
@@ -47,9 +49,10 @@ public class EventBusKafka : IEventBusTemp, IDisposable
 
     public void Publish(IntegrationEvent @event)
     {
-        using var producer = new DependentProducerBuilder<string, IntegrationEvent>(_persistentConnection.Handle).Build();
+        using var producer = new DependentProducerBuilder<string, string>(_persistentConnection.Handle)
+            .Build();
         
-        var policy = RetryPolicy.Handle<ProduceException<string, IntegrationEvent>>()
+        var policy = RetryPolicy.Handle<ProduceException<string, string>>()
             .Or<SocketException>()
             .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
             {
@@ -58,7 +61,9 @@ public class EventBusKafka : IEventBusTemp, IDisposable
 
         var eventName = @event.GetType().Name;
 
-        var message = new Message<string, IntegrationEvent> { Key = eventName, Value = @event };
+        var serialized = JsonSerializer.Serialize(@event);
+        
+        var message = new Message<string, string> { Key = eventName, Value = serialized };
 
         policy.Execute(() =>
         {
