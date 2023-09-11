@@ -469,7 +469,7 @@ public static class CommonExtensions
             return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
         });
 
-        services.AddSingleton<IEventBusTemp, EventBusKafka>(sp =>
+        services.AddSingleton<EventBusKafka>(sp =>
         {
             var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();

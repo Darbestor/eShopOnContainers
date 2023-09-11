@@ -4,7 +4,7 @@ using Confluent.SchemaRegistry.Serdes;
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
 // TODO REMOVE
-public interface IEventBusTemp: IEventBus {}
+public interface IEventBusTemp {}
 
 public class EventBusKafka : IEventBusTemp, IDisposable
 {
@@ -21,7 +21,7 @@ public class EventBusKafka : IEventBusTemp, IDisposable
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
+        _subsManager = subsManager ?? new KafkaEventBusSubscriptionsManager();
         _serviceProvider = serviceProvider;
         _retryCount = retryCount;
         _topic = topic;
@@ -73,12 +73,12 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         });
     }
 
-    public void Subscribe<T, TH>()
+    public void Subscribe<T, TH>(string topicName)
         where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
         var eventName = _subsManager.GetEventKey<T>();
-        DoInternalSubscription(eventName);
+        // DoInternalSubscription(eventName);
 
         _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
 
@@ -86,13 +86,17 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         StartBasicConsume();
     }
 
-    private void DoInternalSubscription(string eventName)
+    private void DoInternalSubscription(string eventName, string topicName)
     {
         // var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
         // if (!containsKey)
         // {
+        //     var consumer = new ConsumerBuilder<string, string>(_persistentConnection.ClientConfig)
+        //         .Build();
+        //     consumer.Subscription.Add(topicName);
+        //     consumer
         //     var consumer = new ConsumerBuilder<string, IntegrationEvent>(_persistentConnection.ClientConfig).Build();
-        //     consumer.Subscribe(eventName);
+        //     consumer.Subscribe(topicName);
         //     if (!_persistentConnection.IsConnected)
         //     {
         //         _persistentConnection.TryConnect();
@@ -100,7 +104,7 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         //
         //     _consumerChannel.QueueBind(queue: _queueName,
         //                         exchange: BROKER_NAME,
-        //                         routingKey: eventName);
+        //                         routingKey: topicName);
         // }
     }
 

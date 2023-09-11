@@ -194,7 +194,7 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     // TODO Remove dependency
-    public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate, [FromServices] IEventBusTemp kafka)
+    public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate, [FromServices] EventBusKafka kafka)
     {
         var catalogItem = await _catalogContext.CatalogItems.SingleOrDefaultAsync(i => i.Id == productToUpdate.Id);
 
