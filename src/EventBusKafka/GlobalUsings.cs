@@ -8,3 +8,4 @@ global using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
 global using Microsoft.Extensions.Logging;
 global using Polly;
 global using Polly.Retry;
+global using Confluent.Kafka;
