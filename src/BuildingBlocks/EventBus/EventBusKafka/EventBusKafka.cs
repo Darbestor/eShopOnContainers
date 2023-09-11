@@ -7,21 +7,23 @@ public class EventBusKafka : IEventBusTemp, IDisposable
 {
     private readonly IKafkaPersistentConnection _persistentConnection;
     private readonly ILogger<EventBusKafka> _logger;
+    private readonly IConsumerManager _consumerManager;
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly IServiceProvider _serviceProvider;
     private readonly int _retryCount;
 
-    private string _topic;
+    private Dictionary<string, List<string>> _topicSubscriptions = new();
     
     public EventBusKafka(IKafkaPersistentConnection persistentConnection, ILogger<EventBusKafka> logger,
-        IServiceProvider serviceProvider, IEventBusSubscriptionsManager subsManager, string topic, int retryCount = 5)
+        IConsumerManager consumerManager, IServiceProvider serviceProvider,
+        IEventBusSubscriptionsManager subsManager, int retryCount = 5)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _subsManager = subsManager ?? new KafkaEventBusSubscriptionsManager();
+        _consumerManager = consumerManager ?? throw new ArgumentNullException(nameof(consumerManager));
+        _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
         _serviceProvider = serviceProvider;
         _retryCount = retryCount;
-        _topic = topic;
         _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
     }
 
@@ -66,7 +68,7 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         {
             _logger.LogTrace("Publishing event to Kafka: {EventId}", @event.Id);
 
-            producer.Produce(_topic, message);
+            producer.Produce(_persistentConnection.KafkaConfig.Producer.Topic, message);
         });
     }
 
@@ -75,34 +77,27 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         where TH : IIntegrationEventHandler<T>
     {
         var eventName = _subsManager.GetEventKey<T>();
-        // DoInternalSubscription(eventName);
+        DoInternalSubscription(eventName, topicName);
 
         _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
 
-        _subsManager.AddSubscription<T, TH>();
-        StartBasicConsume();
+        // _subsManager.AddSubscription<T, TH>();
+        StartBasicConsume(topicName);
     }
 
     private void DoInternalSubscription(string eventName, string topicName)
     {
-        // var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
-        // if (!containsKey)
-        // {
-        //     var consumer = new ConsumerBuilder<string, string>(_persistentConnection.ClientConfig)
-        //         .Build();
-        //     consumer.Subscription.Add(topicName);
-        //     consumer
-        //     var consumer = new ConsumerBuilder<string, IntegrationEvent>(_persistentConnection.ClientConfig).Build();
-        //     consumer.Subscribe(topicName);
-        //     if (!_persistentConnection.IsConnected)
-        //     {
-        //         _persistentConnection.TryConnect();
-        //     }
-        //
-        //     _consumerChannel.QueueBind(queue: _queueName,
-        //                         exchange: BROKER_NAME,
-        //                         routingKey: topicName);
-        // }
+        var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
+        if (!containsKey)
+        {
+            if (_topicSubscriptions.TryGetValue(topicName, out var list))
+            {
+                list.Add(eventName);
+                return;
+            }
+            _topicSubscriptions.Add(topicName, new List<string>{eventName});
+            _consumerManager.StartConsuming(topicName);
+        }
     }
 
     public void Unsubscribe<T, TH>()
@@ -116,18 +111,12 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         _subsManager.RemoveSubscription<T, TH>();
     }
 
-    public void UnsubscribeDynamic<TH>(string eventName)
-        where TH : IDynamicIntegrationEventHandler
-    {
-        _subsManager.RemoveDynamicSubscription<TH>(eventName);
-    }
-
     public void Dispose()
     {
         _subsManager.Clear();
     }
 
-    private void StartBasicConsume()
+    private void StartBasicConsume(string topicName)
     {
         // _logger.LogTrace("Starting RabbitMQ basic consume");
         //

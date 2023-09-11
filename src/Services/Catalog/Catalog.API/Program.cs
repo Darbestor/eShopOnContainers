@@ -26,7 +26,8 @@ app.MapPicApi();
 app.MapControllers();
 app.MapGrpcService<CatalogService>();
 
-var bus = app.Services.GetRequiredService<IEventBusTemp>();
+var bus = app.Services.GetRequiredService<EventBusKafka>();
+bus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>("Ordering");
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 
 eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();

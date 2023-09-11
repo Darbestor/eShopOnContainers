@@ -475,16 +475,18 @@ public static class CommonExtensions
             return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
         });
 
-        services.AddSingleton<Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.EventBusKafka>(sp =>
+        services.AddSingleton<IConsumerManager, ConsumerManager>();
+
+        services.AddSingleton<EventBusKafka>(sp =>
         {
             var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
-            var logger = sp.GetRequiredService<ILogger<Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.EventBusKafka>>();
+            var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            var consumerManager = sp.GetRequiredService<IConsumerManager>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
-            var topicName = kafkaSection.GetRequiredValue("ProducerTopic");
 
-            return new Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.EventBusKafka(kafkaPersistentConnection, logger, sp, eventBusSubscriptionsManager,
-                topicName, retryCount);
+            return new EventBusKafka(kafkaPersistentConnection, logger, consumerManager, sp, eventBusSubscriptionsManager,
+                retryCount);
         });
 
         //services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
