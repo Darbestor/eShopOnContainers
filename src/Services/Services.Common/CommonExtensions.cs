@@ -448,9 +448,9 @@ public static class CommonExtensions
         // }
 
 
-        var eventBusSection = configuration.GetSection("Kafka");
+        var kafkaSection = configuration.GetSection("Kafka");
 
-        if (!eventBusSection.Exists())
+        if (!kafkaSection.Exists())
         {
             return services;
         }
@@ -464,28 +464,28 @@ public static class CommonExtensions
                 HostName = configuration.GetRequiredConnectionString("EventBus"), DispatchConsumersAsync = true
             };
 
-            if (!string.IsNullOrEmpty(eventBusSection["UserName"]))
+            if (!string.IsNullOrEmpty(kafkaSection["UserName"]))
             {
-                factory.UserName = eventBusSection["UserName"];
+                factory.UserName = kafkaSection["UserName"];
             }
 
-            if (!string.IsNullOrEmpty(eventBusSection["Password"]))
+            if (!string.IsNullOrEmpty(kafkaSection["Password"]))
             {
-                factory.Password = eventBusSection["Password"];
+                factory.Password = kafkaSection["Password"];
             }
 
-            var retryCount = eventBusSection.GetValue("RetryCount", 5);
+            var retryCount = kafkaSection.GetValue("RetryCount", 5);
 
             return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
         });
 
         services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
         {
-            var subscriptionClientName = eventBusSection.GetRequiredValue("SubscriptionClientName");
+            var subscriptionClientName = kafkaSection.GetRequiredValue("SubscriptionClientName");
             var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-            var retryCount = eventBusSection.GetValue("RetryCount", 5);
+            var retryCount = kafkaSection.GetValue("RetryCount", 5);
 
             return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, sp, eventBusSubscriptionsManager,
                 subscriptionClientName, retryCount);
