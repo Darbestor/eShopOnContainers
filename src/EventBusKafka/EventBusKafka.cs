@@ -1,7 +1,10 @@
 ﻿namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 using Microsoft.Extensions.DependencyInjection;
 
-public class EventBusKafka : IEventBus, IDisposable
+// TODO REMOVE
+public interface IEventBusTemp: IEventBus {}
+
+public class EventBusKafka : IEventBusTemp, IDisposable
 {
     private readonly IKafkaPersistentConnection _persistentConnection;
     private readonly ILogger<EventBusKafka> _logger;
@@ -12,13 +15,14 @@ public class EventBusKafka : IEventBus, IDisposable
     private string _topic;
     
     public EventBusKafka(IKafkaPersistentConnection persistentConnection, ILogger<EventBusKafka> logger,
-        IServiceProvider serviceProvider, IEventBusSubscriptionsManager subsManager, string queueName = null, int retryCount = 5)
+        IServiceProvider serviceProvider, IEventBusSubscriptionsManager subsManager, string topic, int retryCount = 5)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
         _serviceProvider = serviceProvider;
         _retryCount = retryCount;
+        _topic = topic;
         _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
     }
 

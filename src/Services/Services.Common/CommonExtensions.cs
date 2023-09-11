@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Azure.Identity;
+using Confluent.Kafka;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
@@ -455,42 +457,28 @@ public static class CommonExtensions
             return services;
         }
 
-        services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+        services.Configure<ClientConfig>(kafkaSection);
+
+        services.AddSingleton<IKafkaPersistentConnection>(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
-
-            var factory = new ConnectionFactory()
-            {
-                HostName = configuration.GetRequiredConnectionString("EventBus"), DispatchConsumersAsync = true
-            };
-
-            if (!string.IsNullOrEmpty(kafkaSection["UserName"]))
-            {
-                factory.UserName = kafkaSection["UserName"];
-            }
-
-            if (!string.IsNullOrEmpty(kafkaSection["Password"]))
-            {
-                factory.Password = kafkaSection["Password"];
-            }
-
+            var logger = sp.GetRequiredService<ILogger<DefaultKafkaPersistentConnection>>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
-
-            return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+            var config = sp.GetRequiredService<ClientConfig>();
+            
+            return new DefaultKafkaPersistentConnection(config, logger, retryCount);
         });
 
-        services.AddSingleton<IEventBus, EventBusRabbitMQ>(sp =>
+        services.AddSingleton<IEventBusTemp, EventBusKafka>(sp =>
         {
-            var subscriptionClientName = kafkaSection.GetRequiredValue("SubscriptionClientName");
-            var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
-            var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ>>();
+            var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
+            var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
+            var topicName = kafkaSection.GetRequiredValue("ProducerTopic");
 
-            return new EventBusRabbitMQ(rabbitMQPersistentConnection, logger, sp, eventBusSubscriptionsManager,
-                subscriptionClientName, retryCount);
+            return new EventBusKafka(kafkaPersistentConnection, logger, sp, eventBusSubscriptionsManager,
+                topicName, retryCount);
         });
-
 
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
         return services;
