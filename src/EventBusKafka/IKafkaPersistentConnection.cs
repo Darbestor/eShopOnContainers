@@ -5,4 +5,6 @@ public interface IKafkaPersistentConnection
     : IDisposable
 {
     Handle Handle { get; }
+    
+    ClientConfig ClientConfig { get; }
 }

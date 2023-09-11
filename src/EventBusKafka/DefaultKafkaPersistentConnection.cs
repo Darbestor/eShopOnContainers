@@ -23,6 +23,7 @@ public class DefaultKafkaPersistentConnection
     }
 
     public Handle Handle { get => _producer.Handle; }
+    public ClientConfig ClientConfig { get => _config; }
 
     public void Dispose()
     {
