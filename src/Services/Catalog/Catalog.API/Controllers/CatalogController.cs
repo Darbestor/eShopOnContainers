@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
+﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
@@ -191,7 +193,8 @@ public class CatalogController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate)
+    // TODO Remove dependency
+    public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate, [FromServices] IEventBusTemp kafka)
     {
         var catalogItem = await _catalogContext.CatalogItems.SingleOrDefaultAsync(i => i.Id == productToUpdate.Id);
 
@@ -209,9 +212,12 @@ public class CatalogController : ControllerBase
 
         if (raiseProductPriceChangedEvent) // Save product's data and publish integration event through the Event Bus if price has changed
         {
+            
             //Create Integration Event to be published through the Event Bus
             var priceChangedEvent = new ProductPriceChangedIntegrationEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
 
+            kafka.Publish(priceChangedEvent);
+            
             // Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
             await _catalogIntegrationEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);
 

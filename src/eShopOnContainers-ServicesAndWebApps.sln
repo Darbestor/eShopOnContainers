@@ -122,7 +122,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services.Common", "Services
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{42B85D0F-2ED6-4C00-91FA-103DACC3D5E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBusKafka", "EventBusKafka\EventBusKafka.csproj", "{780F8077-4124-41C1-BB51-A2E3306EBE77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBusKafka", "BuildingBlocks\EventBus\EventBusKafka\EventBusKafka.csproj", "{780F8077-4124-41C1-BB51-A2E3306EBE77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
