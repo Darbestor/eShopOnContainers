@@ -1,20 +1,24 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Confluent.Kafka.SyncOverAsync;
+using Confluent.SchemaRegistry.Serdes;
+using Google.Protobuf;
+using Microsoft.Extensions.Hosting;
 
-namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
 
-public class KafkaConsumer: IDisposable
+public class KafkaTopicConsumer<T>: IDisposable
+    where T: class, IMessage<T>, new()
 {
-    private readonly KafkaConfig _config;
-    private readonly ILogger<KafkaConsumer> _logger;
+    private readonly ILogger<KafkaTopicConsumer<T>> _logger;
+    private readonly IConsumerBuilder<T> _consumerBuilder;
 
     private Task _pollTask;
-    private IConsumer<string, string> _consumer;
+    private IConsumer<string, T> _consumer;
     private CancellationTokenSource _cancellationTokenSource;
 
-    public KafkaConsumer(ILogger<KafkaConsumer> logger, KafkaConfig config)
+    public KafkaTopicConsumer(ILogger<KafkaTopicConsumer<T>> logger, IConsumerBuilder<T> consumerBuilder)
     {
-        _config = config ?? throw new ArgumentNullException(nameof(config));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _consumerBuilder = consumerBuilder ?? throw new ArgumentNullException(nameof(consumerBuilder));
     }
     
     public void StartConsuming(string topic)
@@ -30,11 +34,7 @@ public class KafkaConsumer: IDisposable
         {
             if (_consumer == null)
             {
-                // TODO Change
-                _config.KafkaConsumer.GroupId = "Test";
-            
-                _consumer = new ConsumerBuilder<string, string>(_config.KafkaConsumer)
-                    .Build();
+                _consumer = _consumerBuilder.Build();
             }
             _consumer.Subscribe(topic);
 
@@ -45,14 +45,6 @@ public class KafkaConsumer: IDisposable
         {
             _logger.LogError(ex, "Error Starting consumer for topic \"{Topic}\"", topic);
         }
-    }
-
-    public void StopConsumer()
-    {
-        _cancellationTokenSource.Cancel();
-        _pollTask.Wait();
-        _pollTask = null;
-        _consumer.Close();
     }
 
     private async Task StartPollLoop()
@@ -81,6 +73,8 @@ public class KafkaConsumer: IDisposable
 
     public void Dispose()
     {
+        _cancellationTokenSource.Cancel();
+        _pollTask.Wait();
         _pollTask?.Dispose();
         _consumer?.Dispose();
         _cancellationTokenSource?.Dispose();

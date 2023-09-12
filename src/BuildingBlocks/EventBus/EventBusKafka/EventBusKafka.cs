@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+﻿using Google.Protobuf;
+
+namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
 // TODO REMOVE
 public interface IEventBusTemp {}
@@ -72,17 +74,27 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         });
     }
 
-    public void Subscribe<T, TH>(string topicName)
-        where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+    public void Subscribe<T>(string topicName)
+    where T: IMessage<T>
     {
-        var eventName = _subsManager.GetEventKey<T>();
-        DoInternalSubscription(eventName, topicName);
-
-        _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
-
-        // _subsManager.AddSubscription<T, TH>();
-        StartBasicConsume(topicName);
+        // var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
+        // if (!containsKey)
+        // {
+        //     if (_topicSubscriptions.TryGetValue(topicName, out var list))
+        //     {
+        //         list.Add(eventName);
+        //         return;
+        //     }
+        //     _topicSubscriptions.Add(topicName, new List<string>{eventName});
+        //     _consumerManager.StartConsuming(topicName);
+        // }
+        // var eventName = _subsManager.GetEventKey<T>();
+        // DoInternalSubscription(eventName, topicName);
+        //
+        // _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+        //
+        // // _subsManager.AddSubscription<T, TH>();
+        // StartBasicConsume(topicName);
     }
 
     private void DoInternalSubscription(string eventName, string topicName)
