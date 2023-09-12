@@ -1,4 +1,7 @@
-﻿using Google.Protobuf;
+﻿using Confluent.Kafka.SyncOverAsync;
+using Confluent.SchemaRegistry;
+using Confluent.SchemaRegistry.Serdes;
+using Google.Protobuf;
 
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
@@ -9,7 +12,6 @@ public class EventBusKafka : IEventBusTemp, IDisposable
 {
     private readonly IKafkaPersistentConnection _persistentConnection;
     private readonly ILogger<EventBusKafka> _logger;
-    private readonly IConsumerManager _consumerManager;
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly IServiceProvider _serviceProvider;
     private readonly int _retryCount;
@@ -17,12 +19,11 @@ public class EventBusKafka : IEventBusTemp, IDisposable
     private Dictionary<string, List<string>> _topicSubscriptions = new();
     
     public EventBusKafka(IKafkaPersistentConnection persistentConnection, ILogger<EventBusKafka> logger,
-        IConsumerManager consumerManager, IServiceProvider serviceProvider,
+        IServiceProvider serviceProvider,
         IEventBusSubscriptionsManager subsManager, int retryCount = 5)
     {
         _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _consumerManager = consumerManager ?? throw new ArgumentNullException(nameof(consumerManager));
         _subsManager = subsManager ?? new InMemoryEventBusSubscriptionsManager();
         _serviceProvider = serviceProvider;
         _retryCount = retryCount;
@@ -48,29 +49,32 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         // }
     }
 
-    public void Publish(IntegrationEvent @event)
+    public void Publish<T>(T @event)
+        where T: class, IMessage<T>, new()
     {
-        using var producer = new DependentProducerBuilder<string, string>(_persistentConnection.Handle)
+        var schemaRegistryConfig = new CachedSchemaRegistryClient(_persistentConnection.KafkaConfig.SchemaRegistry);
+        var producer = new DependentProducerBuilder<string, T>(_persistentConnection.Handle)
+            .SetValueSerializer(new ProtobufSerializer<T>(schemaRegistryConfig).AsSyncOverAsync())
             .Build();
         
         var policy = RetryPolicy.Handle<ProduceException<string, string>>()
             .Or<SocketException>()
             .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
             {
-                _logger.LogWarning(ex, "Could not publish event: {EventId} after {Timeout}s", @event.Id, $"{time.TotalSeconds:n1}");
+                _logger.LogWarning(ex, "Could not publish event: {Event} after {Timeout}s", @event, $"{time.TotalSeconds:n1}");
             });
 
         var eventName = @event.GetType().Name;
 
         var serialized = JsonSerializer.Serialize(@event);
         
-        var message = new Message<string, string> { Key = eventName, Value = serialized };
+        var message = new Message<string, T> { Key = eventName, Value = @event };
 
         policy.Execute(() =>
         {
-            _logger.LogTrace("Publishing event to Kafka: {EventId}", @event.Id);
+            _logger.LogTrace("Publishing event to Kafka: {EventId}", @event);
 
-            producer.Produce(_persistentConnection.KafkaConfig.KafkaProducer.Topic, message);
+            producer.Produce(_persistentConnection.KafkaConfig.Producer.Topic, message);
         });
     }
 
@@ -108,7 +112,7 @@ public class EventBusKafka : IEventBusTemp, IDisposable
                 return;
             }
             _topicSubscriptions.Add(topicName, new List<string>{eventName});
-            _consumerManager.StartConsuming(topicName);
+            // _consumerManager.StartConsuming(topicName);
         }
     }
 

@@ -20,7 +20,7 @@ where T: class, IMessage<T>, new()
 
     public IConsumer<string, T> Build()
     {
-        var config = _config.KafkaConsumer;
+        var config = _config.Consumer;
         // TODO Change
         config.GroupId = "Test";
         return new ConsumerBuilder<string, T>(config)

@@ -459,10 +459,10 @@ public static class CommonExtensions
 
         services.Configure<KafkaConfig>(kafkaSection).PostConfigure<KafkaConfig>(x =>
         {
-            x.KafkaProducer.BootstrapServers = x.BootstrapServers;
-            x.KafkaConsumer.BootstrapServers = x.BootstrapServers;
-            x.KafkaProducer.Debug = x.Debug;
-            x.KafkaConsumer.Debug = x.Debug;
+            x.Producer.BootstrapServers = x.BootstrapServers;
+            x.Consumer.BootstrapServers = x.BootstrapServers;
+            x.Producer.Debug = x.Debug;
+            x.Consumer.Debug = x.Debug;
         });
         
         services.AddSingleton<IKafkaPersistentConnection>(sp =>
@@ -473,18 +473,15 @@ public static class CommonExtensions
             
             return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
         });
-
-        services.AddSingleton<IConsumerManager, ConsumerManager>();
-
+        
         services.AddSingleton<EventBusKafka>(sp =>
         {
             var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-            var consumerManager = sp.GetRequiredService<IConsumerManager>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
 
-            return new EventBusKafka(kafkaPersistentConnection, logger, consumerManager, sp, eventBusSubscriptionsManager,
+            return new EventBusKafka(kafkaPersistentConnection, logger, sp, eventBusSubscriptionsManager,
                 retryCount);
         });
 

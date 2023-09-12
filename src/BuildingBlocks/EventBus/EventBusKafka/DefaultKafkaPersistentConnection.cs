@@ -18,7 +18,7 @@ public class DefaultKafkaPersistentConnection
         _retryCount = retryCount;
         try
         {
-            _producer = new ProducerBuilder<byte[], byte[]>(_config.KafkaProducer)
+            _producer = new ProducerBuilder<byte[], byte[]>(_config.Producer)
                 .SetErrorHandler(OnErrorHandle)
                 .Build();
         }

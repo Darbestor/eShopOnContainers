@@ -43,8 +43,8 @@ public class ConsumerManager : IConsumerManager
         
         try
         {
-            _config.KafkaConsumer.GroupId = "Test";
-            var consumer = new ConsumerBuilder<string, string>(_config.KafkaConsumer)
+            _config.Consumer.GroupId = "Test";
+            var consumer = new ConsumerBuilder<string, string>(_config.Consumer)
                 .Build();
             consumer.Subscribe(topicName);
 
