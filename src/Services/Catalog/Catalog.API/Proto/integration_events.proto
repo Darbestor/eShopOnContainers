@@ -11,3 +11,24 @@ message ProductPriceChangedIntegrationEventProto {
   CustomTypes.DecimalValue new_price = 2;
   CustomTypes.DecimalValue old_price = 3;
 }
+
+message OrderStockRejectedIntegrationEventProto {
+  int32 order_id = 1;
+  repeated ConfirmedOrderStockItemProto order_stock_items = 2;
+}
+
+message ConfirmedOrderStockItemProto {
+  int32 product_id = 1;
+  bool has_stock = 2;
+}
+
+message OrderStockConfirmedIntegrationEventProto {  
+  int32 order_id = 1; 
+}
+
+message OrderEvents {
+  oneof oneof_type {
+    OrderStockConfirmedIntegrationEventProto order_stock_confirmed_integration_event = 1;
+    OrderStockRejectedIntegrationEventProto order_stock_rejected_integration_event = 2;
+  }
+}

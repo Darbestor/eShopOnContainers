@@ -21,7 +21,8 @@
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="Proto\catalog.proto" GrpcServices="Server" />
-    <Protobuf ProtoRoot="..\..\" Include="..\..\Catalog\Catalog.API\Proto\integration_events.proto" Link="Proto\integration_events.proto" GrpcServices="Client" />
+    <Protobuf ProtoRoot="..\..\" Include="..\..\Catalog\Catalog.API\Proto\integration_events.proto" 
+              Link="Proto\integration_events.proto" GrpcServices="None" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Catalog.FunctionalTests" />
@@ -50,5 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infrastructure\IntegrationEventMigrations\" />
+    <Folder Include="Infrastructure\IntegrationEvents\Events\" />
   </ItemGroup>
 </Project>
