@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Proto\custom_types.proto" GrpcServices="None" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.AzureServiceBus" />
     <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
@@ -20,6 +24,11 @@
     <PackageReference Include="Duende.IdentityServer.EntityFramework" />
     <PackageReference Include="Duende.IdentityServer.Storage" />
     <PackageReference Include="Duende.IdentityServer" />
+    <PackageReference Include="Google.Protobuf" />
+    <PackageReference Include="Grpc.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" />
     <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" />
     <PackageReference Include="Microsoft.ApplicationInsights.Kubernetes" />

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+/* >>
+import "google/api/annotations.proto";
+<< */
+
+import "Services.Common/Proto/custom_types.proto";
+
+message ProductPriceChangedIntegrationEventProto {
+  int32 product_id = 1;
+  CustomTypes.DecimalValue new_price = 2;
+  CustomTypes.DecimalValue old_price = 3;
+}
