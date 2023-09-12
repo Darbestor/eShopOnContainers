@@ -17,6 +17,7 @@ builder.Services.AddKafka(builder.Configuration);
 builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
 builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
 
+
 var app = builder.Build();
 
 app.UseServiceDefaults();
@@ -24,7 +25,9 @@ app.UseServiceDefaults();
 app.MapPicApi();
 app.MapControllers();
 app.MapGrpcService<CatalogService>();
-var bus = app.Services.GetRequiredService<EventBusKafka>();
+var bus = app.Services.GetRequiredService<KafkaManager>();
+bus.Subscribe<ProductPriceChangedIntegrationEventProto>("Catalog");
+bus.Subscribe<OrderEvents>("Ordering");
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 
 eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
@@ -45,4 +48,5 @@ using (var scope = app.Services.CreateScope())
     await integrationEventLogContext.Database.MigrateAsync();
 }
 
+bus.StartConsumers();
 await app.RunAsync();

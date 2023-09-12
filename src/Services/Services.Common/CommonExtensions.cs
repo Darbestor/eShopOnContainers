@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Azure.Identity;
+using Confluent.Kafka;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -9,6 +10,7 @@ using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Configuration;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
@@ -473,16 +475,18 @@ public static class CommonExtensions
             
             return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
         });
+
+        services.AddSingleton<IConsumerManager, KafkaConsumerManager>();
+        services.AddSingleton(typeof(IConsumerBuilder<>), typeof(KafkaProtobufConsumerBuilder<>));
         
-        services.AddSingleton<EventBusKafka>(sp =>
+        services.AddSingleton<KafkaManager>(sp =>
         {
             var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
-            var logger = sp.GetRequiredService<ILogger<EventBusKafka>>();
-            var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            var logger = sp.GetRequiredService<ILogger<KafkaManager>>();
+            var consumerManager = sp.GetRequiredService<IConsumerManager>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
 
-            return new EventBusKafka(kafkaPersistentConnection, logger, sp, eventBusSubscriptionsManager,
-                retryCount);
+            return new KafkaManager(kafkaPersistentConnection, logger, consumerManager, sp, retryCount);
         });
 
         //services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();

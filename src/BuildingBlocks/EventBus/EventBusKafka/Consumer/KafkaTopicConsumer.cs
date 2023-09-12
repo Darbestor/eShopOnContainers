@@ -1,24 +1,23 @@
-﻿using Confluent.Kafka.SyncOverAsync;
-using Confluent.SchemaRegistry.Serdes;
-using Google.Protobuf;
-using Microsoft.Extensions.Hosting;
+﻿using Google.Protobuf;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
 
-public class KafkaTopicConsumer<T>: IDisposable
+public class KafkaTopicConsumer<T>: IKafkaTopicConsumer
     where T: class, IMessage<T>, new()
 {
     private readonly ILogger<KafkaTopicConsumer<T>> _logger;
-    private readonly IConsumerBuilder<T> _consumerBuilder;
+    private readonly IServiceProvider _serviceProvider;
 
     private Task _pollTask;
-    private IConsumer<string, T> _consumer;
+    private readonly IConsumer<string, T> _consumer;
     private CancellationTokenSource _cancellationTokenSource;
 
-    public KafkaTopicConsumer(ILogger<KafkaTopicConsumer<T>> logger, IConsumerBuilder<T> consumerBuilder)
+    public KafkaTopicConsumer(ILogger<KafkaTopicConsumer<T>> logger, IServiceProvider serviceProvider, IConsumerBuilder<T> consumerBuilder)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _consumerBuilder = consumerBuilder ?? throw new ArgumentNullException(nameof(consumerBuilder));
+        _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        _consumer = consumerBuilder.Build();
     }
     
     public void StartConsuming(string topic)
@@ -32,10 +31,6 @@ public class KafkaTopicConsumer<T>: IDisposable
         
         try
         {
-            if (_consumer == null)
-            {
-                _consumer = _consumerBuilder.Build();
-            }
             _consumer.Subscribe(topic);
 
             _cancellationTokenSource = new CancellationTokenSource();
@@ -53,9 +48,10 @@ public class KafkaTopicConsumer<T>: IDisposable
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
-                var consumeResult = _consumer.Consume(_cancellationTokenSource.Token);
-                _logger.LogInformation("Message received from {TopicPartitionOffset}: {Message}",
-                    consumeResult.TopicPartitionOffset, consumeResult.Message);
+                ConsumeResult<string, T> consumeResult = _consumer.Consume(_cancellationTokenSource.Token);
+                _logger.LogInformation("Message received from {TopicPartitionOffset}: {Id}",
+                    consumeResult.TopicPartitionOffset, consumeResult.Message.Key);
+                await ConsumerReceived(consumeResult);
             }
         }
         catch (OperationCanceledException)
@@ -69,6 +65,37 @@ public class KafkaTopicConsumer<T>: IDisposable
 
             _consumer.Close();
         }
+    }
+    
+    private async Task ConsumerReceived(ConsumeResult<string, T> consumeResult)
+    {
+        try
+        {
+            await ProcessEvent(consumeResult.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Error Processing message \"{Message}\"", consumeResult.Message.Key);
+        }
+
+        // _consumer.Commit(consumeResult);
+    }
+
+    private async Task ProcessEvent(Message<string, T> message)
+    {
+        var genericType = message.Value.GetGenericTypeName();
+
+        _logger.LogTrace("Processing Kafka event: {EventName}", genericType);
+        
+        await using var scope = _serviceProvider.CreateAsyncScope();
+        var handler = scope.ServiceProvider
+        // if (handler == null) continue;
+        // var eventType = _subsManager.GetEventTypeByName(eventName);
+        // var integrationEvent = JsonSerializer.Deserialize(message, eventType, s_caseInsensitiveOptions);
+        // var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+        //
+        // await Task.Yield();
+        // await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
     }
 
     public void Dispose()
