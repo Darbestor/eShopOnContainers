@@ -2,6 +2,7 @@
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling;
 
+// TODO remove
 public class ProductPriceEventHandler :
     IIntegrationProtobufEventHandler<ProductPriceChangedIntegrationEventProto>
 {
