@@ -71,6 +71,7 @@ public class KafkaTopicConsumer<T>: IKafkaTopicConsumer
     {
         try
         {
+            await Task.Yield();
             await ProcessEvent(consumeResult.Message);
         }
         catch (Exception ex)
@@ -78,7 +79,7 @@ public class KafkaTopicConsumer<T>: IKafkaTopicConsumer
             _logger.LogWarning(ex, "Error Processing message \"{Message}\"", consumeResult.Message.Key);
         }
 
-        // _consumer.Commit(consumeResult);
+        _consumer.Commit(consumeResult);
     }
 
     private async Task ProcessEvent(Message<string, T> message)
@@ -88,14 +89,14 @@ public class KafkaTopicConsumer<T>: IKafkaTopicConsumer
         _logger.LogTrace("Processing Kafka event: {EventName}", genericType);
         
         await using var scope = _serviceProvider.CreateAsyncScope();
-        var handler = scope.ServiceProvider
-        // if (handler == null) continue;
-        // var eventType = _subsManager.GetEventTypeByName(eventName);
-        // var integrationEvent = JsonSerializer.Deserialize(message, eventType, s_caseInsensitiveOptions);
-        // var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
-        //
-        // await Task.Yield();
-        // await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
+        var type = typeof(IIntegrationProtobufEventHandler<>).MakeGenericType(message.Value.GetType());
+        var handler = (IIntegrationProtobufEventHandler)scope.ServiceProvider.GetService(type);
+        if (handler == null)
+        {
+            _logger.LogTrace("Event {EventName} don't have handler", genericType);
+            return;
+        }
+        await handler.Handle(message.Value);
     }
 
     public void Dispose()

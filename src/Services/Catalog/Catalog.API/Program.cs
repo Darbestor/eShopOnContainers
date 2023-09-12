@@ -16,7 +16,9 @@ builder.Services.AddIntegrationServices();
 builder.Services.AddKafka(builder.Configuration);
 builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
 builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
-
+builder.Services
+    .AddTransient<IIntegrationProtobufEventHandler<ProductPriceChangedIntegrationEventProto>,
+        ProductPriceEventHandler>();
 
 var app = builder.Build();
 
@@ -47,6 +49,4 @@ using (var scope = app.Services.CreateScope())
     var integrationEventLogContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
     await integrationEventLogContext.Database.MigrateAsync();
 }
-
-bus.StartConsumers();
 await app.RunAsync();

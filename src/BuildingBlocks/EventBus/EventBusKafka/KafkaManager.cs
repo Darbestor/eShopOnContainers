@@ -5,10 +5,19 @@ using Google.Protobuf;
 
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
-// TODO REMOVE
-public interface IEventBusTemp {}
+public interface IKafkaManager
+{
+    void Publish<T>(string key, T @event)
+        where T : class, IMessage<T>, new();
 
-public class KafkaManager : IEventBusTemp
+    void Subscribe<T>(string topicName)
+        where T : class, IMessage<T>, new();
+
+    public void Unsubscribe<T>(string topicName)
+        where T : class, IMessage<T>, new();
+}
+
+public class KafkaManager : IKafkaManager
 {
     private readonly IKafkaPersistentConnection _persistentConnection;
     private readonly ILogger<KafkaManager> _logger;
@@ -57,11 +66,12 @@ public class KafkaManager : IEventBusTemp
     public void Subscribe<T>(string topicName)
     where T: class, IMessage<T>, new()
     {
-        _consumerManager.Add<T>(topicName);
+        _consumerManager.Subscribe<T>(topicName);
     }
 
-    public void StartConsumers()
+    public void Unsubscribe<T>(string topicName) 
+        where T : class, IMessage<T>, new()
     {
-        _consumerManager.StartConsuming();
+        _consumerManager.Unsubscribe<T>(topicName);
     }
 }

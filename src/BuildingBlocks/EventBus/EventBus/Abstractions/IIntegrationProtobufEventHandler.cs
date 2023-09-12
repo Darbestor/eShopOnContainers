@@ -1,0 +1,14 @@
+﻿using Google.Protobuf;
+
+namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+
+public interface IIntegrationProtobufEventHandler<in TIntegrationEvent> : IIntegrationProtobufEventHandler
+    where TIntegrationEvent : IMessage
+{
+    Task Handle(TIntegrationEvent @event);
+}
+
+public interface IIntegrationProtobufEventHandler
+{
+    Task Handle(IMessage @event);
+}

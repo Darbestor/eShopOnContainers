@@ -7,9 +7,11 @@ namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
 public interface IConsumerManager
 {
-    void Add<T>(string topic)
+    void Subscribe<T>(string topic)
         where T : class, IMessage<T>, new();
-    void StartConsuming();
+    
+    public void Unsubscribe<T>(string topicName)
+        where T : class, IMessage<T>, new();
 }
 
 public class KafkaConsumerManager : IConsumerManager
@@ -39,7 +41,7 @@ public class KafkaConsumerManager : IConsumerManager
         }
     }
 
-    public void Add<T>(string topic)
+    public void Subscribe<T>(string topic)
     where T: class, IMessage<T>, new()
     {
         if (_consumers.ContainsKey(topic))
@@ -56,5 +58,17 @@ public class KafkaConsumerManager : IConsumerManager
         
         _consumers.Add(topic, consumer);
         _logger.LogTrace("Kafka Consumer for topic '{Topic}' added", topic);
+        
+        consumer.StartConsuming(topic);
+    }
+
+    public void Unsubscribe<T>(string topicName) 
+        where T : class, IMessage<T>, new()
+    {
+        if (_consumers.TryGetValue(topicName, out var consumer))
+        {
+            consumer.Dispose();
+            _consumers.Remove(topicName);
+        }
     }
 }
