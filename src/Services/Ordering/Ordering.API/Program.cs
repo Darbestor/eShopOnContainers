@@ -45,7 +45,6 @@ services.AddTransient<IIntegrationEventHandler<OrderPaymentSucceededIntegrationE
 services.AddTransient<IIntegrationEventHandler<OrderStockConfirmedIntegrationEvent>, OrderStockConfirmedIntegrationEventHandler>();
 services.AddTransient<IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>, OrderStockRejectedIntegrationEventHandler>();
 services.AddTransient<IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>, UserCheckoutAcceptedIntegrationEventHandler>();
-
 var app = builder.Build();
 
 app.UseServiceDefaults();

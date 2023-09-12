@@ -68,7 +68,7 @@ public class EventBusKafka : IEventBusTemp, IDisposable
         {
             _logger.LogTrace("Publishing event to Kafka: {EventId}", @event.Id);
 
-            producer.Produce(_persistentConnection.KafkaConfig.Producer.Topic, message);
+            producer.Produce(_persistentConnection.KafkaConfig.KafkaProducer.Topic, message);
         });
     }
 

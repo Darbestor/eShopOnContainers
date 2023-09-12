@@ -6,5 +6,5 @@ public interface IKafkaPersistentConnection
 {
     Handle Handle { get; }
     
-    KafkaConfiguration KafkaConfig { get; }
+    KafkaConfig KafkaConfig { get; }
 }

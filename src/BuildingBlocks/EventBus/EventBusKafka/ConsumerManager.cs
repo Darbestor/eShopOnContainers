@@ -24,11 +24,11 @@ public interface IConsumerManager
 public class ConsumerManager : IConsumerManager
 {
     private readonly ILogger<ConsumerManager> _logger;
-    private readonly KafkaConfiguration _config;
+    private readonly KafkaConfig _config;
     private List<ConsumerPoll> _pollLoops = new();
     private readonly TaskFactory _taskFactory;
 
-    public ConsumerManager(ILogger<ConsumerManager> logger, IOptions<KafkaConfiguration> config)
+    public ConsumerManager(ILogger<ConsumerManager> logger, IOptions<KafkaConfig> config)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _config = config.Value;
@@ -43,8 +43,8 @@ public class ConsumerManager : IConsumerManager
         
         try
         {
-            _config.Consumer.GroupId = "Test";
-            var consumer = new ConsumerBuilder<string, string>(_config.Consumer)
+            _config.KafkaConsumer.GroupId = "Test";
+            var consumer = new ConsumerBuilder<string, string>(_config.KafkaConsumer)
                 .Build();
             consumer.Subscribe(topicName);
 

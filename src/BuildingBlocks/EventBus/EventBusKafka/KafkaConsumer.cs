@@ -7,7 +7,7 @@ public class KafkaConsumer: BackgroundService
     private readonly ConsumerConfig _config;
     private readonly ILogger<KafkaConsumer> _logger;
 
-    public KafkaConsumer(ConsumerConfig config, ILogger<KafkaConsumer> logger)
+    public KafkaConsumer(KafkaConsumerConfig config, ILogger<KafkaConsumer> logger)
     {
         _config = config ?? throw new ArgumentNullException(nameof(config));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

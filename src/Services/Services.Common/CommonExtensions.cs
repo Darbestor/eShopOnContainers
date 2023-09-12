@@ -1,15 +1,14 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Azure.Identity;
-using Confluent.Kafka;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Configuration;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
@@ -458,19 +457,19 @@ public static class CommonExtensions
             return services;
         }
 
-        services.Configure<KafkaConfiguration>(kafkaSection).PostConfigure<KafkaConfiguration>(x =>
+        services.Configure<KafkaConfig>(kafkaSection).PostConfigure<KafkaConfig>(x =>
         {
-            x.Producer.BootstrapServers = x.BootstrapServers;
-            x.Consumer.BootstrapServers = x.BootstrapServers;
-            x.Producer.Debug = x.Debug;
-            x.Consumer.Debug = x.Debug;
+            x.KafkaProducer.BootstrapServers = x.BootstrapServers;
+            x.KafkaConsumer.BootstrapServers = x.BootstrapServers;
+            x.KafkaProducer.Debug = x.Debug;
+            x.KafkaConsumer.Debug = x.Debug;
         });
         
         services.AddSingleton<IKafkaPersistentConnection>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<DefaultKafkaPersistentConnection>>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
-            var config = sp.GetRequiredService<IOptions<KafkaConfiguration>>();
+            var config = sp.GetRequiredService<IOptions<KafkaConfig>>();
             
             return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
         });
