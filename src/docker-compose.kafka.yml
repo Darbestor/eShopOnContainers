@@ -57,13 +57,34 @@ services:
       volumes:
         - kafka3:/bitnami/kafka
 
+    kafka-schema-registry:
+      image: confluentinc/cp-schema-registry:7.5.0
+      restart: always
+      depends_on:
+        - kafka1
+        - kafka2
+        - kafka3
+      ports:
+        - 8085:8085
+      environment:
+        - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092
+        - SCHEMA_REGISTRY_HOST_NAME=kafka-schema-registry
+        - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8085
+        - SCHEMA_REGISTRY_DEBUG=true
+      
     ui:
       image: provectuslabs/kafka-ui:master
       ports:
         - 8081:8080
+      depends_on:
+        - kafka3
+        - kafka2
+        - kafka1
+        - kafka-schema-registry
       environment:
         - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka1:9092
-        - KAFKA_CLUSTERS_0_NAME=kraft
+        - KAFKA_CLUSTERS_0_NAME=local
+        - KAFKA_CLUSTERS_0_SCHEMAREGISTRY=http://kafka-schema-registry:8085
 volumes:
   kafka1:
     driver: local
