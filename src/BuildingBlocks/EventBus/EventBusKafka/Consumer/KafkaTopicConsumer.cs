@@ -51,7 +51,7 @@ public class KafkaTopicConsumer<T>: IDisposable
     {
         try
         {
-            while (true)
+            while (!_cancellationTokenSource.IsCancellationRequested)
             {
                 var consumeResult = _consumer.Consume(_cancellationTokenSource.Token);
                 _logger.LogInformation("Message received from {TopicPartitionOffset}: {Message}",
