@@ -2,16 +2,16 @@
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling;
 
-public class OrderStatusChangedToPaidIntegrationEventHandler :
+public class CompoundOrderTypesEventHandler :
     IIntegrationProtobufEventHandler<OrderEvents>
 {
     private readonly CatalogContext _catalogContext;
-    private readonly ILogger<OrderStatusChangedToPaidIntegrationEventHandler> _logger;
+    private readonly ILogger<CompoundOrderTypesEventHandler> _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    public OrderStatusChangedToPaidIntegrationEventHandler(
+    public CompoundOrderTypesEventHandler(
         CatalogContext catalogContext,
-        ILogger<OrderStatusChangedToPaidIntegrationEventHandler> logger,
+        ILogger<CompoundOrderTypesEventHandler> logger,
         IServiceProvider serviceProvider)
     {
         _catalogContext = catalogContext;
