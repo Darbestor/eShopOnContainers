@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+/* >>
+import "google/api/annotations.proto";
+<< */
+
+import "event_ordering_status_changed_to_awaiting.proto";
+import "event_ordering_status_changed_to_paid.proto";
+import "event_ordering_stock_confirmed.proto";
+import "event_ordering_stock_rejected.proto";
+
+
+option csharp_namespace="Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents";
+
+message OrderEvents {
+  oneof oneof_order {
+    OrderStockConfirmedIntegrationEventProto order_stock_confirmed_integration_event = 1;
+    OrderStockRejectedIntegrationEventProto order_stock_rejected_integration_event = 2;
+    OrderStatusChangedToPaidIntegrationEventProto order_status_changed_to_paid_integration_event = 3;
+    OrderStatusChangedToAwaitingValidationIntegrationEventProto order_status_changed_to_awaiting_validation_integration_event = 4;
+  }
+}

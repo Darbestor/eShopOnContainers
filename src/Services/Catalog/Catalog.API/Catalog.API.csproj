@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="Proto\catalog.proto" GrpcServices="Server" />
-    <Protobuf Include="Proto\integration_events.proto"
+    <Protobuf Include="Proto\event*.proto"
               ProtoRoot="Proto"
               AdditionalImportDirs="..\..\Services.Common\Proto"
               Link="Proto\integration_events.proto" GrpcServices="None"

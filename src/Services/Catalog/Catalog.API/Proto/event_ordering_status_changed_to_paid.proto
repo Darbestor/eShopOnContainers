@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+/* >>
+import "google/api/annotations.proto";
+<< */
+
+import "event_ordering_common.proto";
+
+option csharp_namespace="Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents";
+
+message OrderStatusChangedToPaidIntegrationEventProto {
+  int32 order_id = 1;
+  repeated OrderStockItemProto order_stock_items = 2;
+}

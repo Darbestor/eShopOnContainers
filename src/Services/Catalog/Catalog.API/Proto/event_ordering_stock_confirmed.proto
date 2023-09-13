@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+/* >>
+import "google/api/annotations.proto";
+<< */
+
+option csharp_namespace="Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents";
+
+message OrderStockConfirmedIntegrationEventProto {  
+  int32 order_id = 1; 
+}

@@ -27,19 +27,29 @@ public class KafkaProtobufProducer<T>: IKafkaProtobufProducer<T>, IDisposable
             Value = @event.Message as T, 
             Timestamp = new Timestamp(DateTime.UtcNow)
         };
-        var policy = RetryPolicy.Handle<ProduceException<string, T>>()
-            .Or<SocketException>()
-            .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
-            {
-                _logger.LogWarning(ex, "Could not publish event: {Event} after {Timeout}s", topic, $"{time.TotalSeconds:n1}");
-            });
 
-        policy.Execute(() =>
+
+        try
         {
-            _logger.LogTrace("Publishing event to Kafka: {EventId}", topic);
+            var policy = Policy
+                .Handle<ProduceException<string, T>>(x => x.Error.Code != ErrorCode.Local_ValueSerialization)
+                .Or<SocketException>()
+                .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
+                {
+                    _logger.LogWarning(ex, "Could not publish event: {Event} after {Timeout}s", topic,
+                        $"{time.TotalSeconds:n1}");
+                });
+            policy.Execute(() =>
+            {
+                _logger.LogTrace("Publishing event to Kafka: {EventId}", topic);
 
-            _producer.Produce(topic, message, OnDeliveryReport);
-        });
+                _producer.Produce(topic, message, OnDeliveryReport);
+            });
+        }
+        catch (ProduceException<string, T> ex)
+        {
+            throw new KafkaException(ex.Error);
+        }
     }
 
     private void OnDeliveryReport(DeliveryReport<string, T> deliveryReport)
