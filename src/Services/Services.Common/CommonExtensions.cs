@@ -11,6 +11,7 @@ using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Configuration;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
@@ -477,7 +478,8 @@ public static class CommonExtensions
         });
 
         services.AddSingleton<IConsumerManager, KafkaConsumerManager>();
-        services.AddSingleton(typeof(IConsumerBuilder<>), typeof(KafkaProtobufConsumerBuilder<>));
+        services.AddSingleton(typeof(IKafkaConsumerBuilder<>), typeof(KafkaProtobufConsumerBuilder<>));
+        services.AddSingleton(typeof(IKafkaProducerBuilder<>), typeof(KafkaProtobufProducerBuilder<>));
         
         services.AddSingleton<KafkaManager>(sp =>
         {

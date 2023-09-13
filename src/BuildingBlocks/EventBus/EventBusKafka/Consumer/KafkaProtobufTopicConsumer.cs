@@ -3,21 +3,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
 
-public class KafkaTopicConsumer<T>: IKafkaTopicConsumer
+public class KafkaProtobufTopicConsumer<T>: IKafkaTopicConsumer
     where T: class, IMessage<T>, new()
 {
-    private readonly ILogger<KafkaTopicConsumer<T>> _logger;
+    private readonly ILogger<KafkaProtobufTopicConsumer<T>> _logger;
     private readonly IServiceProvider _serviceProvider;
 
     private Task _pollTask;
     private readonly IConsumer<string, T> _consumer;
     private CancellationTokenSource _cancellationTokenSource;
 
-    public KafkaTopicConsumer(ILogger<KafkaTopicConsumer<T>> logger, IServiceProvider serviceProvider, IConsumerBuilder<T> consumerBuilder)
+    public KafkaProtobufTopicConsumer(ILogger<KafkaProtobufTopicConsumer<T>> logger, IServiceProvider serviceProvider, IKafkaConsumerBuilder<T> kafkaConsumerBuilder)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-        _consumer = consumerBuilder.Build();
+        _consumer = kafkaConsumerBuilder.Build();
     }
     
     public void StartConsuming(string topic)

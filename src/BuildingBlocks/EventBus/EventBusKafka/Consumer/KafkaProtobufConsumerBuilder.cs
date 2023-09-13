@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
 
-public class KafkaProtobufConsumerBuilder<T>: IConsumerBuilder<T>
+public class KafkaProtobufConsumerBuilder<T>: IKafkaConsumerBuilder<T>
 where T: class, IMessage<T>, new()
 {
     private readonly ILogger<KafkaProtobufConsumerBuilder<T>> _logger;

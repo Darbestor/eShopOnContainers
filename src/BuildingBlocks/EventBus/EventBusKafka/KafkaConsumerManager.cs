@@ -52,9 +52,9 @@ public class KafkaConsumerManager : IConsumerManager
         _logger.LogTrace("Creating Kafka consumer for topic '{Topic}'", topic);
 
         using var scope = _serviceProvider.CreateScope();
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<KafkaTopicConsumer<T>>>();
-        var builder = scope.ServiceProvider.GetRequiredService<IConsumerBuilder<T>>();
-        var consumer = new KafkaTopicConsumer<T>(logger, _serviceProvider, builder);
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<KafkaProtobufTopicConsumer<T>>>();
+        var builder = scope.ServiceProvider.GetRequiredService<IKafkaConsumerBuilder<T>>();
+        var consumer = new KafkaProtobufTopicConsumer<T>(logger, _serviceProvider, builder);
         
         _consumers.Add(topic, consumer);
         _logger.LogTrace("Kafka Consumer for topic '{Topic}' added", topic);

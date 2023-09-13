@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
 
-public interface IConsumerBuilder<T>
+public interface IKafkaConsumerBuilder<T>
 {
     IConsumer<string, T> Build();
 }
