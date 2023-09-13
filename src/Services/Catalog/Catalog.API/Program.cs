@@ -27,7 +27,7 @@ app.MapControllers();
 app.MapGrpcService<CatalogService>();
 
 // TODO refactor
-var kafkaManager = app.Services.GetRequiredService<KafkaManager>();
+var kafkaManager = app.Services.GetRequiredService<KafkaEventBus>();
 kafkaManager.Subscribe<ProductPriceChangedIntegrationEventProto>("Catalog");
 kafkaManager.Subscribe<OrderEvents>("Ordering");
 

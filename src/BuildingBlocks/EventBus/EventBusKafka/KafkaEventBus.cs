@@ -4,25 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
-public interface IKafkaManager
-{
-    void Publish(string key, KafkaIntegrationEvent @event);
-    void Subscribe<T>(string topicName)
-        where T : class, IMessage<T>, new();
-
-    public void Unsubscribe<T>(string topicName)
-        where T : class, IMessage<T>, new();
-}
-
-public class KafkaManager : IKafkaManager
+public class KafkaEventBus : IKafkaEventBus
 {
     private readonly IKafkaPersistentConnection _persistentConnection;
-    private readonly ILogger<KafkaManager> _logger;
+    private readonly ILogger<KafkaEventBus> _logger;
     private readonly IConsumerManager _consumerManager;
     private readonly IServiceProvider _serviceProvider;
     private readonly int _retryCount;
     
-    public KafkaManager(IKafkaPersistentConnection persistentConnection, ILogger<KafkaManager> logger,
+    public KafkaEventBus(IKafkaPersistentConnection persistentConnection, ILogger<KafkaEventBus> logger,
         IConsumerManager consumerManager,
         IServiceProvider serviceProvider,
         int retryCount = 5)

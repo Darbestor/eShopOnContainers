@@ -195,7 +195,7 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     // TODO Remove dependency
-    public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate, [FromServices] KafkaManager kafkaManager)
+    public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate, [FromServices] KafkaEventBus kafkaEventBus)
     {
         var catalogItem = await _catalogContext.CatalogItems.SingleOrDefaultAsync(i => i.Id == productToUpdate.Id);
 
@@ -229,7 +229,7 @@ public class CatalogController : ControllerBase
                 Key = protoEvent.ProductId.ToString()
             };
             
-            kafkaManager.Publish(catalogItem.Id.ToString(), integrationKafkaEvent);
+            kafkaEventBus.Publish(catalogItem.Id.ToString(), integrationKafkaEvent);
             //
             // // Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
             // await _catalogIntegrationEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);

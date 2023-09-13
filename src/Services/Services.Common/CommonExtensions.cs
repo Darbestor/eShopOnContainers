@@ -481,14 +481,14 @@ public static class CommonExtensions
         services.AddSingleton(typeof(IKafkaConsumerBuilder<>), typeof(KafkaProtobufConsumerBuilder<>));
         services.AddSingleton(typeof(IKafkaProducerBuilder<>), typeof(KafkaProtobufProducerBuilder<>));
         
-        services.AddSingleton<KafkaManager>(sp =>
+        services.AddSingleton<KafkaEventBus>(sp =>
         {
             var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
-            var logger = sp.GetRequiredService<ILogger<KafkaManager>>();
+            var logger = sp.GetRequiredService<ILogger<KafkaEventBus>>();
             var consumerManager = sp.GetRequiredService<IConsumerManager>();
             var retryCount = kafkaSection.GetValue("RetryCount", 5);
 
-            return new KafkaManager(kafkaPersistentConnection, logger, consumerManager, sp, retryCount);
+            return new KafkaEventBus(kafkaPersistentConnection, logger, consumerManager, sp, retryCount);
         });
 
         //services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
