@@ -28,36 +28,37 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
             "byKaAQooUHJvZHVjdFByaWNlQ2hhbmdlZEludGVncmF0aW9uRXZlbnRQcm90",
             "bxISCgpwcm9kdWN0X2lkGAEgASgFEiwKCW5ld19wcmljZRgCIAEoCzIZLkN1",
             "c3RvbVR5cGVzLkRlY2ltYWxWYWx1ZRIsCglvbGRfcHJpY2UYAyABKAsyGS5D",
-            "dXN0b21UeXBlcy5EZWNpbWFsVmFsdWUiMwoOT3JkZXJTdG9ja0l0ZW0SEgoK",
-            "cHJvZHVjdF9pZBgBIAEoBRINCgV1bml0cxgCIAEoBSJFChxDb25maXJtZWRP",
-            "cmRlclN0b2NrSXRlbVByb3RvEhIKCnByb2R1Y3RfaWQYASABKAUSEQoJaGFz",
-            "X3N0b2NrGAIgASgIInUKJ09yZGVyU3RvY2tSZWplY3RlZEludGVncmF0aW9u",
-            "RXZlbnRQcm90bxIQCghvcmRlcl9pZBgBIAEoBRI4ChFvcmRlcl9zdG9ja19p",
-            "dGVtcxgCIAMoCzIdLkNvbmZpcm1lZE9yZGVyU3RvY2tJdGVtUHJvdG8iPAoo",
-            "T3JkZXJTdG9ja0NvbmZpcm1lZEludGVncmF0aW9uRXZlbnRQcm90bxIQCghv",
-            "cmRlcl9pZBgBIAEoBSJtCi1PcmRlclN0YXR1c0NoYW5nZWRUb1BhaWRJbnRl",
-            "Z3JhdGlvbkV2ZW50UHJvdG8SEAoIb3JkZXJfaWQYASABKAUSKgoRb3JkZXJf",
-            "c3RvY2tfaXRlbXMYAiADKAsyDy5PcmRlclN0b2NrSXRlbSJ7CjtPcmRlclN0",
-            "YXR1c0NoYW5nZWRUb0F3YWl0aW5nVmFsaWRhdGlvbkludGVncmF0aW9uRXZl",
-            "bnRQcm90bxIQCghvcmRlcl9pZBgBIAEoBRIqChFvcmRlcl9zdG9ja19pdGVt",
-            "cxgCIAMoCzIPLk9yZGVyU3RvY2tJdGVtIsgDCgtPcmRlckV2ZW50cxJcCidv",
-            "cmRlcl9zdG9ja19jb25maXJtZWRfaW50ZWdyYXRpb25fZXZlbnQYASABKAsy",
-            "KS5PcmRlclN0b2NrQ29uZmlybWVkSW50ZWdyYXRpb25FdmVudFByb3RvSAAS",
-            "Wgomb3JkZXJfc3RvY2tfcmVqZWN0ZWRfaW50ZWdyYXRpb25fZXZlbnQYAiAB",
-            "KAsyKC5PcmRlclN0b2NrUmVqZWN0ZWRJbnRlZ3JhdGlvbkV2ZW50UHJvdG9I",
-            "ABJoCi5vcmRlcl9zdGF0dXNfY2hhbmdlZF90b19wYWlkX2ludGVncmF0aW9u",
-            "X2V2ZW50GAMgASgLMi4uT3JkZXJTdGF0dXNDaGFuZ2VkVG9QYWlkSW50ZWdy",
-            "YXRpb25FdmVudFByb3RvSAAShQEKPW9yZGVyX3N0YXR1c19jaGFuZ2VkX3Rv",
-            "X2F3YWl0aW5nX3ZhbGlkYXRpb25faW50ZWdyYXRpb25fZXZlbnQYBCABKAsy",
-            "PC5PcmRlclN0YXR1c0NoYW5nZWRUb0F3YWl0aW5nVmFsaWRhdGlvbkludGVn",
-            "cmF0aW9uRXZlbnRQcm90b0gAQg0KC29uZW9mX29yZGVyQlGqAk5NaWNyb3Nv",
-            "ZnQuZVNob3BPbkNvbnRhaW5lcnMuU2VydmljZXMuQ2F0YWxvZy5BUEkuSW50",
-            "ZWdyYXRpb25FdmVudHMuUHJvdG9FdmVudHNiBnByb3RvMw=="));
+            "dXN0b21UeXBlcy5EZWNpbWFsVmFsdWUiOAoTT3JkZXJTdG9ja0l0ZW1Qcm90",
+            "bxISCgpwcm9kdWN0X2lkGAEgASgFEg0KBXVuaXRzGAIgASgFIkUKHENvbmZp",
+            "cm1lZE9yZGVyU3RvY2tJdGVtUHJvdG8SEgoKcHJvZHVjdF9pZBgBIAEoBRIR",
+            "CgloYXNfc3RvY2sYAiABKAgidQonT3JkZXJTdG9ja1JlamVjdGVkSW50ZWdy",
+            "YXRpb25FdmVudFByb3RvEhAKCG9yZGVyX2lkGAEgASgFEjgKEW9yZGVyX3N0",
+            "b2NrX2l0ZW1zGAIgAygLMh0uQ29uZmlybWVkT3JkZXJTdG9ja0l0ZW1Qcm90",
+            "byI8CihPcmRlclN0b2NrQ29uZmlybWVkSW50ZWdyYXRpb25FdmVudFByb3Rv",
+            "EhAKCG9yZGVyX2lkGAEgASgFInIKLU9yZGVyU3RhdHVzQ2hhbmdlZFRvUGFp",
+            "ZEludGVncmF0aW9uRXZlbnRQcm90bxIQCghvcmRlcl9pZBgBIAEoBRIvChFv",
+            "cmRlcl9zdG9ja19pdGVtcxgCIAMoCzIULk9yZGVyU3RvY2tJdGVtUHJvdG8i",
+            "gAEKO09yZGVyU3RhdHVzQ2hhbmdlZFRvQXdhaXRpbmdWYWxpZGF0aW9uSW50",
+            "ZWdyYXRpb25FdmVudFByb3RvEhAKCG9yZGVyX2lkGAEgASgFEi8KEW9yZGVy",
+            "X3N0b2NrX2l0ZW1zGAIgAygLMhQuT3JkZXJTdG9ja0l0ZW1Qcm90byLIAwoL",
+            "T3JkZXJFdmVudHMSXAonb3JkZXJfc3RvY2tfY29uZmlybWVkX2ludGVncmF0",
+            "aW9uX2V2ZW50GAEgASgLMikuT3JkZXJTdG9ja0NvbmZpcm1lZEludGVncmF0",
+            "aW9uRXZlbnRQcm90b0gAEloKJm9yZGVyX3N0b2NrX3JlamVjdGVkX2ludGVn",
+            "cmF0aW9uX2V2ZW50GAIgASgLMiguT3JkZXJTdG9ja1JlamVjdGVkSW50ZWdy",
+            "YXRpb25FdmVudFByb3RvSAASaAoub3JkZXJfc3RhdHVzX2NoYW5nZWRfdG9f",
+            "cGFpZF9pbnRlZ3JhdGlvbl9ldmVudBgDIAEoCzIuLk9yZGVyU3RhdHVzQ2hh",
+            "bmdlZFRvUGFpZEludGVncmF0aW9uRXZlbnRQcm90b0gAEoUBCj1vcmRlcl9z",
+            "dGF0dXNfY2hhbmdlZF90b19hd2FpdGluZ192YWxpZGF0aW9uX2ludGVncmF0",
+            "aW9uX2V2ZW50GAQgASgLMjwuT3JkZXJTdGF0dXNDaGFuZ2VkVG9Bd2FpdGlu",
+            "Z1ZhbGlkYXRpb25JbnRlZ3JhdGlvbkV2ZW50UHJvdG9IAEINCgtvbmVvZl9v",
+            "cmRlckJRqgJOTWljcm9zb2Z0LmVTaG9wT25Db250YWluZXJzLlNlcnZpY2Vz",
+            "LkNhdGFsb2cuQVBJLkludGVncmF0aW9uRXZlbnRzLlByb3RvRXZlbnRzYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Services.Common.CustomTypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.ProductPriceChangedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.ProductPriceChangedIntegrationEventProto.Parser, new[]{ "ProductId", "NewPrice", "OldPrice" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem.Parser, new[]{ "ProductId", "Units" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto.Parser, new[]{ "ProductId", "Units" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.ConfirmedOrderStockItemProto), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.ConfirmedOrderStockItemProto.Parser, new[]{ "ProductId", "HasStock" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockRejectedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockRejectedIntegrationEventProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockConfirmedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockConfirmedIntegrationEventProto.Parser, new[]{ "OrderId" }, null, null, null, null),
@@ -351,16 +352,16 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
 
   }
 
-  public sealed partial class OrderStockItem : pb::IMessage<OrderStockItem>
+  public sealed partial class OrderStockItemProto : pb::IMessage<OrderStockItemProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<OrderStockItem> _parser = new pb::MessageParser<OrderStockItem>(() => new OrderStockItem());
+    private static readonly pb::MessageParser<OrderStockItemProto> _parser = new pb::MessageParser<OrderStockItemProto>(() => new OrderStockItemProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<OrderStockItem> Parser { get { return _parser; } }
+    public static pb::MessageParser<OrderStockItemProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -376,7 +377,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockItem() {
+    public OrderStockItemProto() {
       OnConstruction();
     }
 
@@ -384,7 +385,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockItem(OrderStockItem other) : this() {
+    public OrderStockItemProto(OrderStockItemProto other) : this() {
       productId_ = other.productId_;
       units_ = other.units_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -392,8 +393,8 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockItem Clone() {
-      return new OrderStockItem(this);
+    public OrderStockItemProto Clone() {
+      return new OrderStockItemProto(this);
     }
 
     /// <summary>Field number for the "product_id" field.</summary>
@@ -423,12 +424,12 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as OrderStockItem);
+      return Equals(other as OrderStockItemProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(OrderStockItem other) {
+    public bool Equals(OrderStockItemProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -514,7 +515,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(OrderStockItem other) {
+    public void MergeFrom(OrderStockItemProto other) {
       if (other == null) {
         return;
       }
@@ -1266,12 +1267,12 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
 
     /// <summary>Field number for the "order_stock_items" field.</summary>
     public const int OrderStockItemsFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem> _repeated_orderStockItems_codec
-        = pb::FieldCodec.ForMessage(18, global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem.Parser);
-    private readonly pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem> orderStockItems_ = new pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem>();
+    private static readonly pb::FieldCodec<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto> _repeated_orderStockItems_codec
+        = pb::FieldCodec.ForMessage(18, global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto.Parser);
+    private readonly pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto> orderStockItems_ = new pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem> OrderStockItems {
+    public pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto> OrderStockItems {
       get { return orderStockItems_; }
     }
 
@@ -1481,12 +1482,12 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
 
     /// <summary>Field number for the "order_stock_items" field.</summary>
     public const int OrderStockItemsFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem> _repeated_orderStockItems_codec
-        = pb::FieldCodec.ForMessage(18, global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem.Parser);
-    private readonly pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem> orderStockItems_ = new pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem>();
+    private static readonly pb::FieldCodec<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto> _repeated_orderStockItems_codec
+        = pb::FieldCodec.ForMessage(18, global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto.Parser);
+    private readonly pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto> orderStockItems_ = new pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItem> OrderStockItems {
+    public pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockItemProto> OrderStockItems {
       get { return orderStockItems_; }
     }
 

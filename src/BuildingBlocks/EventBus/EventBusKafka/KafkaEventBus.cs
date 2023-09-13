@@ -25,7 +25,7 @@ public class KafkaEventBus : IKafkaEventBus
     }
 
 
-    public void Publish(string key, KafkaIntegrationEvent @event)
+    public void Publish(string topic, KafkaIntegrationEvent @event)
     {
         var eventType = @event.Message.Descriptor.ClrType;
         using var scope = _serviceProvider.CreateScope();
@@ -36,19 +36,7 @@ public class KafkaEventBus : IKafkaEventBus
             return;
         }
         
-        var policy = RetryPolicy.Handle<ProduceException<string, string>>()
-            .Or<SocketException>()
-            .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
-            {
-                _logger.LogWarning(ex, "Could not publish event: {Event} after {Timeout}s", key, $"{time.TotalSeconds:n1}");
-            });
-
-        policy.Execute(() =>
-        {
-            _logger.LogTrace("Publishing event to Kafka: {EventId}", key);
-
-            producer.Produce(_persistentConnection.KafkaConfig.Producer.Topic, @event);
-        });
+        producer.Produce(topic, @event);
     }
 
     public void Subscribe<T>(string topicName)

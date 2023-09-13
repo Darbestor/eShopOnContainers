@@ -89,6 +89,9 @@ public static class Extensions
                 ProductPriceEventHandler>();
         services.AddTransient<IIntegrationProtobufEventHandler<OrderEvents>, CompoundOrderTypesEventHandler>();
         services.AddTransient<IKafkaProtobufProducer<ProductPriceChangedIntegrationEventProto>, KafkaProtobufProducer<ProductPriceChangedIntegrationEventProto>>();
+        services
+            .AddTransient<IKafkaProtobufProducer<OrderStockConfirmedIntegrationEventProto>,
+                KafkaProtobufProducer<OrderStockConfirmedIntegrationEventProto>>();
         return services;
     }
 

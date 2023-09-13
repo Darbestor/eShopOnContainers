@@ -481,7 +481,7 @@ public static class CommonExtensions
         services.AddSingleton(typeof(IKafkaConsumerBuilder<>), typeof(KafkaProtobufConsumerBuilder<>));
         services.AddSingleton(typeof(IKafkaProducerBuilder<>), typeof(KafkaProtobufProducerBuilder<>));
         
-        services.AddSingleton<KafkaEventBus>(sp =>
+        services.AddSingleton<IKafkaEventBus, KafkaEventBus>(sp =>
         {
             var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<KafkaEventBus>>();
