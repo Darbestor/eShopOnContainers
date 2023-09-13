@@ -1,5 +1,4 @@
-﻿using Catalog.API.Infrastructure;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 public static class Extensions
@@ -78,6 +77,17 @@ public static class Extensions
             };
         });
 
+        return services;
+    }
+
+    public static IServiceCollection AddKafkaServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddKafka(configuration);
+        // TODO refactor
+        services
+            .AddTransient<IIntegrationProtobufEventHandler<ProductPriceChangedIntegrationEventProto>,
+                ProductPriceEventHandler>();
+        services.AddTransient<IKafkaProtobufProducer<ProductPriceChangedIntegrationEventProto>, KafkaProtobufProducer<ProductPriceChangedIntegrationEventProto>>();
         return services;
     }
 

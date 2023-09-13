@@ -13,15 +13,10 @@ builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
-// Kafka
-builder.Services.AddKafka(builder.Configuration);
+builder.Services.AddKafkaServices(builder.Configuration);
+
 builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
 builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
-// TODO remove
-builder.Services
-    .AddTransient<IIntegrationProtobufEventHandler<ProductPriceChangedIntegrationEventProto>,
-        ProductPriceEventHandler>();
-builder.Services.AddTransient(typeof(IKafkaProtobufProducer<>), typeof(KafkaProtobufProducer<>));
 
 var app = builder.Build();
 
@@ -30,9 +25,12 @@ app.UseServiceDefaults();
 app.MapPicApi();
 app.MapControllers();
 app.MapGrpcService<CatalogService>();
-var bus = app.Services.GetRequiredService<KafkaManager>();
-bus.Subscribe<ProductPriceChangedIntegrationEventProto>("Catalog");
-bus.Subscribe<OrderEvents>("Ordering");
+
+// TODO refactor
+var kafkaManager = app.Services.GetRequiredService<KafkaManager>();
+kafkaManager.Subscribe<ProductPriceChangedIntegrationEventProto>("Catalog");
+kafkaManager.Subscribe<OrderEvents>("Ordering");
+
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 
 eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
