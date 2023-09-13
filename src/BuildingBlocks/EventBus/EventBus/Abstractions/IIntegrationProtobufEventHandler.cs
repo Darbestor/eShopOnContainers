@@ -6,10 +6,10 @@ namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 public interface IIntegrationProtobufEventHandler<in TIntegrationEvent> : IIntegrationProtobufEventHandler
     where TIntegrationEvent : IMessage<TIntegrationEvent>
 {
-    Task Handle(TIntegrationEvent @event);
+    Task Handle(string key, TIntegrationEvent message);
 }
 
 public interface IIntegrationProtobufEventHandler
 {
-    Task Handle(IMessage @event);
+    Task Handle(KafkaIntegrationEvent @event);
 }

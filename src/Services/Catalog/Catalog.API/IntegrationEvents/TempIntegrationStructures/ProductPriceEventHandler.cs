@@ -15,17 +15,13 @@ public class ProductPriceEventHandler :
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task Handle(ProductPriceChangedIntegrationEventProto @event)
+    public async Task Handle(string key, ProductPriceChangedIntegrationEventProto message)
     {
-        _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.ProductId, @event);
+        _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", key, message);
     }
 
-    public async Task Handle(IMessage @event)
+    public async Task Handle(KafkaIntegrationEvent @event)
     {
-        var cast = (ProductPriceChangedIntegrationEventProto)@event;
-        if (cast != null)
-        {
-            await Handle(cast);
-        }
+            await Handle(@event.Key, @event.Message as ProductPriceChangedIntegrationEventProto);
     }
 }

@@ -95,7 +95,9 @@ public class KafkaProtobufTopicConsumer<T>: IKafkaTopicConsumer
             _logger.LogTrace("Event {EventName} don't have handler", genericType);
             return;
         }
-        await handler.Handle(message.Value);
+
+        var kafkaEvent = new KafkaIntegrationEvent() { Key = message.Key, Message = message.Value };
+        await handler.Handle(kafkaEvent);
     }
 
     public void Dispose()

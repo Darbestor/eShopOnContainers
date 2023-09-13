@@ -31,11 +31,6 @@ var kafkaManager = app.Services.GetRequiredService<KafkaEventBus>();
 kafkaManager.Subscribe<ProductPriceChangedIntegrationEventProto>("Catalog");
 kafkaManager.Subscribe<OrderEvents>("Ordering");
 
-var eventBus = app.Services.GetRequiredService<IEventBus>();
-
-eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
-
 // REVIEW: This is done for development ease but shouldn't be here in production
 using (var scope = app.Services.CreateScope())
 {

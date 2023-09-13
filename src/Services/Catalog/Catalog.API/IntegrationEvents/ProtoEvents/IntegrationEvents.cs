@@ -40,20 +40,19 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
             "c3RvY2tfaXRlbXMYAiADKAsyDy5PcmRlclN0b2NrSXRlbSJ7CjtPcmRlclN0",
             "YXR1c0NoYW5nZWRUb0F3YWl0aW5nVmFsaWRhdGlvbkludGVncmF0aW9uRXZl",
             "bnRQcm90bxIQCghvcmRlcl9pZBgBIAEoBRIqChFvcmRlcl9zdG9ja19pdGVt",
-            "cxgCIAMoCzIPLk9yZGVyU3RvY2tJdGVtItQDCgtPcmRlckV2ZW50cxJcCidv",
+            "cxgCIAMoCzIPLk9yZGVyU3RvY2tJdGVtIsgDCgtPcmRlckV2ZW50cxJcCidv",
             "cmRlcl9zdG9ja19jb25maXJtZWRfaW50ZWdyYXRpb25fZXZlbnQYASABKAsy",
             "KS5PcmRlclN0b2NrQ29uZmlybWVkSW50ZWdyYXRpb25FdmVudFByb3RvSAAS",
             "Wgomb3JkZXJfc3RvY2tfcmVqZWN0ZWRfaW50ZWdyYXRpb25fZXZlbnQYAiAB",
             "KAsyKC5PcmRlclN0b2NrUmVqZWN0ZWRJbnRlZ3JhdGlvbkV2ZW50UHJvdG9I",
-            "ABJuCjRvcmRlcl9zdGF0dXNfY2hhbmdlZF90b19wYWlkX2ludGVncmF0aW9u",
-            "X2V2ZW50X3Byb3RvGAMgASgLMi4uT3JkZXJTdGF0dXNDaGFuZ2VkVG9QYWlk",
-            "SW50ZWdyYXRpb25FdmVudFByb3RvSAASiwEKQ29yZGVyX3N0YXR1c19jaGFu",
-            "Z2VkX3RvX2F3YWl0aW5nX3ZhbGlkYXRpb25faW50ZWdyYXRpb25fZXZlbnRf",
-            "cHJvdG8YBCABKAsyPC5PcmRlclN0YXR1c0NoYW5nZWRUb0F3YWl0aW5nVmFs",
-            "aWRhdGlvbkludGVncmF0aW9uRXZlbnRQcm90b0gAQg0KC29uZW9mX29yZGVy",
-            "QlGqAk5NaWNyb3NvZnQuZVNob3BPbkNvbnRhaW5lcnMuU2VydmljZXMuQ2F0",
-            "YWxvZy5BUEkuSW50ZWdyYXRpb25FdmVudHMuUHJvdG9FdmVudHNiBnByb3Rv",
-            "Mw=="));
+            "ABJoCi5vcmRlcl9zdGF0dXNfY2hhbmdlZF90b19wYWlkX2ludGVncmF0aW9u",
+            "X2V2ZW50GAMgASgLMi4uT3JkZXJTdGF0dXNDaGFuZ2VkVG9QYWlkSW50ZWdy",
+            "YXRpb25FdmVudFByb3RvSAAShQEKPW9yZGVyX3N0YXR1c19jaGFuZ2VkX3Rv",
+            "X2F3YWl0aW5nX3ZhbGlkYXRpb25faW50ZWdyYXRpb25fZXZlbnQYBCABKAsy",
+            "PC5PcmRlclN0YXR1c0NoYW5nZWRUb0F3YWl0aW5nVmFsaWRhdGlvbkludGVn",
+            "cmF0aW9uRXZlbnRQcm90b0gAQg0KC29uZW9mX29yZGVyQlGqAk5NaWNyb3Nv",
+            "ZnQuZVNob3BPbkNvbnRhaW5lcnMuU2VydmljZXMuQ2F0YWxvZy5BUEkuSW50",
+            "ZWdyYXRpb25FdmVudHMuUHJvdG9FdmVudHNiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Services.Common.CustomTypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -64,7 +63,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockConfirmedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStockConfirmedIntegrationEventProto.Parser, new[]{ "OrderId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderEvents), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderEvents.Parser, new[]{ "OrderStockConfirmedIntegrationEvent", "OrderStockRejectedIntegrationEvent", "OrderStatusChangedToPaidIntegrationEventProto", "OrderStatusChangedToAwaitingValidationIntegrationEventProto" }, new[]{ "OneofOrder" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderEvents), global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderEvents.Parser, new[]{ "OrderStockConfirmedIntegrationEvent", "OrderStockRejectedIntegrationEvent", "OrderStatusChangedToPaidIntegrationEvent", "OrderStatusChangedToAwaitingValidationIntegrationEvent" }, new[]{ "OneofOrder" }, null, null, null)
           }));
     }
     #endregion
@@ -1679,11 +1678,11 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
         case OneofOrderOneofCase.OrderStockRejectedIntegrationEvent:
           OrderStockRejectedIntegrationEvent = other.OrderStockRejectedIntegrationEvent.Clone();
           break;
-        case OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto:
-          OrderStatusChangedToPaidIntegrationEventProto = other.OrderStatusChangedToPaidIntegrationEventProto.Clone();
+        case OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent:
+          OrderStatusChangedToPaidIntegrationEvent = other.OrderStatusChangedToPaidIntegrationEvent.Clone();
           break;
-        case OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto:
-          OrderStatusChangedToAwaitingValidationIntegrationEventProto = other.OrderStatusChangedToAwaitingValidationIntegrationEventProto.Clone();
+        case OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent:
+          OrderStatusChangedToAwaitingValidationIntegrationEvent = other.OrderStatusChangedToAwaitingValidationIntegrationEvent.Clone();
           break;
       }
 
@@ -1720,27 +1719,27 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
       }
     }
 
-    /// <summary>Field number for the "order_status_changed_to_paid_integration_event_proto" field.</summary>
-    public const int OrderStatusChangedToPaidIntegrationEventProtoFieldNumber = 3;
+    /// <summary>Field number for the "order_status_changed_to_paid_integration_event" field.</summary>
+    public const int OrderStatusChangedToPaidIntegrationEventFieldNumber = 3;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto OrderStatusChangedToPaidIntegrationEventProto {
-      get { return oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto ? (global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto) oneofOrder_ : null; }
+    public global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto OrderStatusChangedToPaidIntegrationEvent {
+      get { return oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent ? (global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto) oneofOrder_ : null; }
       set {
         oneofOrder_ = value;
-        oneofOrderCase_ = value == null ? OneofOrderOneofCase.None : OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto;
+        oneofOrderCase_ = value == null ? OneofOrderOneofCase.None : OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent;
       }
     }
 
-    /// <summary>Field number for the "order_status_changed_to_awaiting_validation_integration_event_proto" field.</summary>
-    public const int OrderStatusChangedToAwaitingValidationIntegrationEventProtoFieldNumber = 4;
+    /// <summary>Field number for the "order_status_changed_to_awaiting_validation_integration_event" field.</summary>
+    public const int OrderStatusChangedToAwaitingValidationIntegrationEventFieldNumber = 4;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto OrderStatusChangedToAwaitingValidationIntegrationEventProto {
-      get { return oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto ? (global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto) oneofOrder_ : null; }
+    public global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto OrderStatusChangedToAwaitingValidationIntegrationEvent {
+      get { return oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent ? (global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto) oneofOrder_ : null; }
       set {
         oneofOrder_ = value;
-        oneofOrderCase_ = value == null ? OneofOrderOneofCase.None : OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto;
+        oneofOrderCase_ = value == null ? OneofOrderOneofCase.None : OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent;
       }
     }
 
@@ -1750,8 +1749,8 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
       None = 0,
       OrderStockConfirmedIntegrationEvent = 1,
       OrderStockRejectedIntegrationEvent = 2,
-      OrderStatusChangedToPaidIntegrationEventProto = 3,
-      OrderStatusChangedToAwaitingValidationIntegrationEventProto = 4,
+      OrderStatusChangedToPaidIntegrationEvent = 3,
+      OrderStatusChangedToAwaitingValidationIntegrationEvent = 4,
     }
     private OneofOrderOneofCase oneofOrderCase_ = OneofOrderOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1784,8 +1783,8 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
       }
       if (!object.Equals(OrderStockConfirmedIntegrationEvent, other.OrderStockConfirmedIntegrationEvent)) return false;
       if (!object.Equals(OrderStockRejectedIntegrationEvent, other.OrderStockRejectedIntegrationEvent)) return false;
-      if (!object.Equals(OrderStatusChangedToPaidIntegrationEventProto, other.OrderStatusChangedToPaidIntegrationEventProto)) return false;
-      if (!object.Equals(OrderStatusChangedToAwaitingValidationIntegrationEventProto, other.OrderStatusChangedToAwaitingValidationIntegrationEventProto)) return false;
+      if (!object.Equals(OrderStatusChangedToPaidIntegrationEvent, other.OrderStatusChangedToPaidIntegrationEvent)) return false;
+      if (!object.Equals(OrderStatusChangedToAwaitingValidationIntegrationEvent, other.OrderStatusChangedToAwaitingValidationIntegrationEvent)) return false;
       if (OneofOrderCase != other.OneofOrderCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1796,8 +1795,8 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
       int hash = 1;
       if (oneofOrderCase_ == OneofOrderOneofCase.OrderStockConfirmedIntegrationEvent) hash ^= OrderStockConfirmedIntegrationEvent.GetHashCode();
       if (oneofOrderCase_ == OneofOrderOneofCase.OrderStockRejectedIntegrationEvent) hash ^= OrderStockRejectedIntegrationEvent.GetHashCode();
-      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto) hash ^= OrderStatusChangedToPaidIntegrationEventProto.GetHashCode();
-      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto) hash ^= OrderStatusChangedToAwaitingValidationIntegrationEventProto.GetHashCode();
+      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent) hash ^= OrderStatusChangedToPaidIntegrationEvent.GetHashCode();
+      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent) hash ^= OrderStatusChangedToAwaitingValidationIntegrationEvent.GetHashCode();
       hash ^= (int) oneofOrderCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1825,13 +1824,13 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
         output.WriteRawTag(18);
         output.WriteMessage(OrderStockRejectedIntegrationEvent);
       }
-      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto) {
+      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent) {
         output.WriteRawTag(26);
-        output.WriteMessage(OrderStatusChangedToPaidIntegrationEventProto);
+        output.WriteMessage(OrderStatusChangedToPaidIntegrationEvent);
       }
-      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto) {
+      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent) {
         output.WriteRawTag(34);
-        output.WriteMessage(OrderStatusChangedToAwaitingValidationIntegrationEventProto);
+        output.WriteMessage(OrderStatusChangedToAwaitingValidationIntegrationEvent);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1851,13 +1850,13 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
         output.WriteRawTag(18);
         output.WriteMessage(OrderStockRejectedIntegrationEvent);
       }
-      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto) {
+      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent) {
         output.WriteRawTag(26);
-        output.WriteMessage(OrderStatusChangedToPaidIntegrationEventProto);
+        output.WriteMessage(OrderStatusChangedToPaidIntegrationEvent);
       }
-      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto) {
+      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent) {
         output.WriteRawTag(34);
-        output.WriteMessage(OrderStatusChangedToAwaitingValidationIntegrationEventProto);
+        output.WriteMessage(OrderStatusChangedToAwaitingValidationIntegrationEvent);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -1875,11 +1874,11 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
       if (oneofOrderCase_ == OneofOrderOneofCase.OrderStockRejectedIntegrationEvent) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(OrderStockRejectedIntegrationEvent);
       }
-      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(OrderStatusChangedToPaidIntegrationEventProto);
+      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(OrderStatusChangedToPaidIntegrationEvent);
       }
-      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(OrderStatusChangedToAwaitingValidationIntegrationEventProto);
+      if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(OrderStatusChangedToAwaitingValidationIntegrationEvent);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1906,17 +1905,17 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
           }
           OrderStockRejectedIntegrationEvent.MergeFrom(other.OrderStockRejectedIntegrationEvent);
           break;
-        case OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto:
-          if (OrderStatusChangedToPaidIntegrationEventProto == null) {
-            OrderStatusChangedToPaidIntegrationEventProto = new global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto();
+        case OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent:
+          if (OrderStatusChangedToPaidIntegrationEvent == null) {
+            OrderStatusChangedToPaidIntegrationEvent = new global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto();
           }
-          OrderStatusChangedToPaidIntegrationEventProto.MergeFrom(other.OrderStatusChangedToPaidIntegrationEventProto);
+          OrderStatusChangedToPaidIntegrationEvent.MergeFrom(other.OrderStatusChangedToPaidIntegrationEvent);
           break;
-        case OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto:
-          if (OrderStatusChangedToAwaitingValidationIntegrationEventProto == null) {
-            OrderStatusChangedToAwaitingValidationIntegrationEventProto = new global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto();
+        case OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent:
+          if (OrderStatusChangedToAwaitingValidationIntegrationEvent == null) {
+            OrderStatusChangedToAwaitingValidationIntegrationEvent = new global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto();
           }
-          OrderStatusChangedToAwaitingValidationIntegrationEventProto.MergeFrom(other.OrderStatusChangedToAwaitingValidationIntegrationEventProto);
+          OrderStatusChangedToAwaitingValidationIntegrationEvent.MergeFrom(other.OrderStatusChangedToAwaitingValidationIntegrationEvent);
           break;
       }
 
@@ -1955,20 +1954,20 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
           }
           case 26: {
             global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto subBuilder = new global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto();
-            if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto) {
-              subBuilder.MergeFrom(OrderStatusChangedToPaidIntegrationEventProto);
+            if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent) {
+              subBuilder.MergeFrom(OrderStatusChangedToPaidIntegrationEvent);
             }
             input.ReadMessage(subBuilder);
-            OrderStatusChangedToPaidIntegrationEventProto = subBuilder;
+            OrderStatusChangedToPaidIntegrationEvent = subBuilder;
             break;
           }
           case 34: {
             global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto subBuilder = new global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto();
-            if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto) {
-              subBuilder.MergeFrom(OrderStatusChangedToAwaitingValidationIntegrationEventProto);
+            if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent) {
+              subBuilder.MergeFrom(OrderStatusChangedToAwaitingValidationIntegrationEvent);
             }
             input.ReadMessage(subBuilder);
-            OrderStatusChangedToAwaitingValidationIntegrationEventProto = subBuilder;
+            OrderStatusChangedToAwaitingValidationIntegrationEvent = subBuilder;
             break;
           }
         }
@@ -2006,20 +2005,20 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Pro
           }
           case 26: {
             global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto subBuilder = new global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToPaidIntegrationEventProto();
-            if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEventProto) {
-              subBuilder.MergeFrom(OrderStatusChangedToPaidIntegrationEventProto);
+            if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToPaidIntegrationEvent) {
+              subBuilder.MergeFrom(OrderStatusChangedToPaidIntegrationEvent);
             }
             input.ReadMessage(subBuilder);
-            OrderStatusChangedToPaidIntegrationEventProto = subBuilder;
+            OrderStatusChangedToPaidIntegrationEvent = subBuilder;
             break;
           }
           case 34: {
             global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto subBuilder = new global::Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents.OrderStatusChangedToAwaitingValidationIntegrationEventProto();
-            if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEventProto) {
-              subBuilder.MergeFrom(OrderStatusChangedToAwaitingValidationIntegrationEventProto);
+            if (oneofOrderCase_ == OneofOrderOneofCase.OrderStatusChangedToAwaitingValidationIntegrationEvent) {
+              subBuilder.MergeFrom(OrderStatusChangedToAwaitingValidationIntegrationEvent);
             }
             input.ReadMessage(subBuilder);
-            OrderStatusChangedToAwaitingValidationIntegrationEventProto = subBuilder;
+            OrderStatusChangedToAwaitingValidationIntegrationEvent = subBuilder;
             break;
           }
         }
