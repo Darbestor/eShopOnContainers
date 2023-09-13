@@ -1,4 +1,5 @@
 ﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 
@@ -217,11 +218,18 @@ public class CatalogController : ControllerBase
             //Create Integration Event to be published through the Event Bus
             // var priceChangedEvent = new ProductPriceChangedIntegrationEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
 
+            // TODO refactor
             var protoEvent = new ProductPriceChangedIntegrationEventProto()
             {
                 NewPrice = productToUpdate.Price, OldPrice = productToUpdate.Price, ProductId = catalogItem.Id
             };
-            kafkaManager.Publish(catalogItem.Id.ToString(), protoEvent);
+            var integrationKafkaEvent = new KafkaIntegrationEvent
+            {
+                Message = protoEvent, 
+                Key = protoEvent.ProductId.ToString()
+            };
+            
+            kafkaManager.Publish(catalogItem.Id.ToString(), integrationKafkaEvent);
             //
             // // Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
             // await _catalogIntegrationEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>()
 builder.Services
     .AddTransient<IIntegrationProtobufEventHandler<ProductPriceChangedIntegrationEventProto>,
         ProductPriceEventHandler>();
+builder.Services.AddTransient(typeof(IKafkaProtobufProducer<>), typeof(KafkaProtobufProducer<>));
 
 var app = builder.Build();
 

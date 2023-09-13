@@ -1,15 +1,12 @@
-﻿using Confluent.Kafka.SyncOverAsync;
-using Confluent.SchemaRegistry;
-using Confluent.SchemaRegistry.Serdes;
-using Google.Protobuf;
+﻿using Google.Protobuf;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
 
 public interface IKafkaManager
 {
-    void Publish<T>(string key, T @event)
-        where T : class, IMessage<T>, new();
-
+    void Publish(string key, KafkaIntegrationEvent @event);
     void Subscribe<T>(string topicName)
         where T : class, IMessage<T>, new();
 
@@ -38,13 +35,16 @@ public class KafkaManager : IKafkaManager
     }
 
 
-    public void Publish<T>(string key, T @event)
-        where T: class, IMessage<T>, new()
+    public void Publish(string key, KafkaIntegrationEvent @event)
     {
-        var schemaRegistryConfig = new CachedSchemaRegistryClient(_persistentConnection.KafkaConfig.SchemaRegistry);
-        var producer = new DependentProducerBuilder<string, T>(_persistentConnection.Handle)
-            .SetValueSerializer(new ProtobufSerializer<T>(schemaRegistryConfig).AsSyncOverAsync())
-            .Build();
+        var eventType = @event.Message.Descriptor.ClrType;
+        using var scope = _serviceProvider.CreateScope();
+        var type = typeof(IKafkaProtobufProducer<>).MakeGenericType(eventType);
+        if (scope.ServiceProvider.GetService(type) is not IKafkaProtobufProducer producer)
+        {
+            _logger.LogError("Kafka Producer for {EventName} not registered", @event.Message.GetGenericTypeName());
+            return;
+        }
         
         var policy = RetryPolicy.Handle<ProduceException<string, string>>()
             .Or<SocketException>()
@@ -53,13 +53,11 @@ public class KafkaManager : IKafkaManager
                 _logger.LogWarning(ex, "Could not publish event: {Event} after {Timeout}s", key, $"{time.TotalSeconds:n1}");
             });
 
-        var message = new Message<string, T> { Key = key, Value = @event };
-
         policy.Execute(() =>
         {
             _logger.LogTrace("Publishing event to Kafka: {EventId}", key);
 
-            producer.Produce(_persistentConnection.KafkaConfig.Producer.Topic, message);
+            producer.Produce(_persistentConnection.KafkaConfig.Producer.Topic, @event);
         });
     }
 

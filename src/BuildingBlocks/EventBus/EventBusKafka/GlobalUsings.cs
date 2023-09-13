@@ -9,3 +9,4 @@ global using Microsoft.Extensions.Logging;
 global using Polly;
 global using Polly.Retry;
 global using Confluent.Kafka;
+global using Google.Protobuf;
