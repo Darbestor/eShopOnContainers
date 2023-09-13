@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf;
 
-namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
+namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 
 //TODO Remove
 public interface IKafkaEventBus

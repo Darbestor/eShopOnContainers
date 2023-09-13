@@ -21,8 +21,11 @@
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="Proto\catalog.proto" GrpcServices="Server" />
-    <Protobuf ProtoRoot="..\..\" Include="..\..\Catalog\Catalog.API\Proto\integration_events.proto" 
-              Link="Proto\integration_events.proto" GrpcServices="None" />
+    <Protobuf Include="Proto\integration_events.proto"
+              ProtoRoot="Proto"
+              AdditionalImportDirs="..\..\Services.Common\Proto"
+              Link="Proto\integration_events.proto" GrpcServices="None"
+              OutputDir="IntegrationEvents\ProtoEvents"/>
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Catalog.FunctionalTests" />
