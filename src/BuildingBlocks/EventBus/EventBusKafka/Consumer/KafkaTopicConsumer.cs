@@ -73,13 +73,12 @@ public class KafkaTopicConsumer<T>: IKafkaTopicConsumer
         {
             await Task.Yield();
             await ProcessEvent(consumeResult.Message);
+            _consumer.StoreOffset(consumeResult);
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Error Processing message \"{Message}\"", consumeResult.Message.Key);
         }
-
-        _consumer.Commit(consumeResult);
     }
 
     private async Task ProcessEvent(Message<string, T> message)

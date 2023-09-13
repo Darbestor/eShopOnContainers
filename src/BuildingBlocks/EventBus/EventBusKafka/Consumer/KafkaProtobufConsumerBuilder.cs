@@ -1,6 +1,5 @@
 ﻿using Confluent.Kafka.SyncOverAsync;
 using Confluent.SchemaRegistry.Serdes;
-using Google.Protobuf;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
@@ -21,9 +20,7 @@ where T: class, IMessage<T>, new()
     public IConsumer<string, T> Build()
     {
         var config = _config.Consumer;
-        config.EnableAutoCommit = false;
-        // TODO Change
-        config.GroupId = "Test";
+        config.EnableAutoOffsetStore = false;
         return new ConsumerBuilder<string, T>(config)
             .SetValueDeserializer(new ProtobufDeserializer<T>().AsSyncOverAsync())
             .Build();
