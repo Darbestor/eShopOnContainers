@@ -77,8 +77,8 @@ public class TestController : ControllerBase
                 throw new ArgumentOutOfRangeException(nameof(eventType), eventType, null);
         }
         
-        var integrationEvent = new KafkaIntegrationEvent() { Message = testEvent, Key = "TestEvents" };
-        _kafkaEventBus.Publish("Ordering", integrationEvent);
+        var integrationEvent = new KafkaIntegrationEvent("Ordering", "TestEvents", orderEvent);
+        _kafkaEventBus.Publish(integrationEvent);
     }
     
     private List<int> GetRandomNumbers(int from,int to,int numberOfElement)

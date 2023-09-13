@@ -5,7 +5,7 @@ namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 //TODO Remove
 public interface IKafkaEventBus
 {
-    void Publish(string topic, KafkaIntegrationEvent @event);
+    void Publish(KafkaIntegrationEvent @event);
     void Subscribe<T>(string topicName)
         where T : class, IMessage<T>, new();
 

@@ -59,12 +59,11 @@ public class CompoundOrderTypesEventHandler :
             return;
         }
 
-        var @event = new KafkaIntegrationEvent() { Key = key, Message = message };
-        await exactEvent.Handle(@event);
+        await exactEvent.Handle(key, message);
     }
 
-    public async Task Handle(KafkaIntegrationEvent @event)
+    public async Task Handle(string key, IMessage message)
     {
-        await Handle(@event.Key, @event.Message as OrderEvents);
+        await Handle(key, message as OrderEvents);
     }
 }

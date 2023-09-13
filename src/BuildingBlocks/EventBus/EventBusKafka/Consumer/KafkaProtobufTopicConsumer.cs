@@ -71,7 +71,6 @@ public class KafkaProtobufTopicConsumer<T>: IKafkaTopicConsumer
     {
         try
         {
-            await Task.Yield();
             await ProcessEvent(consumeResult.Message);
             _consumer.StoreOffset(consumeResult);
         }
@@ -88,16 +87,16 @@ public class KafkaProtobufTopicConsumer<T>: IKafkaTopicConsumer
         _logger.LogTrace("Processing Kafka event: {EventName}", genericType);
         
         await using var scope = _serviceProvider.CreateAsyncScope();
-        var type = typeof(IIntegrationProtobufEventHandler<>).MakeGenericType(message.Value.GetType());
-        var handler = (IIntegrationProtobufEventHandler)scope.ServiceProvider.GetService(type);
+        var handlerType = typeof(IIntegrationProtobufEventHandler<>).MakeGenericType(message.Value.GetType());
+        var handler = (IIntegrationProtobufEventHandler)scope.ServiceProvider.GetService(handlerType);
         if (handler == null)
         {
             _logger.LogTrace("Event {EventName} don't have handler", genericType);
             return;
         }
-
-        var kafkaEvent = new KafkaIntegrationEvent() { Key = message.Key, Message = message.Value };
-        await handler.Handle(kafkaEvent);
+        
+        // var kafkaEvent = new KafkaIntegrationEvent(_consumer.Subscription.Single(), message.Key, message.Value);
+        await handler.Handle(message.Key, message.Value);
     }
 
     public void Dispose()

@@ -20,8 +20,8 @@ public class ProductPriceEventHandler :
         _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", key, message);
     }
 
-    public async Task Handle(KafkaIntegrationEvent @event)
+    public async Task Handle(string key, IMessage message)
     {
-            await Handle(@event.Key, @event.Message as ProductPriceChangedIntegrationEventProto);
+            await Handle(key, message as ProductPriceChangedIntegrationEventProto);
     }
 }

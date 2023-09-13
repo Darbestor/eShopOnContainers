@@ -11,5 +11,5 @@ public interface IIntegrationProtobufEventHandler<in TIntegrationEvent> : IInteg
 
 public interface IIntegrationProtobufEventHandler
 {
-    Task Handle(KafkaIntegrationEvent @event);
+    Task Handle(string key, IMessage message);
 }

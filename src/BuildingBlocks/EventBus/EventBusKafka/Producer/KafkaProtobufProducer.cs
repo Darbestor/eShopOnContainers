@@ -18,7 +18,7 @@ public class KafkaProtobufProducer<T>: IKafkaProtobufProducer<T>, IDisposable
         _producer = producerBuilder.Build();
     }
 
-    public void Produce(string topic, KafkaIntegrationEvent @event)
+    public void Produce(KafkaIntegrationEvent @event)
     {
         _logger.LogTrace("Kafka producing message '{MessageType}'", @event.Message.Descriptor.ClrType);
         var message = new Message<string, T>
@@ -36,14 +36,14 @@ public class KafkaProtobufProducer<T>: IKafkaProtobufProducer<T>, IDisposable
                 .Or<SocketException>()
                 .WaitAndRetry(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
                 {
-                    _logger.LogWarning(ex, "Could not publish event: {Event} after {Timeout}s", topic,
+                    _logger.LogWarning(ex, "Could not publish event: {Event} after {Timeout}s", @event.Message.Descriptor.ClrType,
                         $"{time.TotalSeconds:n1}");
                 });
             policy.Execute(() =>
             {
-                _logger.LogTrace("Publishing event to Kafka: {EventId}", topic);
+                _logger.LogTrace("Publishing event to Kafka topic '{Topic}': '{Event}'", @event.Topic, @event.Message.Descriptor.ClrType);
 
-                _producer.Produce(topic, message, OnDeliveryReport);
+                _producer.Produce(@event.Topic, message, OnDeliveryReport);
             });
         }
         catch (ProduceException<string, T> ex)

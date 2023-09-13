@@ -25,7 +25,7 @@ public class KafkaEventBus : IKafkaEventBus
     }
 
 
-    public void Publish(string topic, KafkaIntegrationEvent @event)
+    public void Publish(KafkaIntegrationEvent @event)
     {
         var eventType = @event.Message.Descriptor.ClrType;
         using var scope = _serviceProvider.CreateScope();
@@ -36,7 +36,7 @@ public class KafkaEventBus : IKafkaEventBus
             return;
         }
         
-        producer.Produce(topic, @event);
+        producer.Produce(@event);
     }
 
     public void Subscribe<T>(string topicName)

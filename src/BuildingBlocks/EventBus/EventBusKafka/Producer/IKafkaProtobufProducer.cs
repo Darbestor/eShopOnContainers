@@ -7,6 +7,6 @@ public interface IKafkaProtobufProducer<T>: IKafkaProtobufProducer
 
 public interface IKafkaProtobufProducer
 {
-    void Produce(string topic, KafkaIntegrationEvent @event);
+    void Produce(KafkaIntegrationEvent @event);
 }
 
