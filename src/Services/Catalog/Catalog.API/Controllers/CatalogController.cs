@@ -1,7 +1,4 @@
-﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
-
-namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
+﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
@@ -195,7 +192,7 @@ public class CatalogController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     // TODO Remove dependency
-    public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate, [FromServices] IKafkaEventBus kafkaEventBus)
+    public async Task<ActionResult> UpdateProductAsync([FromBody] CatalogItem productToUpdate)//, [FromServices] IKafkaEventBus kafkaEventBus)
     {
         var catalogItem = await _catalogContext.CatalogItems.SingleOrDefaultAsync(i => i.Id == productToUpdate.Id);
 
@@ -225,7 +222,7 @@ public class CatalogController : ControllerBase
             };
             var integrationKafkaEvent =
                 new KafkaIntegrationEvent("Catalog", protoEvent.ProductId.ToString(), protoEvent);
-            kafkaEventBus.Publish(integrationKafkaEvent);
+            // kafkaEventBus.Publish(integrationKafkaEvent);
             //
             // // Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
             // await _catalogIntegrationEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);

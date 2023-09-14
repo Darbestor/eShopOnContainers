@@ -1,4 +1,4 @@
-﻿namespace Services.Common;
+﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Extensions;
 
 public partial class DecimalValue
 {

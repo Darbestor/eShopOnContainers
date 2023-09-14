@@ -9,10 +9,6 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="Proto\custom_types.proto" GrpcServices="None" />
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.AzureServiceBus" />
@@ -29,11 +25,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="KafkaFlow" />
-    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" />
-    <PackageReference Include="KafkaFlow.Serializer" />
-    <PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentProtobuf" />
-    <PackageReference Include="KafkaFlow.TypedHandler" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" />
     <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" />
     <PackageReference Include="Microsoft.ApplicationInsights.Kubernetes" />
@@ -63,7 +54,7 @@
     <ProjectReference Include="..\..\BuildingBlocks\EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\EventBus\EventBusServiceBus\EventBusServiceBus.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\EventBus\EventBus\EventBus.csproj" />
-    <ProjectReference Include="..\..\BuildingBlocks\EventBus\EventBusKafka\EventBusKafka.csproj" />
+<!--    <ProjectReference Include="..\..\BuildingBlocks\EventBus\EventBusKafka\EventBusKafka.csproj" />-->
   </ItemGroup>
   
 </Project>

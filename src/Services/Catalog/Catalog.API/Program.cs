@@ -1,5 +1,4 @@
-﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
+﻿using KafkaFlow;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,11 +13,14 @@ builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
 // builder.Services.AddKafkaServices(builder.Configuration);
+builder.Services.AddKafkaFlow(builder.Configuration);
 
 builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
 builder.Services.AddTransient<CompoundOrderTypesEventHandler>();
 
 var app = builder.Build();
+var bus = app.Services.CreateKafkaBus();
+await bus.StartAsync();
 
 app.UseServiceDefaults();
 

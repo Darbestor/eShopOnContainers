@@ -6,7 +6,7 @@ import "google/api/annotations.proto";
 
 option csharp_namespace="Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents";
 
-import "custom_types.proto";
+import "event_custom_types.proto";
 
 message ProductPriceChangedIntegrationEventProto {
   int32 product_id = 1;

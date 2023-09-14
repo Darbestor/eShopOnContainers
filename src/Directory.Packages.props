@@ -37,8 +37,8 @@
     <PackageVersion Include="Grpc.Net.ClientFactory" Version="2.51.0" />
     <PackageVersion Include="Grpc.Tools" Version="2.58.0" />
     <PackageVersion Include="KafkaFlow" Version="2.4.0" />
+    <PackageVersion Include="KafkaFlow.LogHandler.Microsoft" Version="2.4.0" />
     <PackageVersion Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.4.0" />
-    <PackageVersion Include="KafkaFlow.Serializer" Version="2.4.0" />
     <PackageVersion Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentProtobuf" Version="2.4.0" />
     <PackageVersion Include="KafkaFlow.TypedHandler" Version="2.4.0" />
     <PackageVersion Include="MediatR" Version="12.0.0" />

@@ -1,6 +1,10 @@
-﻿using Google.Protobuf;
+﻿using Confluent.Kafka;
+using Google.Protobuf;
 using Google.Protobuf.Collections;
+using KafkaFlow;
+using KafkaFlow.Producers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 
@@ -8,11 +12,26 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 [ApiController]
 public class TestController : ControllerBase
 {
-    private readonly IKafkaEventBus _kafkaEventBus;
+    private readonly IProducerAccessor _producerAccessor;
+    // private readonly IKafkaEventBus _kafkaEventBus;
 
-    public TestController(IKafkaEventBus kafkaEventBus)
+    public TestController(IProducerAccessor producerAccessor)//IKafkaEventBus kafkaEventBus)
     {
-        _kafkaEventBus = kafkaEventBus ?? throw new ArgumentNullException(nameof(kafkaEventBus));
+        _producerAccessor = producerAccessor ?? throw new ArgumentNullException(nameof(producerAccessor));
+        // _kafkaEventBus = kafkaEventBus ?? throw new ArgumentNullException(nameof(kafkaEventBus));
+    }
+
+    [HttpGet]
+    [Route("catalog")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public void ProduceCatalogIntegrationEvent()
+    {
+        var protoPayload = new ProductPriceChangedIntegrationEventProto { ProductId = 1, NewPrice = 10, OldPrice = 5 };
+        var kafkaEvent = new ProductPriceChangedIntegrationEventKafka("1", protoPayload);
+        var producer = _producerAccessor.GetProducer(kafkaEvent.GetGenericTypeName());
+        var (key, message) = kafkaEvent;
+        producer.Produce(key, message);
     }
 
     [HttpGet]
@@ -77,8 +96,19 @@ public class TestController : ControllerBase
                 throw new ArgumentOutOfRangeException(nameof(eventType), eventType, null);
         }
         
-        var integrationEvent = new KafkaIntegrationEvent("Ordering", "TestEvents", orderEvent);
-        _kafkaEventBus.Publish(integrationEvent);
+        // var integrationEvent = new KafkaIntegrationEvent("Ordering", "TestEvents", orderEvent);
+        // _kafkaEventBus.Publish(integrationEvent);
+        var protoEvent = new OrderStockRejectedIntegrationEventProto
+        {
+            OrderId = 1,
+        };
+        protoEvent.OrderStockItems.Add(new ConfirmedOrderStockItemProto
+        {
+            ProductId = 1,
+            HasStock = false
+        });
+        var producer = _producerAccessor.GetProducer("Ordering-producer");
+        producer.Produce("1", protoEvent);
     }
     
     private List<int> GetRandomNumbers(int from,int to,int numberOfElement)

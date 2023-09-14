@@ -7,6 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
   <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -23,9 +26,7 @@
     <Protobuf Include="Proto\catalog.proto" GrpcServices="Server" />
     <Protobuf Include="Proto\event*.proto"
               ProtoRoot="Proto"
-              AdditionalImportDirs="..\..\Services.Common\Proto"
-              Link="Proto\integration_events.proto" GrpcServices="None"
-              OutputDir="IntegrationEvents\ProtoEvents"/>
+              GrpcServices="None" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Catalog.FunctionalTests" />
@@ -35,6 +36,11 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
     <PackageReference Include="EFCore.NamingConventions" />
     <PackageReference Include="Grpc.AspNetCore" />
+    <PackageReference Include="KafkaFlow" />
+    <PackageReference Include="KafkaFlow.LogHandler.Microsoft" />
+    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" />
+    <PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentProtobuf" />
+    <PackageReference Include="KafkaFlow.TypedHandler" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />

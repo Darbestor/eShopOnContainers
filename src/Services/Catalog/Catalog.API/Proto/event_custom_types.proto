@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "Services.Common";
+option csharp_namespace = "Microsoft.eShopOnContainers.Services.Catalog.API.Extensions";
 
 package CustomTypes;
 

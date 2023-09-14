@@ -1,20 +1,12 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Azure.Identity;
-using Confluent.Kafka;
 using HealthChecks.UI.Client;
-using KafkaFlow;
-using KafkaFlow.Clusters;
-using KafkaFlow.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Configuration;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Consumer;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
@@ -439,72 +431,72 @@ public static class CommonExtensions
         return services;
     }
 
-    public static IServiceCollection AddKafkaService(this IServiceCollection services, IConfiguration configuration)
-    {
-        //  {
-        //    "ConnectionStrings": {
-        //      "Kafka": "..."
-        //    },
-
-        // {
-        //   "Kafka": {
-        //     "TopicName": "...",
-        //     "UserName": "...",
-        //     "Password": "...",
-        //     "RetryCount": 1
-        //   }
-        // }
-
-
-        var kafkaSection = configuration.GetSection("Kafka");
-
-        if (!kafkaSection.Exists())
-        {
-            return services;
-        }
-
-        // TODO remove?
-        services.Configure<KafkaConfig>(kafkaSection).PostConfigure<KafkaConfig>(x =>
-        {
-            foreach (var producer in x.Producers)
-            {
-                producer.BootstrapServers = x.BootstrapServers.Single();
-                producer.Debug = x.Debug;
-            }
-            foreach (var consumer in x.Consumers)
-            {
-                consumer.BootstrapServers = x.BootstrapServers.Single();
-                consumer.Debug = x.Debug;
-            }
-        });
-        
-        
-        services.AddSingleton<IKafkaPersistentConnection>(sp =>
-        {
-            var logger = sp.GetRequiredService<ILogger<DefaultKafkaPersistentConnection>>();
-            var retryCount = kafkaSection.GetValue("RetryCount", 5);
-            var config = sp.GetRequiredService<IOptions<KafkaConfig>>();
-            
-            return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
-        });
-
-        services.AddSingleton<IConsumerManager, KafkaConsumerManager>();
-        services.AddSingleton(typeof(IKafkaConsumerBuilder<>), typeof(KafkaProtobufConsumerBuilder<>));
-        services.AddSingleton(typeof(IKafkaProducerBuilder<>), typeof(KafkaProtobufProducerBuilder<>));
-        
-        services.AddSingleton<IKafkaEventBus, KafkaEventBus>(sp =>
-        {
-            var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
-            var logger = sp.GetRequiredService<ILogger<KafkaEventBus>>();
-            var consumerManager = sp.GetRequiredService<IConsumerManager>();
-            var retryCount = kafkaSection.GetValue("RetryCount", 5);
-
-            return new KafkaEventBus(kafkaPersistentConnection, logger, consumerManager, sp, retryCount);
-        });
-
-        //services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-        return services;
-    }
+    // public static IServiceCollection AddKafkaService(this IServiceCollection services, IConfiguration configuration)
+    // {
+    //     //  {
+    //     //    "ConnectionStrings": {
+    //     //      "Kafka": "..."
+    //     //    },
+    //
+    //     // {
+    //     //   "Kafka": {
+    //     //     "TopicName": "...",
+    //     //     "UserName": "...",
+    //     //     "Password": "...",
+    //     //     "RetryCount": 1
+    //     //   }
+    //     // }
+    //
+    //
+    //     var kafkaSection = configuration.GetSection("Kafka");
+    //
+    //     if (!kafkaSection.Exists())
+    //     {
+    //         return services;
+    //     }
+    //
+    //     // TODO remove?
+    //     services.Configure<KafkaConfig>(kafkaSection).PostConfigure<KafkaConfig>(x =>
+    //     {
+    //         foreach (var producer in x.Producers)
+    //         {
+    //             producer.BootstrapServers = x.BootstrapServers.Single();
+    //             producer.Debug = x.Debug;
+    //         }
+    //         foreach (var consumer in x.Consumers)
+    //         {
+    //             consumer.BootstrapServers = x.BootstrapServers.Single();
+    //             consumer.Debug = x.Debug;
+    //         }
+    //     });
+    //     
+    //     
+    //     services.AddSingleton<IKafkaPersistentConnection>(sp =>
+    //     {
+    //         var logger = sp.GetRequiredService<ILogger<DefaultKafkaPersistentConnection>>();
+    //         var retryCount = kafkaSection.GetValue("RetryCount", 5);
+    //         var config = sp.GetRequiredService<IOptions<KafkaConfig>>();
+    //         
+    //         return new DefaultKafkaPersistentConnection(config.Value, logger, retryCount);
+    //     });
+    //
+    //     services.AddSingleton<IConsumerManager, KafkaConsumerManager>();
+    //     services.AddSingleton(typeof(IKafkaConsumerBuilder<>), typeof(KafkaProtobufConsumerBuilder<>));
+    //     services.AddSingleton(typeof(IKafkaProducerBuilder<>), typeof(KafkaProtobufProducerBuilder<>));
+    //     
+    //     services.AddSingleton<IKafkaEventBus, KafkaEventBus>(sp =>
+    //     {
+    //         var kafkaPersistentConnection = sp.GetRequiredService<IKafkaPersistentConnection>();
+    //         var logger = sp.GetRequiredService<ILogger<KafkaEventBus>>();
+    //         var consumerManager = sp.GetRequiredService<IConsumerManager>();
+    //         var retryCount = kafkaSection.GetValue("RetryCount", 5);
+    //
+    //         return new KafkaEventBus(kafkaPersistentConnection, logger, consumerManager, sp, retryCount);
+    //     });
+    //
+    //     //services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+    //     return services;
+    // }
     
     public static void MapDefaultHealthChecks(this IEndpointRouteBuilder routes)
     {
