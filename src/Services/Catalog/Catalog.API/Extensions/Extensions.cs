@@ -1,4 +1,7 @@
-﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
+﻿using Confluent.SchemaRegistry.Serdes;
+using KafkaFlow;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Configuration;
+using Microsoft.eShopOnContainers.BuildingBlocks.EventBusKafka.Producer;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 public static class Extensions
@@ -82,7 +85,7 @@ public static class Extensions
 
     public static IServiceCollection AddKafkaServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddKafka(configuration);
+        services.AddKafkaService(configuration);
         // TODO refactor
         services
             .AddTransient<IIntegrationProtobufEventHandler<ProductPriceChangedIntegrationEventProto>,
@@ -93,6 +96,71 @@ public static class Extensions
         services
             .AddTransient<IKafkaProtobufProducer<OrderStockConfirmedIntegrationEventProto>,
                 KafkaProtobufProducer<OrderStockConfirmedIntegrationEventProto>>();
+        return services;
+    }
+
+    public static IServiceCollection AddKafkaFlow(this IServiceCollection services, IConfiguration configuration)
+    {
+        var kafkaSection = configuration.GetSection("Kafka");
+
+        if (!kafkaSection.Exists())
+        {
+            return services;
+        }
+
+        KafkaConfig kafkaConfig = new();
+        kafkaSection.Bind(kafkaConfig);
+
+        services.AddKafka(builder =>
+        {
+            builder.AddCluster(cluster =>
+            {
+                cluster.WithBrokers(kafkaConfig.BootstrapServers);
+                var hasSchema = kafkaConfig.SchemaRegistry is not null;
+                if (hasSchema)
+                {
+                    cluster.WithSchemaRegistry(srb =>
+                    {
+                        if (srb == null)
+                        {
+                            throw new ArgumentNullException(nameof(srb));
+                        }
+
+                        srb = kafkaConfig.SchemaRegistry;
+                    });
+                }
+                foreach (var producerConfig in kafkaConfig.Producers)
+                {
+                    cluster.CreateTopicIfNotExists(producerConfig.Topic, 3, 1);
+                    cluster.AddProducer($"{producerConfig.Topic}-producer", pb =>
+                    {
+                        pb.DefaultTopic(producerConfig.Topic)
+                            .WithProducerConfig(producerConfig);
+                        if (hasSchema)
+                        {
+                            pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(new ProtobufSerializerConfig()));
+                        }
+                    });
+                }
+
+                foreach (var consumerConfig in kafkaConfig.Consumers)
+                {
+                    cluster.AddConsumer(cb =>
+                    {
+                        cb.Topic(consumerConfig.Topic)
+                            .WithName($"{consumerConfig.Topic}-consumer")
+                            .WithConsumerConfig(consumerConfig);
+                        if (hasSchema)
+                        {
+                            cb.AddMiddlewares(m =>
+                            {
+                                m.AddSchemaRegistryProtobufSerializer();
+                            });
+                        }
+                    });
+                }
+            });
+        });
         return services;
     }
 

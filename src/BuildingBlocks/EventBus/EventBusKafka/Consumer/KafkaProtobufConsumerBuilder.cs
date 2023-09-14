@@ -19,7 +19,7 @@ where T: class, IMessage<T>, new()
 
     public IConsumer<string, T> Build()
     {
-        var config = _config.Consumer;
+        var config = _config.Consumers.Single();
         config.EnableAutoOffsetStore = false;
         return new ConsumerBuilder<string, T>(config)
             .SetValueDeserializer(new ProtobufDeserializer<T>().AsSyncOverAsync())

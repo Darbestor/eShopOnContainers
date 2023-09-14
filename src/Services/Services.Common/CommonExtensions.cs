@@ -2,6 +2,9 @@
 using Azure.Identity;
 using Confluent.Kafka;
 using HealthChecks.UI.Client;
+using KafkaFlow;
+using KafkaFlow.Clusters;
+using KafkaFlow.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -436,7 +439,7 @@ public static class CommonExtensions
         return services;
     }
 
-    public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddKafkaService(this IServiceCollection services, IConfiguration configuration)
     {
         //  {
         //    "ConnectionStrings": {
@@ -460,13 +463,21 @@ public static class CommonExtensions
             return services;
         }
 
+        // TODO remove?
         services.Configure<KafkaConfig>(kafkaSection).PostConfigure<KafkaConfig>(x =>
         {
-            x.Producer.BootstrapServers = x.BootstrapServers;
-            x.Consumer.BootstrapServers = x.BootstrapServers;
-            x.Producer.Debug = x.Debug;
-            x.Consumer.Debug = x.Debug;
+            foreach (var producer in x.Producers)
+            {
+                producer.BootstrapServers = x.BootstrapServers.Single();
+                producer.Debug = x.Debug;
+            }
+            foreach (var consumer in x.Consumers)
+            {
+                consumer.BootstrapServers = x.BootstrapServers.Single();
+                consumer.Debug = x.Debug;
+            }
         });
+        
         
         services.AddSingleton<IKafkaPersistentConnection>(sp =>
         {
