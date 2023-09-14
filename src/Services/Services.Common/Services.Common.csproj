@@ -14,7 +14,6 @@
     <PackageReference Include="AspNetCore.HealthChecks.AzureServiceBus" />
     <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
-    <PackageReference Include="Confluent.Kafka" />
     <PackageReference Include="Duende.IdentityServer.AspNetIdentity" />
     <PackageReference Include="Duende.IdentityServer.EntityFramework.Storage" />
     <PackageReference Include="Duende.IdentityServer.EntityFramework" />
