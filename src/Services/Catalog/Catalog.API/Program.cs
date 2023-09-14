@@ -13,7 +13,7 @@ builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
-builder.Services.AddKafkaServices(builder.Configuration);
+// builder.Services.AddKafkaServices(builder.Configuration);
 
 builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
 builder.Services.AddTransient<CompoundOrderTypesEventHandler>();
@@ -27,9 +27,9 @@ app.MapControllers();
 app.MapGrpcService<CatalogService>();
 
 // TODO refactor
-var kafkaManager = app.Services.GetRequiredService<IKafkaEventBus>();
-kafkaManager.Subscribe<ProductPriceChangedIntegrationEventProto>("Catalog");
-kafkaManager.Subscribe<OrderEvents>("Ordering");
+// var kafkaManager = app.Services.GetRequiredService<IKafkaEventBus>();
+// kafkaManager.Subscribe<ProductPriceChangedIntegrationEventProto>("Catalog");
+// kafkaManager.Subscribe<OrderEvents>("Ordering");
 
 // REVIEW: This is done for development ease but shouldn't be here in production
 using (var scope = app.Services.CreateScope())
