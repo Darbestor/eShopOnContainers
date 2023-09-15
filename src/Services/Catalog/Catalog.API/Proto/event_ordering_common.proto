@@ -4,6 +4,8 @@ syntax = "proto3";
 import "google/api/annotations.proto";
 << */
 
+package CatalogIntegrationEvents;
+
 option csharp_namespace="Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents";
 
 message OrderStockItemProto {

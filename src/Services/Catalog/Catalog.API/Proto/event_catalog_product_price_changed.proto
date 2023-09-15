@@ -4,6 +4,8 @@ syntax = "proto3";
 import "google/api/annotations.proto";
 << */
 
+package eshoponcontainers.integrationevents.catalog;
+
 option csharp_namespace="Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents";
 
 import "event_custom_types.proto";

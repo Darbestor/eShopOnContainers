@@ -1,4 +1,5 @@
-﻿using Confluent.SchemaRegistry;
+﻿using Catalog.API.Extensions;
+using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
 using KafkaFlow.TypedHandler;
@@ -202,22 +203,18 @@ public static class Extensions
                         .WithGroupId("Catalog-consumer")
                         .WithBufferSize(100)
                         .WithWorkersCount(1)
-                        .WithAutoOffsetReset(AutoOffsetReset.Earliest)
-                        .WithManualStoreOffsets();
-
+                        .WithAutoOffsetReset(AutoOffsetReset.Earliest);
                     cb.AddMiddlewares(m =>
                     {
                         if (hasSchema)
                         {
-                            m.AddSchemaRegistryProtobufSerializer();
+                            m.AddSchemaRegistryProtobufCustomSerializer();
                         }
 
-                        m.AddTypedHandlers(x => x.AddHandler<ProductPriceEventHandlerKafkaFlow>()
-                            .WhenNoHandlerFound(mc =>
-                            {
-                                var c = mc.Message.Value.ToString();
-                                Console.WriteLine("No handler binded for {C}", c);
-                            }));
+                        m.AddTypedHandlers(x => x.WhenNoHandlerFound(mc =>
+                        {
+                            Console.WriteLine("No handler binded");
+                        }).AddHandler<ProductPriceEventHandlerKafkaFlow>());
                     });
                 });
 

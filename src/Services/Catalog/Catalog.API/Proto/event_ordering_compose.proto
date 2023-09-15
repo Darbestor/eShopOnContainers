@@ -4,6 +4,8 @@ syntax = "proto3";
 import "google/api/annotations.proto";
 << */
 
+package CatalogIntegrationEvents;
+
 import "event_ordering_status_changed_to_awaiting.proto";
 import "event_ordering_status_changed_to_paid.proto";
 import "event_ordering_stock_confirmed.proto";
