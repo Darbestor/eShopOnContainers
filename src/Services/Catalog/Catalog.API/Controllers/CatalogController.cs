@@ -214,16 +214,7 @@ public class CatalogController : ControllerBase
             
             //Create Integration Event to be published through the Event Bus
             // var priceChangedEvent = new ProductPriceChangedIntegrationEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
-
-            // TODO refactor
-            var protoEvent = new ProductPriceChangedIntegrationEventProto()
-            {
-                NewPrice = productToUpdate.Price, OldPrice = productToUpdate.Price, ProductId = catalogItem.Id
-            };
-            var integrationKafkaEvent =
-                new KafkaIntegrationEvent("Catalog", protoEvent.ProductId.ToString(), protoEvent);
-            // kafkaEventBus.Publish(integrationKafkaEvent);
-            //
+            
             // // Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
             // await _catalogIntegrationEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);
             //

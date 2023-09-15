@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package CatalogIntegrationEvents;
+package microsoft.eshoponcontainers.integrationevents.ordering;
 
 /* >>
 import "google/api/annotations.proto";
 << */
 
-option csharp_namespace="Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.ProtoEvents";
+option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering";
 
 message ConfirmedOrderStockItemProto {
   int32 product_id = 1;

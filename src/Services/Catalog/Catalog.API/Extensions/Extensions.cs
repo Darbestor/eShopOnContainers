@@ -4,6 +4,7 @@ using KafkaFlow;
 using KafkaFlow.TypedHandler;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Configuration;
 using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
+using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.TempIntegrationStructures;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.Extensions;
@@ -136,13 +137,17 @@ public static class Extensions
                 //     });
                 // }
                 cluster.CreateTopicIfNotExists("Catalog", 3, 1);
-                cluster.AddProducer(nameof(ProductPriceChangedIntegrationEventKafka), pb =>
+                cluster.AddProducer(nameof(ProductPriceChangedProtobuf), pb =>
                 {
                     pb.DefaultTopic("Catalog");
                     if (hasSchema)
                     {
                         pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
-                            new ProtobufSerializerConfig { SubjectNameStrategy = SubjectNameStrategy.TopicRecord }));
+                            new ProtobufSerializerConfig
+                            {
+                                SubjectNameStrategy = SubjectNameStrategy.TopicRecord,
+                                NormalizeSchemas = true,
+                            }));
                     }
                 });
                 cluster.CreateTopicIfNotExists("Ordering", 3, 1);
@@ -154,29 +159,6 @@ public static class Extensions
                         pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
                             new ProtobufSerializerConfig { SubjectNameStrategy = SubjectNameStrategy.TopicRecord }));
                     }
-                });
-                cluster.AddConsumer(cb =>
-                {
-                    cb.Topic("Ordering")
-                        .WithName("Ordering-consumer")
-                        .WithGroupId("Ordering-consumer")
-                        .WithBufferSize(100)
-                        .WithWorkersCount(1);
-
-                    cb.AddMiddlewares(m =>
-                    {
-                        if (hasSchema)
-                        {
-                            m.AddSchemaRegistryProtobufSerializer();
-                        }
-
-                        m.AddTypedHandlers(x => x.AddHandler<OrderStockRejectedTestHandler>()
-                            .WhenNoHandlerFound(mc =>
-                            {
-                                var test = mc.Message.Value.ToString();
-                                Console.WriteLine("No handler binded {}", test);
-                            }));
-                    });
                 });
                 cluster.AddConsumer(cb =>
                 {

@@ -48,15 +48,15 @@ public abstract class KafkaEvent<T>: IKafkaEvent
     }
 }
 
-public class ProductPriceChangedIntegrationEventKafka: KafkaEvent<ProductPriceChangedIntegrationEventProto>
-{
-    public ProductPriceChangedIntegrationEventKafka(string key, ProductPriceChangedIntegrationEventProto message)
-        : base(key, message)
-    {}
-}
-
-public class OrderStockRejectedIntegrationEventKafka: KafkaEvent<OrderStockRejectedIntegrationEventProto>
-{
-    public OrderStockRejectedIntegrationEventKafka(string key, IMessage<OrderStockRejectedIntegrationEventProto> message) : base(key, message)
-    { }
-}
+// public class ProductPriceChangedIntegrationEventKafka: KafkaEvent<ProductPriceChangedIntegrationEventProto>
+// {
+//     public ProductPriceChangedIntegrationEventKafka(string key, ProductPriceChangedIntegrationEventProto message)
+//         : base(key, message)
+//     {}
+// }
+//
+// public class OrderStockRejectedIntegrationEventKafka: KafkaEvent<OrderStockRejectedIntegrationEventProto>
+// {
+//     public OrderStockRejectedIntegrationEventKafka(string key, IMessage<OrderStockRejectedIntegrationEventProto> message) : base(key, message)
+//     { }
+// }

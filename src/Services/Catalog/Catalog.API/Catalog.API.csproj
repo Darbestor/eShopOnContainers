@@ -26,11 +26,6 @@
   <ItemGroup Label="Grpc">
     <Protobuf Include="Proto\catalog.proto" GrpcServices="Server" />
   </ItemGroup>
-  <ItemGroup Label="ProtobufIntegrationEvents">
-    <Protobuf Include="Proto\event*.proto"
-              ProtoRoot="Proto"
-              GrpcServices="None" />
-  </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Catalog.FunctionalTests" />
   </ItemGroup>

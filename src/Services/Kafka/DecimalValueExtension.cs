@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.Extensions;
+﻿namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf;
 
 public partial class DecimalValue
 {
