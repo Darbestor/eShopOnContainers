@@ -1,9 +1,9 @@
-﻿using Catalog.API.Extensions;
-using Confluent.SchemaRegistry;
+﻿using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
 using KafkaFlow.TypedHandler;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Configuration;
+using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.Extensions;
@@ -90,24 +90,6 @@ public static class Extensions
 
         return services;
     }
-
-    // public static IServiceCollection AddKafkaServices(this IServiceCollection services, IConfiguration configuration)
-    // {
-    //     services.AddKafkaService(configuration);
-    //     // TODO refactor
-    //     services
-    //         .AddTransient<IIntegrationProtobufEventHandler<ProductPriceChangedIntegrationEventProto>,
-    //             ProductPriceEventHandler>();
-    //     services.AddTransient<IIntegrationProtobufEventHandler<OrderEvents>, CompoundOrderTypesEventHandler>();
-    //     services
-    //         .AddTransient<IKafkaProtobufProducer<ProductPriceChangedIntegrationEventProto>,
-    //             KafkaProtobufProducer<ProductPriceChangedIntegrationEventProto>>();
-    //     services.AddTransient<IKafkaProtobufProducer<OrderEvents>, KafkaProtobufProducer<OrderEvents>>();
-    //     services
-    //         .AddTransient<IKafkaProtobufProducer<OrderStockConfirmedIntegrationEventProto>,
-    //             KafkaProtobufProducer<OrderStockConfirmedIntegrationEventProto>>();
-    //     return services;
-    // }
 
     public static IServiceCollection AddKafkaFlow(this IServiceCollection services, IConfiguration configuration)
     {
@@ -239,25 +221,6 @@ public static class Extensions
             });
         });
         return services;
-    }
-
-    public class SampleMessageTypeResolver : IMessageTypeResolver
-    {
-        private const string MessageType = "MessageType";
-
-        public Type OnConsume(IMessageContext context)
-        {
-            var typeName = context.Headers.GetString(MessageType);
-
-            return Type.GetType(typeName);
-        }
-
-        public void OnProduce(IMessageContext context)
-        {
-            context.Headers.SetString(
-                MessageType,
-                $"{context.Message.GetType().FullName}, {context.Message.GetType().Assembly.GetName().Name}");
-        }
     }
     
     public static IServiceCollection AddIntegrationServices(this IServiceCollection services)

@@ -6,6 +6,7 @@
     <UserSecretsId>aspnet-Catalog.API-20161122013618</UserSecretsId>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <RootNamespace>Microsoft.eShopOnContainers.Services.Catalog.API</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>full</DebugType>
@@ -22,8 +23,10 @@
     </Content>
     <None Include="IntegrationEvents\EventHandling\AnyFutureIntegrationEventHandler.cs.txt" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Label="Grpc">
     <Protobuf Include="Proto\catalog.proto" GrpcServices="Server" />
+  </ItemGroup>
+  <ItemGroup Label="ProtobufIntegrationEvents">
     <Protobuf Include="Proto\event*.proto"
               ProtoRoot="Proto"
               GrpcServices="None" />
@@ -36,11 +39,6 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
     <PackageReference Include="EFCore.NamingConventions" />
     <PackageReference Include="Grpc.AspNetCore" />
-    <PackageReference Include="KafkaFlow" />
-    <PackageReference Include="KafkaFlow.LogHandler.Microsoft" />
-    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" />
-    <PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentProtobuf" />
-    <PackageReference Include="KafkaFlow.TypedHandler" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
@@ -53,6 +51,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\WebHostCustomization\WebHost.Customization\WebHost.Customization.csproj" />
+    <ProjectReference Include="..\..\Kafka\Kafka.csproj" />
     <ProjectReference Include="..\..\Services.Common\Services.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
