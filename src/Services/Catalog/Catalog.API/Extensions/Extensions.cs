@@ -2,7 +2,7 @@
 using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
 using KafkaFlow.TypedHandler;
-using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Configuration;
+using Microsoft.eShopOnContainers.Kafka.Configuration;
 using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
 using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.TempIntegrationStructures;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
