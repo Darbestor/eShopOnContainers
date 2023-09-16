@@ -1,6 +1,7 @@
 ﻿using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
+using KafkaFlow.Consumers;
 using KafkaFlow.TypedHandler;
 using Microsoft.eShopOnContainers.Kafka.Configuration;
 using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
@@ -104,6 +105,18 @@ public static class Extensions
         KafkaConfig kafkaConfig = new();
         kafkaSection.Bind(kafkaConfig);
 
+        if (!kafkaConfig.Producers.TryGetValue(KafkaConstants.CatalogTopicName, out var catalogProducerConfig))
+        {
+            throw new ArgumentException("Kafka producer '{Name}' not found in the configuration",
+                KafkaConstants.CatalogTopicName);
+        }
+
+        if (!kafkaConfig.Consumers.TryGetValue(KafkaConstants.OrderingTopicName, out var orderingConsumerConfig))
+        {
+            throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
+                KafkaConstants.OrderingTopicName);
+        }
+
         services.AddKafka(builder =>
         {
             builder.UseMicrosoftLog();
@@ -115,59 +128,36 @@ public static class Extensions
                 {
                     cluster.WithSchemaRegistry(srb =>
                     {
-                        srb.Url = kafkaConfig.SchemaRegistry.Url;
-                        // foreach (var (key, value) in kafkaConfig.SchemaRegistry)
-                        // {
-                        //     srb.Set(key, value);
-                        // }
+                        foreach (var (key, value) in kafkaConfig.SchemaRegistry)
+                        {
+                            srb.Set(key, value);
+                        }
                     });
                 }
 
-                // foreach (var producerConfig in kafkaConfig.Producers)
-                // {
-                //     cluster.CreateTopicIfNotExists(producerConfig.Topic, 3, 1);
-                //     cluster.AddProducer($"{producerConfig.Topic}-producer", pb =>
-                //     {
-                //         pb.DefaultTopic(producerConfig.Topic)
-                //             .WithProducerConfig(producerConfig);
-                //         if (hasSchema)
-                //         {
-                //             pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(new ProtobufSerializerConfig()));
-                //         }
-                //     });
-                // }
-                cluster.CreateTopicIfNotExists("Catalog", 3, 1);
-                cluster.AddProducer(nameof(ProductPriceChangedProtobuf), pb =>
+                cluster.CreateTopicIfNotExists(KafkaConstants.CatalogTopicName, 3, 1);
+                cluster.AddProducer(KafkaConstants.CatalogTopicName, pb =>
                 {
-                    pb.DefaultTopic("Catalog");
+                    pb.DefaultTopic(KafkaConstants.CatalogTopicName);
+                    pb.WithProducerConfig(catalogProducerConfig);
                     if (hasSchema)
                     {
                         pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
                             new ProtobufSerializerConfig
                             {
-                                SubjectNameStrategy = SubjectNameStrategy.TopicRecord,
-                                NormalizeSchemas = true,
+                                SubjectNameStrategy = SubjectNameStrategy.TopicRecord, NormalizeSchemas = true,
                             }));
                     }
                 });
-                cluster.CreateTopicIfNotExists("Ordering", 3, 1);
-                cluster.AddProducer("Ordering-producer", pb =>
-                {
-                    pb.DefaultTopic("Ordering");
-                    if (hasSchema)
-                    {
-                        pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
-                            new ProtobufSerializerConfig { SubjectNameStrategy = SubjectNameStrategy.TopicRecord }));
-                    }
-                });
                 cluster.AddConsumer(cb =>
                 {
-                    cb.Topic("Catalog")
-                        .WithName("Catalog-consumer")
-                        .WithGroupId("Catalog-consumer")
+                    cb.Topic(KafkaConstants.OrderingTopicName)
+                        .WithName($"Catalog.API-{KafkaConstants.OrderingTopicName}")
+                        .WithConsumerConfig(orderingConsumerConfig)
                         .WithBufferSize(100)
                         .WithWorkersCount(1)
-                        .WithAutoOffsetReset(AutoOffsetReset.Earliest);
+                        .WithAutoOffsetReset(AutoOffsetReset.Earliest)
+                        .WithManualStoreOffsets();
                     cb.AddMiddlewares(m =>
                     {
                         if (hasSchema)
@@ -175,57 +165,15 @@ public static class Extensions
                             m.AddSchemaRegistryProtobufCustomSerializer();
                         }
 
-                        m.AddTypedHandlers(x => x.WhenNoHandlerFound(mc =>
-                        {
-                            Console.WriteLine("No handler binded for Catalog");
-                        }).AddHandler<ProductPriceEventHandlerKafkaFlow>());
+                        m.AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                            .AddHandler<ProductPriceEventHandlerKafkaFlow>());
                     });
                 });
-                cluster.AddConsumer(cb =>
-                {
-                    cb.Topic("Ordering")
-                        .WithName("Ordering-consumer")
-                        .WithGroupId("Ordering-consumer")
-                        .WithBufferSize(100)
-                        .WithWorkersCount(1)
-                        .WithAutoOffsetReset(AutoOffsetReset.Earliest);
-                    cb.AddMiddlewares(m =>
-                    {
-                        if (hasSchema)
-                        {
-                            m.AddSchemaRegistryProtobufCustomSerializer();
-                        }
-
-                        m.AddTypedHandlers(x => x.WhenNoHandlerFound(mc =>
-                        {
-                            Console.WriteLine("No handler binded for Ordering");
-                        }).AddHandler<OrderStockRejectedIntegrationEventProtoHandler>());
-                    });
-                });
-
-                // foreach (var consumerConfig in kafkaConfig.Consumers)
-                // {
-                //     cluster.AddConsumer(cb =>
-                //     {
-                //         cb.Topic(consumerConfig.Topic)
-                //             .WithName($"{consumerConfig.Topic}-consumer")
-                //             .WithConsumerConfig(consumerConfig)
-                //             .WithBufferSize(100)
-                //             .WithWorkersCount(1);
-                //         if (hasSchema)
-                //         {
-                //             cb.AddMiddlewares(m =>
-                //             {
-                //                 m.AddSchemaRegistryProtobufSerializer();
-                //             });
-                //         }
-                //     });
-                // }
             });
         });
         return services;
     }
-    
+
     public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
     {
         services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
