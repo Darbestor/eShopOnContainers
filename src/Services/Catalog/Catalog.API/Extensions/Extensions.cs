@@ -177,8 +177,29 @@ public static class Extensions
 
                         m.AddTypedHandlers(x => x.WhenNoHandlerFound(mc =>
                         {
-                            Console.WriteLine("No handler binded");
+                            Console.WriteLine("No handler binded for Catalog");
                         }).AddHandler<ProductPriceEventHandlerKafkaFlow>());
+                    });
+                });
+                cluster.AddConsumer(cb =>
+                {
+                    cb.Topic("Ordering")
+                        .WithName("Ordering-consumer")
+                        .WithGroupId("Ordering-consumer")
+                        .WithBufferSize(100)
+                        .WithWorkersCount(1)
+                        .WithAutoOffsetReset(AutoOffsetReset.Earliest);
+                    cb.AddMiddlewares(m =>
+                    {
+                        if (hasSchema)
+                        {
+                            m.AddSchemaRegistryProtobufCustomSerializer();
+                        }
+
+                        m.AddTypedHandlers(x => x.WhenNoHandlerFound(mc =>
+                        {
+                            Console.WriteLine("No handler binded for Ordering");
+                        }).AddHandler<OrderStockRejectedIntegrationEventProtoHandler>());
                     });
                 });
 
