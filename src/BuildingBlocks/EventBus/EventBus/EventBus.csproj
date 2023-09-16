@@ -7,8 +7,5 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>    
-    <PackageReference Include="Google.Protobuf" />
-  </ItemGroup>
 
 </Project>
