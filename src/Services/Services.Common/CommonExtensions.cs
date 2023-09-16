@@ -1,5 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Azure.Identity;
+using Confluent.SchemaRegistry;
+using Confluent.SchemaRegistry.Serdes;
 using HealthChecks.UI.Client;
 using KafkaFlow;
 using KafkaFlow.Configuration;
@@ -12,6 +14,7 @@ using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
 using Microsoft.eShopOnContainers.Kafka.Configuration;
+using Microsoft.eShopOnContainers.Kafka.Producers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -447,7 +450,7 @@ public static class CommonExtensions
         });
     }
     
-    public static IServiceCollection AddKafkaFlow(this IServiceCollection services, IConfiguration configuration, Action<IClusterConfigurationBuilder, KafkaConfig> consumersProducers)
+    public static IServiceCollection AddKafkaFlow(this IServiceCollection services, IConfiguration configuration, Action<IClusterConfigurationBuilder, KafkaConfig> consumers)
     {
         var kafkaSection = configuration.GetSection("Kafka");
 
@@ -459,6 +462,13 @@ public static class CommonExtensions
         KafkaConfig kafkaConfig = new();
         kafkaSection.Bind(kafkaConfig);
 
+        if (kafkaConfig.Producer is null)
+        {
+            throw new ArgumentException("Required Kafka producer configuration not found");
+        }
+
+        services.AddScoped<IEShopOnContainersProducer, EShopOnContainersProducer>();
+        
         services.AddKafka(builder =>
         {
             builder.UseMicrosoftLog();
@@ -474,7 +484,16 @@ public static class CommonExtensions
                     }
                 });
 
-                consumersProducers(cluster, kafkaConfig);
+                cluster.AddProducer<EShopOnContainersProducer>(pb =>
+                {
+                    pb.WithProducerConfig(kafkaConfig.Producer);
+                    pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
+                        new ProtobufSerializerConfig
+                        {
+                            SubjectNameStrategy = SubjectNameStrategy.TopicRecord, NormalizeSchemas = true,
+                        }));
+                });
+                consumers(cluster, kafkaConfig);
             });
         });
         return services;

@@ -46,6 +46,9 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
   }
   #region Messages
+  /// <summary>
+  /// Event must be at the top of a file
+  /// </summary>
   public sealed partial class OrderStockRejectedIntegrationEventProto : pb::IMessage<OrderStockRejectedIntegrationEventProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage

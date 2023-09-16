@@ -5,6 +5,7 @@ using KafkaFlow;
 using KafkaFlow.Producers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
+using Microsoft.eShopOnContainers.Kafka.Producers;
 using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
@@ -13,12 +14,15 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 [ApiController]
 public class TestController : ControllerBase
 {
+    private readonly IEShopOnContainersProducer _producer;
+
     private readonly IProducerAccessor _producerAccessor;
     // private readonly IKafkaEventBus _kafkaEventBus;
 
-    public TestController(IProducerAccessor producerAccessor)//IKafkaEventBus kafkaEventBus)
+    public TestController(IEShopOnContainersProducer producer)//IKafkaEventBus kafkaEventBus)
     {
-        _producerAccessor = producerAccessor ?? throw new ArgumentNullException(nameof(producerAccessor));
+        _producer = producer ?? throw new ArgumentNullException(nameof(producer));
+        // _producerAccessor = producerAccessor ?? throw new ArgumentNullException(nameof(producerAccessor));
         // _kafkaEventBus = kafkaEventBus ?? throw new ArgumentNullException(nameof(kafkaEventBus));
     }
 
@@ -28,9 +32,9 @@ public class TestController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public void ProduceCatalogIntegrationEvent()
     {
-        var protoPayload = new ProductPriceChangedProtobuf { ProductId = 1, NewPrice = 10, OldPrice = 5 };
-        var producer = _producerAccessor.GetProducer(KafkaConstants.CatalogTopicName);
-        producer.Produce("1", protoPayload);
+        var message = new ProductPriceChangedProtobuf { ProductId = 1, NewPrice = 10, OldPrice = 5 };
+        var kafkaEvent = new KafkaIntegrationEvent(KafkaConstants.CatalogTopicName, "2", message);
+        _producer.Produce(kafkaEvent);
     }
 
     [HttpGet]

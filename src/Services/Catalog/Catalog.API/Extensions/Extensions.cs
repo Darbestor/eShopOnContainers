@@ -98,28 +98,12 @@ public static class Extensions
     {
         services.AddKafkaFlow(configuration, (cluster, config) =>
         {
-            if (!config.Producers.TryGetValue(KafkaConstants.CatalogTopicName, out var catalogProducerConfig))
-            {
-                throw new ArgumentException("Kafka producer '{Name}' not found in the configuration",
-                    KafkaConstants.CatalogTopicName);
-            }
-
             if (!config.Consumers.TryGetValue(KafkaConstants.OrderingTopicName, out var orderingConsumerConfig))
             {
                 throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
                     KafkaConstants.OrderingTopicName);
             }
             cluster.CreateTopicIfNotExists(KafkaConstants.CatalogTopicName, 3, 1);
-            cluster.AddProducer(KafkaConstants.CatalogTopicName, pb =>
-            {
-                pb.DefaultTopic(KafkaConstants.CatalogTopicName);
-                pb.WithProducerConfig(catalogProducerConfig);
-                pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
-                    new ProtobufSerializerConfig
-                    {
-                        SubjectNameStrategy = SubjectNameStrategy.TopicRecord, NormalizeSchemas = true,
-                    }));
-            });
             cluster.AddConsumer(cb =>
             {
                 cb.Topic(KafkaConstants.OrderingTopicName)
