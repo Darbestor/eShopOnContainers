@@ -46,7 +46,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\WebHostCustomization\WebHost.Customization\WebHost.Customization.csproj" />
-    <ProjectReference Include="..\..\Kafka\Kafka.csproj" />
     <ProjectReference Include="..\..\Services.Common\Services.Common.csproj" />
   </ItemGroup>
   <ItemGroup>

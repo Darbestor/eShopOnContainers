@@ -1,6 +1,7 @@
 ﻿using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
 using KafkaFlow;
+using KafkaFlow.Configuration;
 using KafkaFlow.Consumers;
 using KafkaFlow.TypedHandler;
 using Microsoft.eShopOnContainers.Kafka.Configuration;
@@ -93,84 +94,50 @@ public static class Extensions
         return services;
     }
 
-    public static IServiceCollection AddKafkaFlow(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
     {
-        var kafkaSection = configuration.GetSection("Kafka");
-
-        if (!kafkaSection.Exists())
+        services.AddKafkaFlow(configuration, (cluster, config) =>
         {
-            return services;
-        }
-
-        KafkaConfig kafkaConfig = new();
-        kafkaSection.Bind(kafkaConfig);
-
-        if (!kafkaConfig.Producers.TryGetValue(KafkaConstants.CatalogTopicName, out var catalogProducerConfig))
-        {
-            throw new ArgumentException("Kafka producer '{Name}' not found in the configuration",
-                KafkaConstants.CatalogTopicName);
-        }
-
-        if (!kafkaConfig.Consumers.TryGetValue(KafkaConstants.OrderingTopicName, out var orderingConsumerConfig))
-        {
-            throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
-                KafkaConstants.OrderingTopicName);
-        }
-
-        services.AddKafka(builder =>
-        {
-            builder.UseMicrosoftLog();
-            builder.AddCluster(cluster =>
+            if (!config.Producers.TryGetValue(KafkaConstants.CatalogTopicName, out var catalogProducerConfig))
             {
-                cluster.WithBrokers(kafkaConfig.BootstrapServers);
-                var hasSchema = kafkaConfig.SchemaRegistry is not null;
-                if (hasSchema)
-                {
-                    cluster.WithSchemaRegistry(srb =>
-                    {
-                        foreach (var (key, value) in kafkaConfig.SchemaRegistry)
-                        {
-                            srb.Set(key, value);
-                        }
-                    });
-                }
+                throw new ArgumentException("Kafka producer '{Name}' not found in the configuration",
+                    KafkaConstants.CatalogTopicName);
+            }
 
-                cluster.CreateTopicIfNotExists(KafkaConstants.CatalogTopicName, 3, 1);
-                cluster.AddProducer(KafkaConstants.CatalogTopicName, pb =>
-                {
-                    pb.DefaultTopic(KafkaConstants.CatalogTopicName);
-                    pb.WithProducerConfig(catalogProducerConfig);
-                    if (hasSchema)
+            if (!config.Consumers.TryGetValue(KafkaConstants.OrderingTopicName, out var orderingConsumerConfig))
+            {
+                throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
+                    KafkaConstants.OrderingTopicName);
+            }
+            cluster.CreateTopicIfNotExists(KafkaConstants.CatalogTopicName, 3, 1);
+            cluster.AddProducer(KafkaConstants.CatalogTopicName, pb =>
+            {
+                pb.DefaultTopic(KafkaConstants.CatalogTopicName);
+                pb.WithProducerConfig(catalogProducerConfig);
+                pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
+                    new ProtobufSerializerConfig
                     {
-                        pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
-                            new ProtobufSerializerConfig
-                            {
-                                SubjectNameStrategy = SubjectNameStrategy.TopicRecord, NormalizeSchemas = true,
-                            }));
-                    }
-                });
-                cluster.AddConsumer(cb =>
+                        SubjectNameStrategy = SubjectNameStrategy.TopicRecord, NormalizeSchemas = true,
+                    }));
+            });
+            cluster.AddConsumer(cb =>
+            {
+                cb.Topic(KafkaConstants.OrderingTopicName)
+                    .WithName($"Catalog.API-{KafkaConstants.OrderingTopicName}")
+                    .WithConsumerConfig(orderingConsumerConfig)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(1)
+                    .WithAutoOffsetReset(AutoOffsetReset.Earliest)
+                    .WithManualStoreOffsets();
+                cb.AddMiddlewares(m =>
                 {
-                    cb.Topic(KafkaConstants.OrderingTopicName)
-                        .WithName($"Catalog.API-{KafkaConstants.OrderingTopicName}")
-                        .WithConsumerConfig(orderingConsumerConfig)
-                        .WithBufferSize(100)
-                        .WithWorkersCount(1)
-                        .WithAutoOffsetReset(AutoOffsetReset.Earliest)
-                        .WithManualStoreOffsets();
-                    cb.AddMiddlewares(m =>
-                    {
-                        if (hasSchema)
-                        {
-                            m.AddSchemaRegistryProtobufCustomSerializer();
-                        }
-
-                        m.AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                    m.AddSchemaRegistryProtobufCustomSerializer()
+                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
                             .AddHandler<ProductPriceEventHandlerKafkaFlow>());
-                    });
                 });
             });
         });
+        
         return services;
     }
 

@@ -29,7 +29,7 @@ public class TestController : ControllerBase
     public void ProduceCatalogIntegrationEvent()
     {
         var protoPayload = new ProductPriceChangedProtobuf { ProductId = 1, NewPrice = 10, OldPrice = 5 };
-        var producer = _producerAccessor.GetProducer(nameof(ProductPriceChangedProtobuf));
+        var producer = _producerAccessor.GetProducer(KafkaConstants.CatalogTopicName);
         producer.Produce("1", protoPayload);
     }
 
