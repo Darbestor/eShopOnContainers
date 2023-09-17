@@ -16,14 +16,9 @@ public class TestController : ControllerBase
 {
     private readonly IEShopOnContainersProducer _producer;
 
-    private readonly IProducerAccessor _producerAccessor;
-    // private readonly IKafkaEventBus _kafkaEventBus;
-
-    public TestController(IEShopOnContainersProducer producer)//IKafkaEventBus kafkaEventBus)
+    public TestController(IEShopOnContainersProducer producer)
     {
         _producer = producer ?? throw new ArgumentNullException(nameof(producer));
-        // _producerAccessor = producerAccessor ?? throw new ArgumentNullException(nameof(producerAccessor));
-        // _kafkaEventBus = kafkaEventBus ?? throw new ArgumentNullException(nameof(kafkaEventBus));
     }
 
     [HttpGet]
@@ -101,12 +96,12 @@ public class TestController : ControllerBase
         
         // var integrationEvent = new KafkaIntegrationEvent("Ordering", "TestEvents", orderEvent);
         // _kafkaEventBus.Publish(integrationEvent);
-        var protoEvent = new OrderStatusChangedToPaidIntegrationEventProto
+        var protoEvent = new OrderStatusChangedToAwaitingValidationIntegrationEventProto()
         {
-            OrderId = 1,
+            OrderId = 1
         };
-        var producer = _producerAccessor.GetProducer("Ordering-producer");
-        producer.Produce("1", protoEvent);
+        var message = new KafkaIntegrationEvent(KafkaConstants.OrderingTopicName, "1", protoEvent, Array.Empty<KeyValuePair<string, string>>());
+        _producer.Produce(message);
     }
     
     private List<int> GetRandomNumbers(int from,int to,int numberOfElement)

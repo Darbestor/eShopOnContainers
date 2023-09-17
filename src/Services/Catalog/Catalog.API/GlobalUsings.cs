@@ -20,7 +20,6 @@ global using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.EntityConfigurations;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Infrastructure.Exceptions;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents;
-global using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Model;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.ViewModel;

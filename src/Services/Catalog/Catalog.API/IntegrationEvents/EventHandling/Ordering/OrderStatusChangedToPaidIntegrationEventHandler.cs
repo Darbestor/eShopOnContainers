@@ -1,9 +1,11 @@
-﻿using Google.Protobuf;
+﻿using KafkaFlow;
+using KafkaFlow.TypedHandler;
+using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering;
 
-namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling;
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling.Ordering;
 
 public class OrderStatusChangedToPaidIntegrationEventHandler :
-    IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>
+    IMessageHandler<OrderStatusChangedToPaidIntegrationEventProto>
 {
     private readonly CatalogContext _catalogContext;
     private readonly ILogger<OrderStatusChangedToPaidIntegrationEventHandler> _logger;
@@ -19,15 +21,14 @@ public class OrderStatusChangedToPaidIntegrationEventHandler :
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
     }
 
-    public async Task Handle(OrderStatusChangedToPaidIntegrationEvent @event)
+    public async Task Handle(IMessageContext context, OrderStatusChangedToPaidIntegrationEventProto message)
     {
-        
-        using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new ("IntegrationEventContext", @event.Id) }))
+        using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new ("IntegrationEventContext", message.OrderId) }))
         {
-            _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
+            _logger.LogInformation("Handling integration event: ({@IntegrationEvent})", message);
 
             //we're not blocking stock/inventory
-            foreach (var orderStockItem in @event.OrderStockItems)
+            foreach (var orderStockItem in message.OrderStockItems)
             {
                 var catalogItem = _catalogContext.CatalogItems.Find(orderStockItem.ProductId);
 
@@ -35,7 +36,6 @@ public class OrderStatusChangedToPaidIntegrationEventHandler :
             }
 
             await _catalogContext.SaveChangesAsync();
-
         }
     }
 }

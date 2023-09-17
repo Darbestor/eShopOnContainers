@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering;
+
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
 
 public record OrderStockRejectedIntegrationEvent : IntegrationEvent
 {
@@ -23,5 +25,24 @@ public record ConfirmedOrderStockItem
     {
         ProductId = productId;
         HasStock = hasStock;
+    }
+}
+
+public record KafkaOrderStockRejectedIntegrationEvent : KafkaIntegrationEvent
+{
+    public KafkaOrderStockRejectedIntegrationEvent(int orderId, IEnumerable<ConfirmedOrderStockItem> stockItems)
+        : base(KafkaConstants.OrderingTopicName, orderId.ToString(), BuildPayload(orderId, stockItems),
+            Array.Empty<KeyValuePair<string, string>>()) {}
+
+    private static OrderStockRejectedIntegrationEventProto BuildPayload(int orderId,
+        IEnumerable<ConfirmedOrderStockItem> stockItems)
+    {
+        var proto = new OrderStockRejectedIntegrationEventProto { OrderId = orderId };
+        proto.OrderStockItems.AddRange(stockItems.Select(x => new ConfirmedOrderStockItemProto()
+        {
+            ProductId = x.ProductId,
+            HasStock = x.HasStock
+        }));
+        return proto;
     }
 }

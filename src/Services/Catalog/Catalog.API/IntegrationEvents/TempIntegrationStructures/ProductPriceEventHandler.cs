@@ -4,6 +4,7 @@ using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Orde
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.TempIntegrationStructures;
 
+// TODO REmove
 public class ProductPriceEventHandlerKafkaFlow :
     IMessageHandler<ProductPriceChangedProtobuf>
 {
@@ -20,27 +21,6 @@ public class ProductPriceEventHandlerKafkaFlow :
             context.ConsumerContext.Partition,
             context.ConsumerContext.Offset,
             message.ProductId);
-
-        return Task.CompletedTask;
-    }
-}
-
-public class OrderStockRejectedIntegrationEventProtoHandler :
-    IMessageHandler<OrderStatusChangedToPaidIntegrationEventProto>
-{
-    private readonly ILogger<OrderStockRejectedIntegrationEventProtoHandler> _logger;
-
-    public OrderStockRejectedIntegrationEventProtoHandler(ILogger<OrderStockRejectedIntegrationEventProtoHandler> logger)
-    {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    }
-
-    public Task Handle(IMessageContext context, OrderStatusChangedToPaidIntegrationEventProto message)
-    {
-        _logger.LogTrace("Partition: {Partition} | Offset: {Offset} | Message: {Id} | Protobuf",
-            context.ConsumerContext.Partition,
-            context.ConsumerContext.Offset,
-            message.OrderId);
 
         return Task.CompletedTask;
     }
