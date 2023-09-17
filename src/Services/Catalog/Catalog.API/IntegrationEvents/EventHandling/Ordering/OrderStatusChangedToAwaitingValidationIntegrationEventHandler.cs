@@ -1,6 +1,5 @@
 ﻿using KafkaFlow;
 using KafkaFlow.TypedHandler;
-using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling.Ordering;
 
@@ -23,17 +22,19 @@ public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler :
 
     public async Task Handle(IMessageContext context, OrderStatusChangedToAwaitingValidationIntegrationEventProto message)
     {
-        using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new ("IntegrationEventContext", message.OrderId) }))
+        using (_logger.BeginScope(
+                   new List<KeyValuePair<string, object>> { new("IntegrationEventContext", message.OrderId) }))
         {
             _logger.LogInformation("Handling integration event: ({@IntegrationEvent})", message);
 
-            var confirmedOrderStockItems = new List<ConfirmedOrderStockItem>();
+            var confirmedOrderStockItems = new List<ConfirmedOrderStockItemProto>();
 
             foreach (var orderStockItem in message.OrderStockItems)
             {
                 var catalogItem = _catalogContext.CatalogItems.Find(orderStockItem.ProductId);
                 var hasStock = catalogItem.AvailableStock >= orderStockItem.Units;
-                var confirmedOrderStockItem = new ConfirmedOrderStockItem(catalogItem.Id, hasStock);
+                var confirmedOrderStockItem =
+                    new ConfirmedOrderStockItemProto { ProductId = catalogItem.Id, HasStock = hasStock };
 
                 confirmedOrderStockItems.Add(confirmedOrderStockItem);
             }

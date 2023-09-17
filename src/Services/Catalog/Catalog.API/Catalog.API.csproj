@@ -31,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.AzureStorage" />
+    <PackageReference Include="AspNetCore.HealthChecks.Kafka" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" />
     <PackageReference Include="EFCore.NamingConventions" />
     <PackageReference Include="Grpc.AspNetCore" />
@@ -46,13 +47,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\WebHostCustomization\WebHost.Customization\WebHost.Customization.csproj" />
+    <ProjectReference Include="..\..\Ordering\Ordering.API\Ordering.API.csproj" />
     <ProjectReference Include="..\..\Services.Common\Services.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Update="AspNetCore.HealthChecks.NpgSql" Version="7.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Infrastructure\IntegrationEventMigrations\" />
-    <Folder Include="Infrastructure\IntegrationEvents\Events\" />
   </ItemGroup>
 </Project>

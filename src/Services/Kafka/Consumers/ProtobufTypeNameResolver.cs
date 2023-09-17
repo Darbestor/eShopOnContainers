@@ -4,7 +4,7 @@ using Google.Protobuf;
 using Google.Protobuf.Reflection;
 using KafkaFlow;
 
-namespace Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
+namespace Microsoft.eShopOnContainers.Kafka.Consumers;
 
 public class ProtobufTypeNameResolver : IAsyncSchemaRegistryTypeNameResolver
 {

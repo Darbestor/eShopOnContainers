@@ -1,6 +1,6 @@
 ﻿using KafkaFlow;
 
-namespace Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
+namespace Microsoft.eShopOnContainers.Kafka.Consumers;
 
 public class DeserializerConsumerMiddleware : IMessageMiddleware
 {

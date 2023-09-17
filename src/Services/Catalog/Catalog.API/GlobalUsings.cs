@@ -8,11 +8,9 @@ global using Grpc.Core;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
-global using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 global using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 global using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF;
 global using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF.Services;
-global using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF.Utilities;
 global using Microsoft.eShopOnContainers.Services.Catalog.API;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Extensions;
 global using Microsoft.eShopOnContainers.Services.Catalog.API.Grpc;
@@ -28,3 +26,5 @@ global using Polly;
 global using Polly.Retry;
 global using Services.Common;
 global using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Catalog;
+global using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering;
+

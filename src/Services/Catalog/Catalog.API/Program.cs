@@ -12,11 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
-builder.Services.AddIntegrationServices();
 builder.Services.AddKafka(builder.Configuration);
-
-// builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-// builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
 
 var app = builder.Build();
 var bus = app.Services.CreateKafkaBus();
@@ -38,8 +34,5 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
         new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger).Wait();
     });
-    
-    var integrationEventLogContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
-    await integrationEventLogContext.Database.MigrateAsync();
 }
 await app.RunAsync();

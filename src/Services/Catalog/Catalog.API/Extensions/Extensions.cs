@@ -1,13 +1,8 @@
 ﻿using System.Reflection;
-using Confluent.SchemaRegistry;
-using Confluent.SchemaRegistry.Serdes;
+using HealthChecks.Kafka;
 using KafkaFlow;
-using KafkaFlow.Configuration;
-using KafkaFlow.Consumers;
 using KafkaFlow.TypedHandler;
-using Microsoft.eShopOnContainers.Kafka.Configuration;
 using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
-using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.TempIntegrationStructures;
 using Microsoft.Extensions.Localization;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
@@ -49,23 +44,13 @@ public static class Extensions
                 errorCodesToAdd: null);
         }
 
-        ;
-
         services.AddDbContext<CatalogContext>(options =>
         {
             var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
 
             options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
         });
-
-        services.AddDbContext<IntegrationEventLogContext>(options =>
-        {
-            var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
-
-            options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
-        });
-
-
+        
         return services;
     }
 
@@ -118,7 +103,7 @@ public static class Extensions
                 cb.AddMiddlewares(m =>
                 {
                     var assembly = Assembly.GetExecutingAssembly();
-                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>().RootNamespace;
+                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
                     var orderingHandlerTypes = assembly.GetTypes()
                         .Where(x => x.Namespace == $"{rootNamespace}.IntegrationEvents.EventHandling.Ordering")
                         .ToArray();

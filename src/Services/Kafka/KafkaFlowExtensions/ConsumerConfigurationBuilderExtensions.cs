@@ -2,6 +2,7 @@
 using KafkaFlow;
 using KafkaFlow.Configuration;
 using KafkaFlow.Serializer.SchemaRegistry;
+using Microsoft.eShopOnContainers.Kafka.Consumers;
 
 namespace Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
 
