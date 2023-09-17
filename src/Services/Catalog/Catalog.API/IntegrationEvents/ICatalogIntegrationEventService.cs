@@ -2,6 +2,5 @@
 
 public interface ICatalogIntegrationEventService
 {
-    Task SaveEventAndCatalogContextChangesAsync(IntegrationEvent evt);
-    Task PublishThroughEventBusAsync(IntegrationEvent evt);
+    Task PublishAndSaveCatalogContextAsync(KafkaIntegrationEvent evt);
 }

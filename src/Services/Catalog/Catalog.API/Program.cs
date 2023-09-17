@@ -14,7 +14,7 @@ builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
 builder.Services.AddKafka(builder.Configuration);
 
-builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+// builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
 builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
 
 var app = builder.Build();

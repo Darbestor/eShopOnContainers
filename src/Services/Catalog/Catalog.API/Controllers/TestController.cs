@@ -33,7 +33,7 @@ public class TestController : ControllerBase
     public void ProduceCatalogIntegrationEvent()
     {
         var message = new ProductPriceChangedProtobuf { ProductId = 1, NewPrice = 10, OldPrice = 5 };
-        var kafkaEvent = new KafkaIntegrationEvent(KafkaConstants.CatalogTopicName, "2", message);
+        var kafkaEvent = new KafkaIntegrationEvent(KafkaConstants.CatalogTopicName, "2", message, Array.Empty<KeyValuePair<string, string>>());
         _producer.Produce(kafkaEvent);
     }
 

@@ -20,8 +20,7 @@ public class EShopOnContainersProducer : IEShopOnContainersProducer
     public void Produce(KafkaIntegrationEvent @event)
     {
         var (topic, key, message, headers) = @event;
-        _logger.LogTrace(@"Producing integration event: Topic [{Topic}], Key [{Key}], 
-Message [{Message}]", topic, key, message);
+        _logger.LogTrace(@"Producing integration event: {Event}", @event);
 
         var kafkaHeaders = new MessageHeaders();
         foreach (var (headerKey, headerValue) in headers)
