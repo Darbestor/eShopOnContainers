@@ -117,14 +117,4 @@ public static class Extensions
         
         return services;
     }
-
-    public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
-    {
-        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
-            sp => (DbConnection c) => new IntegrationEventLogService(c));
-
-        services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
-
-        return services;
-    }
 }

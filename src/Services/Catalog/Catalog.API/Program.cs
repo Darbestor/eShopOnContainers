@@ -13,6 +13,7 @@ builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddKafka(builder.Configuration);
+builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
 var app = builder.Build();
 var bus = app.Services.CreateKafkaBus();
