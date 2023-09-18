@@ -6,7 +6,7 @@ using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Orde
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling.Ordering;
 
 public class OrderStatusChangedToPaidIntegrationEventHandler :
-    KafkaConsumerEventHandler<OrderStatusChangedToPaidIntegrationEventProto>
+    KafkaConsumerEventHandler<OrderStatusChangedToPaidProto>
 {
     private readonly CatalogContext _catalogContext;
     private readonly IServiceProvider _serviceProvider;
@@ -22,7 +22,7 @@ public class OrderStatusChangedToPaidIntegrationEventHandler :
     }
 
     protected override async Task HandleInternal(IMessageContext context,
-        OrderStatusChangedToPaidIntegrationEventProto message)
+        OrderStatusChangedToPaidProto message)
     {
         //we're not blocking stock/inventory
         foreach (var orderStockItem in message.OrderStockItems)

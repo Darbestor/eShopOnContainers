@@ -3,7 +3,7 @@ using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Cata
 
 namespace Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.EventHandling.Catalog;
 
-public class ProductPriceChangedIntegrationEventHandler : KafkaConsumerEventHandler<ProductPriceChangedProtobuf>
+public class ProductPriceChangedIntegrationEventHandler : KafkaConsumerEventHandler<ProductPriceChangedProto>
 {
     private readonly ILogger<ProductPriceChangedIntegrationEventHandler> _logger;
     private readonly IBasketRepository _repository;
@@ -17,7 +17,7 @@ public class ProductPriceChangedIntegrationEventHandler : KafkaConsumerEventHand
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    protected override async Task HandleInternal(IMessageContext context, ProductPriceChangedProtobuf @event)
+    protected override async Task HandleInternal(IMessageContext context, ProductPriceChangedProto @event)
     {
             var userIds = _repository.GetUsers();
 

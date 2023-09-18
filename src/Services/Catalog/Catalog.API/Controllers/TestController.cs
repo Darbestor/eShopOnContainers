@@ -27,7 +27,7 @@ public class TestController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public void ProduceCatalogIntegrationEvent()
     {
-        var message = new ProductPriceChangedProtobuf { ProductId = 1, NewPrice = 10, OldPrice = 5 };
+        var message = new ProductPriceChangedProto { ProductId = 1, NewPrice = 10, OldPrice = 5 };
         var kafkaEvent = new KafkaIntegrationEvent(KafkaConstants.CatalogTopicName, "2", message, Array.Empty<KeyValuePair<string, string>>());
         _producer.Produce(kafkaEvent);
     }
@@ -96,7 +96,7 @@ public class TestController : ControllerBase
         
         // var integrationEvent = new KafkaIntegrationEvent("Ordering", "TestEvents", orderEvent);
         // _kafkaEventBus.Publish(integrationEvent);
-        var protoEvent = new OrderStatusChangedToAwaitingValidationIntegrationEventProto()
+        var protoEvent = new OrderStatusChangedToAwaitingValidationProto()
         {
             OrderId = 1
         };

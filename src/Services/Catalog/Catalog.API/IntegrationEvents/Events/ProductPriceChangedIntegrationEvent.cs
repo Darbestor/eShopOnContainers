@@ -9,6 +9,6 @@ public record KafkaProductPriceChangedIntegrationEvent : KafkaIntegrationEvent
 {
     public KafkaProductPriceChangedIntegrationEvent(int productId, decimal newPrice, decimal oldPrice)
         : base(KafkaConstants.CatalogTopicName, productId.ToString(),
-            new ProductPriceChangedProtobuf { ProductId = productId, NewPrice = newPrice, OldPrice = oldPrice },
+            new ProductPriceChangedProto { ProductId = productId, NewPrice = newPrice, OldPrice = oldPrice },
             Array.Empty<KeyValuePair<string, string>>()) {}
 }

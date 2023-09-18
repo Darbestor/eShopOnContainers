@@ -3,7 +3,7 @@ using Microsoft.eShopOnContainers.Kafka.Consumers;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling.Ordering;
 
-public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler : KafkaConsumerEventHandler<OrderStatusChangedToAwaitingValidationIntegrationEventProto>
+public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler : KafkaConsumerEventHandler<OrderStatusChangedToAwaitingValidationProto>
 {
     private readonly CatalogContext _catalogContext;
     private readonly ICatalogIntegrationEventService _catalogIntegrationEventService;
@@ -19,7 +19,7 @@ public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler : Kaf
     }
 
     protected override async Task HandleInternal(IMessageContext context,
-        OrderStatusChangedToAwaitingValidationIntegrationEventProto message)
+        OrderStatusChangedToAwaitingValidationProto message)
     {
         var confirmedOrderStockItems = new List<ConfirmedOrderStockItemProto>();
 

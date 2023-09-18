@@ -3,7 +3,7 @@ using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Orde
 
 namespace Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.EventHandling.Ordering;
 
-public class OrderStartedIntegrationEventHandler : KafkaConsumerEventHandler<OrderStartedIntegrationEventProto>
+public class OrderStartedIntegrationEventHandler : KafkaConsumerEventHandler<OrderStartedProto>
 {
     private readonly IBasketRepository _repository;
 
@@ -15,7 +15,7 @@ public class OrderStartedIntegrationEventHandler : KafkaConsumerEventHandler<Ord
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    protected override async Task HandleInternal(IMessageContext context, OrderStartedIntegrationEventProto message)
+    protected override async Task HandleInternal(IMessageContext context, OrderStartedProto message)
     {
         await _repository.DeleteBasketAsync(message.UserId.ToString());
     }

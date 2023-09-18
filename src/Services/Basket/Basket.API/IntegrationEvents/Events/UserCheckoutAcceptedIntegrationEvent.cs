@@ -20,13 +20,13 @@ public record UserCheckoutAcceptedIntegrationEvent : KafkaIntegrationEvent
     {
     }
 
-    private static UserCheckoutAcceptedIntegrationEventProto BuildProto(string userId, string userName, string city,
+    private static UserCheckoutAcceptedProto BuildProto(string userId, string userName, string city,
         string street,
         string state, string country, string zipCode, string cardNumber, string cardHolderName,
         DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer, Guid requestId,
         CustomerBasket basket)
     {
-        var proto = new UserCheckoutAcceptedIntegrationEventProto
+        var proto = new UserCheckoutAcceptedProto
         {
             UserId = userId,
             CardExpiration = Timestamp.FromDateTime(cardExpiration),

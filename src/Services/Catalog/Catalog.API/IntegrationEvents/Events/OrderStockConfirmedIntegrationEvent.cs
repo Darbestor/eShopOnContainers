@@ -8,5 +8,5 @@ public record KafkaOrderStockConfirmedIntegrationEvent : KafkaIntegrationEvent
         : base(KafkaConstants.OrderingTopicName, orderId.ToString(), BuildPayload(orderId),
             Array.Empty<KeyValuePair<string, string>>()) {}
 
-    private static OrderStockConfirmedIntegrationEventProto BuildPayload(int orderId) => new() { OrderId = orderId };
+    private static OrderStockConfirmedProto BuildPayload(int orderId) => new() { OrderId = orderId };
 }

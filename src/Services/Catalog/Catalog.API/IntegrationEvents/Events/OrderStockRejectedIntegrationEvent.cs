@@ -8,10 +8,10 @@ public record KafkaOrderStockRejectedIntegrationEvent : KafkaIntegrationEvent
         : base(KafkaConstants.OrderingTopicName, orderId.ToString(), BuildPayload(orderId, stockItems),
             Array.Empty<KeyValuePair<string, string>>()) {}
 
-    private static OrderStockRejectedIntegrationEventProto BuildPayload(int orderId,
+    private static OrderStockRejectedProto BuildPayload(int orderId,
         IEnumerable<ConfirmedOrderStockItemProto> stockItems)
     {
-        var proto = new OrderStockRejectedIntegrationEventProto { OrderId = orderId };
+        var proto = new OrderStockRejectedProto { OrderId = orderId };
         proto.OrderStockItems.AddRange(stockItems.Select(x => new ConfirmedOrderStockItemProto()
         {
             ProductId = x.ProductId,
