@@ -42,7 +42,7 @@ public static class Extensions
             cluster.AddConsumer(cb =>
             {
                 cb.Topic(KafkaConstants.OrderingTopicName)
-                    .WithName($"Catalog.API-{KafkaConstants.OrderingTopicName}")
+                    .WithName($"Basket.API-{KafkaConstants.OrderingTopicName}")
                     .WithConsumerConfig(orderingConsumerConfig)
                     .WithBufferSize(100)
                     .WithWorkersCount(1)
@@ -64,7 +64,7 @@ public static class Extensions
             cluster.AddConsumer(cb =>
             {
                 cb.Topic(KafkaConstants.CatalogTopicName)
-                    .WithName($"Catalog.API-{KafkaConstants.CatalogTopicName}")
+                    .WithName($"Basket.API-{KafkaConstants.CatalogTopicName}")
                     .WithConsumerConfig(catalogConsumerConfig)
                     .WithBufferSize(100)
                     .WithWorkersCount(1)
