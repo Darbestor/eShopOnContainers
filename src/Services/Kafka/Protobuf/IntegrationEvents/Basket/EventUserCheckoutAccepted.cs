@@ -28,7 +28,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
             "dF9hY2NlcHRlZC5wcm90bxI0bWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJz",
             "LmludGVncmF0aW9uZXZlbnRzLmJhc2tldBofQ3VzdG9tVHlwZXMvZGVjaW1h",
             "bF92YWx1ZS5wcm90bxocQ3VzdG9tVHlwZXMvdXVpZF92YWx1ZS5wcm90bxof",
-            "Z29vZ2xlL3Byb3RvYnVmL3RpbWVzdGFtcC5wcm90byKABAopVXNlckNoZWNr",
+            "Z29vZ2xlL3Byb3RvYnVmL3RpbWVzdGFtcC5wcm90byKFBAopVXNlckNoZWNr",
             "b3V0QWNjZXB0ZWRJbnRlZ3JhdGlvbkV2ZW50UHJvdG8SDwoHdXNlcl9pZBgB",
             "IAEoCRIRCgl1c2VyX25hbWUYAiABKAkSFAoMb3JkZXJfbnVtYmVyGAMgASgF",
             "EgwKBGNpdHkYBCABKAkSDgoGc3RyZWV0GAUgASgJEg0KBXN0YXRlGAYgASgJ",
@@ -38,25 +38,26 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
             "EhwKFGNhcmRfc2VjdXJpdHlfbnVtYmVyGAwgASgJEhQKDGNhcmRfdHlwZV9p",
             "ZBgNIAEoBRINCgVidXllchgOIAEoCRJMCgpyZXF1ZXN0X2lkGBAgASgLMjgu",
             "bWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJzLmludGVncmF0aW9uZXZlbnRz",
-            "LlV1aWRWYWx1ZRJUCgZiYXNrZXQYDyABKAsyRC5taWNyb3NvZnQuZXNob3Bv",
+            "LlV1aWRWYWx1ZRJZCgZiYXNrZXQYDyABKAsySS5taWNyb3NvZnQuZXNob3Bv",
             "bmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMuYmFza2V0LkN1c3RvbWVy",
-            "QmFza2V0InIKDkN1c3RvbWVyQmFza2V0Eg8KB0J1eWVySWQYASABKAkSTwoF",
-            "SXRlbXMYAiADKAsyQC5taWNyb3NvZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50",
-            "ZWdyYXRpb25ldmVudHMuYmFza2V0LkJhc2tldEl0ZW0ijwIKCkJhc2tldEl0",
-            "ZW0SCgoCaWQYASABKAkSEgoKcHJvZHVjdF9pZBgCIAEoBRIUCgxwcm9kdWN0",
-            "X25hbWUYAyABKAkSTwoKdW5pdF9wcmljZRgEIAEoCzI7Lm1pY3Jvc29mdC5l",
-            "c2hvcG9uY29udGFpbmVycy5pbnRlZ3JhdGlvbmV2ZW50cy5EZWNpbWFsVmFs",
-            "dWUSUwoOb2xkX3VuaXRfcHJpY2UYBSABKAsyOy5taWNyb3NvZnQuZXNob3Bv",
-            "bmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMuRGVjaW1hbFZhbHVlEhAK",
-            "CHF1YW50aXR5GAYgASgFEhMKC3BpY3R1cmVfdXJsGAcgASgJQk+qAkxNaWNy",
-            "b3NvZnQuZVNob3BPbkNvbnRhaW5lcnMuU2VydmljZXMuS2Fma2EuUHJvdG9i",
-            "dWYuSW50ZWdyYXRpb25FdmVudHMuQmFza2V0YgZwcm90bzM="));
+            "QmFza2V0UHJvdG8ifAoTQ3VzdG9tZXJCYXNrZXRQcm90bxIPCgdCdXllcklk",
+            "GAEgASgJElQKBUl0ZW1zGAIgAygLMkUubWljcm9zb2Z0LmVzaG9wb25jb250",
+            "YWluZXJzLmludGVncmF0aW9uZXZlbnRzLmJhc2tldC5CYXNrZXRJdGVtUHJv",
+            "dG8ilAIKD0Jhc2tldEl0ZW1Qcm90bxIKCgJpZBgBIAEoCRISCgpwcm9kdWN0",
+            "X2lkGAIgASgFEhQKDHByb2R1Y3RfbmFtZRgDIAEoCRJPCgp1bml0X3ByaWNl",
+            "GAQgASgLMjsubWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJzLmludGVncmF0",
+            "aW9uZXZlbnRzLkRlY2ltYWxWYWx1ZRJTCg5vbGRfdW5pdF9wcmljZRgFIAEo",
+            "CzI7Lm1pY3Jvc29mdC5lc2hvcG9uY29udGFpbmVycy5pbnRlZ3JhdGlvbmV2",
+            "ZW50cy5EZWNpbWFsVmFsdWUSEAoIcXVhbnRpdHkYBiABKAUSEwoLcGljdHVy",
+            "ZV91cmwYByABKAlCT6oCTE1pY3Jvc29mdC5lU2hvcE9uQ29udGFpbmVycy5T",
+            "ZXJ2aWNlcy5LYWZrYS5Qcm90b2J1Zi5JbnRlZ3JhdGlvbkV2ZW50cy5CYXNr",
+            "ZXRiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.DecimalValueReflection.Descriptor, global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.UuidValueReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.UserCheckoutAcceptedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.UserCheckoutAcceptedIntegrationEventProto.Parser, new[]{ "UserId", "UserName", "OrderNumber", "City", "Street", "State", "Country", "ZipCode", "CardNumber", "CardHolderName", "CardExpiration", "CardSecurityNumber", "CardTypeId", "Buyer", "RequestId", "Basket" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasket), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasket.Parser, new[]{ "BuyerId", "Items" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItem), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItem.Parser, new[]{ "Id", "ProductId", "ProductName", "UnitPrice", "OldUnitPrice", "Quantity", "PictureUrl" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto.Parser, new[]{ "BuyerId", "Items" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto.Parser, new[]{ "Id", "ProductId", "ProductName", "UnitPrice", "OldUnitPrice", "Quantity", "PictureUrl" }, null, null, null, null)
           }));
     }
     #endregion
@@ -304,10 +305,10 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     /// <summary>Field number for the "basket" field.</summary>
     public const int BasketFieldNumber = 15;
-    private global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasket basket_;
+    private global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto basket_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasket Basket {
+    public global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto Basket {
       get { return basket_; }
       set {
         basket_ = value;
@@ -647,7 +648,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
       }
       if (other.basket_ != null) {
         if (basket_ == null) {
-          Basket = new global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasket();
+          Basket = new global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto();
         }
         Basket.MergeFrom(other.Basket);
       }
@@ -727,7 +728,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
           }
           case 122: {
             if (basket_ == null) {
-              Basket = new global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasket();
+              Basket = new global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto();
             }
             input.ReadMessage(Basket);
             break;
@@ -815,7 +816,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
           }
           case 122: {
             if (basket_ == null) {
-              Basket = new global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasket();
+              Basket = new global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto();
             }
             input.ReadMessage(Basket);
             break;
@@ -834,16 +835,16 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
   }
 
-  public sealed partial class CustomerBasket : pb::IMessage<CustomerBasket>
+  public sealed partial class CustomerBasketProto : pb::IMessage<CustomerBasketProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<CustomerBasket> _parser = new pb::MessageParser<CustomerBasket>(() => new CustomerBasket());
+    private static readonly pb::MessageParser<CustomerBasketProto> _parser = new pb::MessageParser<CustomerBasketProto>(() => new CustomerBasketProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<CustomerBasket> Parser { get { return _parser; } }
+    public static pb::MessageParser<CustomerBasketProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -859,7 +860,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CustomerBasket() {
+    public CustomerBasketProto() {
       OnConstruction();
     }
 
@@ -867,7 +868,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CustomerBasket(CustomerBasket other) : this() {
+    public CustomerBasketProto(CustomerBasketProto other) : this() {
       buyerId_ = other.buyerId_;
       items_ = other.items_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -875,8 +876,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CustomerBasket Clone() {
-      return new CustomerBasket(this);
+    public CustomerBasketProto Clone() {
+      return new CustomerBasketProto(this);
     }
 
     /// <summary>Field number for the "BuyerId" field.</summary>
@@ -893,24 +894,24 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     /// <summary>Field number for the "Items" field.</summary>
     public const int ItemsFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItem> _repeated_items_codec
-        = pb::FieldCodec.ForMessage(18, global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItem.Parser);
-    private readonly pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItem> items_ = new pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItem>();
+    private static readonly pb::FieldCodec<global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto> _repeated_items_codec
+        = pb::FieldCodec.ForMessage(18, global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto.Parser);
+    private readonly pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto> items_ = new pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItem> Items {
+    public pbc::RepeatedField<global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto> Items {
       get { return items_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as CustomerBasket);
+      return Equals(other as CustomerBasketProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(CustomerBasket other) {
+    public bool Equals(CustomerBasketProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -988,7 +989,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(CustomerBasket other) {
+    public void MergeFrom(CustomerBasketProto other) {
       if (other == null) {
         return;
       }
@@ -1049,16 +1050,16 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
   }
 
-  public sealed partial class BasketItem : pb::IMessage<BasketItem>
+  public sealed partial class BasketItemProto : pb::IMessage<BasketItemProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<BasketItem> _parser = new pb::MessageParser<BasketItem>(() => new BasketItem());
+    private static readonly pb::MessageParser<BasketItemProto> _parser = new pb::MessageParser<BasketItemProto>(() => new BasketItemProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<BasketItem> Parser { get { return _parser; } }
+    public static pb::MessageParser<BasketItemProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1074,7 +1075,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public BasketItem() {
+    public BasketItemProto() {
       OnConstruction();
     }
 
@@ -1082,7 +1083,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public BasketItem(BasketItem other) : this() {
+    public BasketItemProto(BasketItemProto other) : this() {
       id_ = other.id_;
       productId_ = other.productId_;
       productName_ = other.productName_;
@@ -1095,8 +1096,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public BasketItem Clone() {
-      return new BasketItem(this);
+    public BasketItemProto Clone() {
+      return new BasketItemProto(this);
     }
 
     /// <summary>Field number for the "id" field.</summary>
@@ -1186,12 +1187,12 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as BasketItem);
+      return Equals(other as BasketItemProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(BasketItem other) {
+    public bool Equals(BasketItemProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1342,7 +1343,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(BasketItem other) {
+    public void MergeFrom(BasketItemProto other) {
       if (other == null) {
         return;
       }
