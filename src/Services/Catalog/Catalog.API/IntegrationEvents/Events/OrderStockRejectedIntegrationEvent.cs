@@ -1,4 +1,4 @@
-﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderPayment;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
 

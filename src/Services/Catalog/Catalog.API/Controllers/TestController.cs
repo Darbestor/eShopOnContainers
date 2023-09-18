@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Extensions;
 using Microsoft.eShopOnContainers.Kafka.Producers;
 using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering;
+using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 
