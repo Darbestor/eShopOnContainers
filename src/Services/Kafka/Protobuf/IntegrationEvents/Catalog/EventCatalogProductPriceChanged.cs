@@ -27,34 +27,34 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
             "CkNJbnRlZ3JhdGlvbkV2ZW50cy9DYXRhbG9nL2V2ZW50X2NhdGFsb2dfcHJv",
             "ZHVjdF9wcmljZV9jaGFuZ2VkLnByb3RvEjVtaWNyb3NvZnQuZXNob3BvbmNv",
             "bnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMuY2F0YWxvZxofQ3VzdG9tVHlw",
-            "ZXMvZGVjaW1hbF92YWx1ZS5wcm90byLRAQobUHJvZHVjdFByaWNlQ2hhbmdl",
-            "ZFByb3RvYnVmEhIKCnByb2R1Y3RfaWQYASABKAUSTgoJbmV3X3ByaWNlGAIg",
-            "ASgLMjsubWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJzLmludGVncmF0aW9u",
-            "ZXZlbnRzLkRlY2ltYWxWYWx1ZRJOCglvbGRfcHJpY2UYAyABKAsyOy5taWNy",
-            "b3NvZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMuRGVj",
-            "aW1hbFZhbHVlQlCqAk1NaWNyb3NvZnQuZVNob3BPbkNvbnRhaW5lcnMuU2Vy",
-            "dmljZXMuS2Fma2EuUHJvdG9idWYuSW50ZWdyYXRpb25FdmVudHMuQ2F0YWxv",
-            "Z2IGcHJvdG8z"));
+            "ZXMvZGVjaW1hbF92YWx1ZS5wcm90byLOAQoYUHJvZHVjdFByaWNlQ2hhbmdl",
+            "ZFByb3RvEhIKCnByb2R1Y3RfaWQYASABKAUSTgoJbmV3X3ByaWNlGAIgASgL",
+            "MjsubWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJzLmludGVncmF0aW9uZXZl",
+            "bnRzLkRlY2ltYWxWYWx1ZRJOCglvbGRfcHJpY2UYAyABKAsyOy5taWNyb3Nv",
+            "ZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMuRGVjaW1h",
+            "bFZhbHVlQlCqAk1NaWNyb3NvZnQuZVNob3BPbkNvbnRhaW5lcnMuU2Vydmlj",
+            "ZXMuS2Fma2EuUHJvdG9idWYuSW50ZWdyYXRpb25FdmVudHMuQ2F0YWxvZ2IG",
+            "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.DecimalValueReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Catalog.ProductPriceChangedProtobuf), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Catalog.ProductPriceChangedProtobuf.Parser, new[]{ "ProductId", "NewPrice", "OldPrice" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Catalog.ProductPriceChangedProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Catalog.ProductPriceChangedProto.Parser, new[]{ "ProductId", "NewPrice", "OldPrice" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
-  public sealed partial class ProductPriceChangedProtobuf : pb::IMessage<ProductPriceChangedProtobuf>
+  public sealed partial class ProductPriceChangedProto : pb::IMessage<ProductPriceChangedProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<ProductPriceChangedProtobuf> _parser = new pb::MessageParser<ProductPriceChangedProtobuf>(() => new ProductPriceChangedProtobuf());
+    private static readonly pb::MessageParser<ProductPriceChangedProto> _parser = new pb::MessageParser<ProductPriceChangedProto>(() => new ProductPriceChangedProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ProductPriceChangedProtobuf> Parser { get { return _parser; } }
+    public static pb::MessageParser<ProductPriceChangedProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -70,7 +70,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProductPriceChangedProtobuf() {
+    public ProductPriceChangedProto() {
       OnConstruction();
     }
 
@@ -78,7 +78,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProductPriceChangedProtobuf(ProductPriceChangedProtobuf other) : this() {
+    public ProductPriceChangedProto(ProductPriceChangedProto other) : this() {
       productId_ = other.productId_;
       newPrice_ = other.newPrice_ != null ? other.newPrice_.Clone() : null;
       oldPrice_ = other.oldPrice_ != null ? other.oldPrice_.Clone() : null;
@@ -87,8 +87,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ProductPriceChangedProtobuf Clone() {
-      return new ProductPriceChangedProtobuf(this);
+    public ProductPriceChangedProto Clone() {
+      return new ProductPriceChangedProto(this);
     }
 
     /// <summary>Field number for the "product_id" field.</summary>
@@ -130,12 +130,12 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as ProductPriceChangedProtobuf);
+      return Equals(other as ProductPriceChangedProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ProductPriceChangedProtobuf other) {
+    public bool Equals(ProductPriceChangedProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -234,7 +234,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ProductPriceChangedProtobuf other) {
+    public void MergeFrom(ProductPriceChangedProto other) {
       if (other == null) {
         return;
       }

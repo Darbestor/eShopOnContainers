@@ -28,32 +28,32 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
             "dGF0dXNfY2hhbmdlZF90b19wYWlkLnByb3RvEjZtaWNyb3NvZnQuZXNob3Bv",
             "bmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMub3JkZXJpbmcaNkludGVn",
             "cmF0aW9uRXZlbnRzL09yZGVyaW5nL2V2ZW50X29yZGVyaW5nX2NvbW1vbi5w",
-            "cm90byKpAQotT3JkZXJTdGF0dXNDaGFuZ2VkVG9QYWlkSW50ZWdyYXRpb25F",
-            "dmVudFByb3RvEhAKCG9yZGVyX2lkGAEgASgFEmYKEW9yZGVyX3N0b2NrX2l0",
-            "ZW1zGAIgAygLMksubWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJzLmludGVn",
-            "cmF0aW9uZXZlbnRzLm9yZGVyaW5nLk9yZGVyU3RvY2tJdGVtUHJvdG9CUaoC",
-            "Tk1pY3Jvc29mdC5lU2hvcE9uQ29udGFpbmVycy5TZXJ2aWNlcy5LYWZrYS5Q",
-            "cm90b2J1Zi5JbnRlZ3JhdGlvbkV2ZW50cy5PcmRlcmluZ2IGcHJvdG8z"));
+            "cm90byKZAQodT3JkZXJTdGF0dXNDaGFuZ2VkVG9QYWlkUHJvdG8SEAoIb3Jk",
+            "ZXJfaWQYASABKAUSZgoRb3JkZXJfc3RvY2tfaXRlbXMYAiADKAsySy5taWNy",
+            "b3NvZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMub3Jk",
+            "ZXJpbmcuT3JkZXJTdG9ja0l0ZW1Qcm90b0JRqgJOTWljcm9zb2Z0LmVTaG9w",
+            "T25Db250YWluZXJzLlNlcnZpY2VzLkthZmthLlByb3RvYnVmLkludGVncmF0",
+            "aW9uRXZlbnRzLk9yZGVyaW5nYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.EventOrderingCommonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStatusChangedToPaidIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStatusChangedToPaidIntegrationEventProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStatusChangedToPaidProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStatusChangedToPaidProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
-  public sealed partial class OrderStatusChangedToPaidIntegrationEventProto : pb::IMessage<OrderStatusChangedToPaidIntegrationEventProto>
+  public sealed partial class OrderStatusChangedToPaidProto : pb::IMessage<OrderStatusChangedToPaidProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<OrderStatusChangedToPaidIntegrationEventProto> _parser = new pb::MessageParser<OrderStatusChangedToPaidIntegrationEventProto>(() => new OrderStatusChangedToPaidIntegrationEventProto());
+    private static readonly pb::MessageParser<OrderStatusChangedToPaidProto> _parser = new pb::MessageParser<OrderStatusChangedToPaidProto>(() => new OrderStatusChangedToPaidProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<OrderStatusChangedToPaidIntegrationEventProto> Parser { get { return _parser; } }
+    public static pb::MessageParser<OrderStatusChangedToPaidProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -69,7 +69,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStatusChangedToPaidIntegrationEventProto() {
+    public OrderStatusChangedToPaidProto() {
       OnConstruction();
     }
 
@@ -77,7 +77,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStatusChangedToPaidIntegrationEventProto(OrderStatusChangedToPaidIntegrationEventProto other) : this() {
+    public OrderStatusChangedToPaidProto(OrderStatusChangedToPaidProto other) : this() {
       orderId_ = other.orderId_;
       orderStockItems_ = other.orderStockItems_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -85,8 +85,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStatusChangedToPaidIntegrationEventProto Clone() {
-      return new OrderStatusChangedToPaidIntegrationEventProto(this);
+    public OrderStatusChangedToPaidProto Clone() {
+      return new OrderStatusChangedToPaidProto(this);
     }
 
     /// <summary>Field number for the "order_id" field.</summary>
@@ -115,12 +115,12 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as OrderStatusChangedToPaidIntegrationEventProto);
+      return Equals(other as OrderStatusChangedToPaidProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(OrderStatusChangedToPaidIntegrationEventProto other) {
+    public bool Equals(OrderStatusChangedToPaidProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -198,7 +198,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(OrderStatusChangedToPaidIntegrationEventProto other) {
+    public void MergeFrom(OrderStatusChangedToPaidProto other) {
       if (other == null) {
         return;
       }

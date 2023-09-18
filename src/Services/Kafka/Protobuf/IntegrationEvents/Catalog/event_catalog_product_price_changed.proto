@@ -10,7 +10,7 @@ option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.Int
 
 import "CustomTypes/decimal_value.proto";
 
-message ProductPriceChangedProtobuf {
+message ProductPriceChangedProto {
   int32 product_id = 1;
   DecimalValue new_price = 2;
   DecimalValue old_price = 3;

@@ -28,33 +28,32 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
             "dGF0dXNfY2hhbmdlZF90b19hd2FpdGluZy5wcm90bxI2bWljcm9zb2Z0LmVz",
             "aG9wb25jb250YWluZXJzLmludGVncmF0aW9uZXZlbnRzLm9yZGVyaW5nGjZJ",
             "bnRlZ3JhdGlvbkV2ZW50cy9PcmRlcmluZy9ldmVudF9vcmRlcmluZ19jb21t",
-            "b24ucHJvdG8itwEKO09yZGVyU3RhdHVzQ2hhbmdlZFRvQXdhaXRpbmdWYWxp",
-            "ZGF0aW9uSW50ZWdyYXRpb25FdmVudFByb3RvEhAKCG9yZGVyX2lkGAEgASgF",
-            "EmYKEW9yZGVyX3N0b2NrX2l0ZW1zGAIgAygLMksubWljcm9zb2Z0LmVzaG9w",
-            "b25jb250YWluZXJzLmludGVncmF0aW9uZXZlbnRzLm9yZGVyaW5nLk9yZGVy",
-            "U3RvY2tJdGVtUHJvdG9CUaoCTk1pY3Jvc29mdC5lU2hvcE9uQ29udGFpbmVy",
-            "cy5TZXJ2aWNlcy5LYWZrYS5Qcm90b2J1Zi5JbnRlZ3JhdGlvbkV2ZW50cy5P",
-            "cmRlcmluZ2IGcHJvdG8z"));
+            "b24ucHJvdG8ipwEKK09yZGVyU3RhdHVzQ2hhbmdlZFRvQXdhaXRpbmdWYWxp",
+            "ZGF0aW9uUHJvdG8SEAoIb3JkZXJfaWQYASABKAUSZgoRb3JkZXJfc3RvY2tf",
+            "aXRlbXMYAiADKAsySy5taWNyb3NvZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50",
+            "ZWdyYXRpb25ldmVudHMub3JkZXJpbmcuT3JkZXJTdG9ja0l0ZW1Qcm90b0JR",
+            "qgJOTWljcm9zb2Z0LmVTaG9wT25Db250YWluZXJzLlNlcnZpY2VzLkthZmth",
+            "LlByb3RvYnVmLkludGVncmF0aW9uRXZlbnRzLk9yZGVyaW5nYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.EventOrderingCommonReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStatusChangedToAwaitingValidationIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStatusChangedToAwaitingValidationIntegrationEventProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStatusChangedToAwaitingValidationProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStatusChangedToAwaitingValidationProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
-  public sealed partial class OrderStatusChangedToAwaitingValidationIntegrationEventProto : pb::IMessage<OrderStatusChangedToAwaitingValidationIntegrationEventProto>
+  public sealed partial class OrderStatusChangedToAwaitingValidationProto : pb::IMessage<OrderStatusChangedToAwaitingValidationProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<OrderStatusChangedToAwaitingValidationIntegrationEventProto> _parser = new pb::MessageParser<OrderStatusChangedToAwaitingValidationIntegrationEventProto>(() => new OrderStatusChangedToAwaitingValidationIntegrationEventProto());
+    private static readonly pb::MessageParser<OrderStatusChangedToAwaitingValidationProto> _parser = new pb::MessageParser<OrderStatusChangedToAwaitingValidationProto>(() => new OrderStatusChangedToAwaitingValidationProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<OrderStatusChangedToAwaitingValidationIntegrationEventProto> Parser { get { return _parser; } }
+    public static pb::MessageParser<OrderStatusChangedToAwaitingValidationProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -70,7 +69,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStatusChangedToAwaitingValidationIntegrationEventProto() {
+    public OrderStatusChangedToAwaitingValidationProto() {
       OnConstruction();
     }
 
@@ -78,7 +77,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStatusChangedToAwaitingValidationIntegrationEventProto(OrderStatusChangedToAwaitingValidationIntegrationEventProto other) : this() {
+    public OrderStatusChangedToAwaitingValidationProto(OrderStatusChangedToAwaitingValidationProto other) : this() {
       orderId_ = other.orderId_;
       orderStockItems_ = other.orderStockItems_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -86,8 +85,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStatusChangedToAwaitingValidationIntegrationEventProto Clone() {
-      return new OrderStatusChangedToAwaitingValidationIntegrationEventProto(this);
+    public OrderStatusChangedToAwaitingValidationProto Clone() {
+      return new OrderStatusChangedToAwaitingValidationProto(this);
     }
 
     /// <summary>Field number for the "order_id" field.</summary>
@@ -116,12 +115,12 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as OrderStatusChangedToAwaitingValidationIntegrationEventProto);
+      return Equals(other as OrderStatusChangedToAwaitingValidationProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(OrderStatusChangedToAwaitingValidationIntegrationEventProto other) {
+    public bool Equals(OrderStatusChangedToAwaitingValidationProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -199,7 +198,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(OrderStatusChangedToAwaitingValidationIntegrationEventProto other) {
+    public void MergeFrom(OrderStatusChangedToAwaitingValidationProto other) {
       if (other == null) {
         return;
       }

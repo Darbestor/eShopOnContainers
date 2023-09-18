@@ -10,7 +10,7 @@ import "IntegrationEvents/Ordering/event_ordering_common.proto";
 
 option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering";
 
-message OrderStatusChangedToPaidIntegrationEventProto {
+message OrderStatusChangedToPaidProto {
   int32 order_id = 1;
   repeated OrderStockItemProto order_stock_items = 2;
 }

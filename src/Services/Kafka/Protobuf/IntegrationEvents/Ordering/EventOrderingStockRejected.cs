@@ -26,19 +26,18 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
           string.Concat(
             "Cj5JbnRlZ3JhdGlvbkV2ZW50cy9PcmRlcmluZy9ldmVudF9vcmRlcmluZ19z",
             "dG9ja19yZWplY3RlZC5wcm90bxI2bWljcm9zb2Z0LmVzaG9wb25jb250YWlu",
-            "ZXJzLmludGVncmF0aW9uZXZlbnRzLm9yZGVyaW5nIqwBCidPcmRlclN0b2Nr",
-            "UmVqZWN0ZWRJbnRlZ3JhdGlvbkV2ZW50UHJvdG8SEAoIb3JkZXJfaWQYASAB",
-            "KAUSbwoRb3JkZXJfc3RvY2tfaXRlbXMYAiADKAsyVC5taWNyb3NvZnQuZXNo",
-            "b3BvbmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMub3JkZXJpbmcuQ29u",
-            "ZmlybWVkT3JkZXJTdG9ja0l0ZW1Qcm90byJFChxDb25maXJtZWRPcmRlclN0",
-            "b2NrSXRlbVByb3RvEhIKCnByb2R1Y3RfaWQYASABKAUSEQoJaGFzX3N0b2Nr",
-            "GAIgASgIQlGqAk5NaWNyb3NvZnQuZVNob3BPbkNvbnRhaW5lcnMuU2Vydmlj",
-            "ZXMuS2Fma2EuUHJvdG9idWYuSW50ZWdyYXRpb25FdmVudHMuT3JkZXJpbmdi",
-            "BnByb3RvMw=="));
+            "ZXJzLmludGVncmF0aW9uZXZlbnRzLm9yZGVyaW5nIpwBChdPcmRlclN0b2Nr",
+            "UmVqZWN0ZWRQcm90bxIQCghvcmRlcl9pZBgBIAEoBRJvChFvcmRlcl9zdG9j",
+            "a19pdGVtcxgCIAMoCzJULm1pY3Jvc29mdC5lc2hvcG9uY29udGFpbmVycy5p",
+            "bnRlZ3JhdGlvbmV2ZW50cy5vcmRlcmluZy5Db25maXJtZWRPcmRlclN0b2Nr",
+            "SXRlbVByb3RvIkUKHENvbmZpcm1lZE9yZGVyU3RvY2tJdGVtUHJvdG8SEgoK",
+            "cHJvZHVjdF9pZBgBIAEoBRIRCgloYXNfc3RvY2sYAiABKAhCUaoCTk1pY3Jv",
+            "c29mdC5lU2hvcE9uQ29udGFpbmVycy5TZXJ2aWNlcy5LYWZrYS5Qcm90b2J1",
+            "Zi5JbnRlZ3JhdGlvbkV2ZW50cy5PcmRlcmluZ2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStockRejectedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStockRejectedIntegrationEventProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStockRejectedProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStockRejectedProto.Parser, new[]{ "OrderId", "OrderStockItems" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.ConfirmedOrderStockItemProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.ConfirmedOrderStockItemProto.Parser, new[]{ "ProductId", "HasStock" }, null, null, null, null)
           }));
     }
@@ -49,16 +48,16 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
   /// <summary>
   /// Event must be at the top of a file
   /// </summary>
-  public sealed partial class OrderStockRejectedIntegrationEventProto : pb::IMessage<OrderStockRejectedIntegrationEventProto>
+  public sealed partial class OrderStockRejectedProto : pb::IMessage<OrderStockRejectedProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<OrderStockRejectedIntegrationEventProto> _parser = new pb::MessageParser<OrderStockRejectedIntegrationEventProto>(() => new OrderStockRejectedIntegrationEventProto());
+    private static readonly pb::MessageParser<OrderStockRejectedProto> _parser = new pb::MessageParser<OrderStockRejectedProto>(() => new OrderStockRejectedProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<OrderStockRejectedIntegrationEventProto> Parser { get { return _parser; } }
+    public static pb::MessageParser<OrderStockRejectedProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -74,7 +73,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockRejectedIntegrationEventProto() {
+    public OrderStockRejectedProto() {
       OnConstruction();
     }
 
@@ -82,7 +81,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockRejectedIntegrationEventProto(OrderStockRejectedIntegrationEventProto other) : this() {
+    public OrderStockRejectedProto(OrderStockRejectedProto other) : this() {
       orderId_ = other.orderId_;
       orderStockItems_ = other.orderStockItems_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -90,8 +89,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockRejectedIntegrationEventProto Clone() {
-      return new OrderStockRejectedIntegrationEventProto(this);
+    public OrderStockRejectedProto Clone() {
+      return new OrderStockRejectedProto(this);
     }
 
     /// <summary>Field number for the "order_id" field.</summary>
@@ -120,12 +119,12 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as OrderStockRejectedIntegrationEventProto);
+      return Equals(other as OrderStockRejectedProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(OrderStockRejectedIntegrationEventProto other) {
+    public bool Equals(OrderStockRejectedProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -203,7 +202,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(OrderStockRejectedIntegrationEventProto other) {
+    public void MergeFrom(OrderStockRejectedProto other) {
       if (other == null) {
         return;
       }

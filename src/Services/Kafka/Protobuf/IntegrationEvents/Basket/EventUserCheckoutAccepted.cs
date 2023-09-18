@@ -28,34 +28,33 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
             "dF9hY2NlcHRlZC5wcm90bxI0bWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJz",
             "LmludGVncmF0aW9uZXZlbnRzLmJhc2tldBofQ3VzdG9tVHlwZXMvZGVjaW1h",
             "bF92YWx1ZS5wcm90bxocQ3VzdG9tVHlwZXMvdXVpZF92YWx1ZS5wcm90bxof",
-            "Z29vZ2xlL3Byb3RvYnVmL3RpbWVzdGFtcC5wcm90byKFBAopVXNlckNoZWNr",
-            "b3V0QWNjZXB0ZWRJbnRlZ3JhdGlvbkV2ZW50UHJvdG8SDwoHdXNlcl9pZBgB",
-            "IAEoCRIRCgl1c2VyX25hbWUYAiABKAkSFAoMb3JkZXJfbnVtYmVyGAMgASgF",
-            "EgwKBGNpdHkYBCABKAkSDgoGc3RyZWV0GAUgASgJEg0KBXN0YXRlGAYgASgJ",
-            "Eg8KB2NvdW50cnkYByABKAkSEAoIemlwX2NvZGUYCCABKAkSEwoLY2FyZF9u",
-            "dW1iZXIYCSABKAkSGAoQY2FyZF9ob2xkZXJfbmFtZRgKIAEoCRIzCg9jYXJk",
-            "X2V4cGlyYXRpb24YCyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1w",
-            "EhwKFGNhcmRfc2VjdXJpdHlfbnVtYmVyGAwgASgJEhQKDGNhcmRfdHlwZV9p",
-            "ZBgNIAEoBRINCgVidXllchgOIAEoCRJMCgpyZXF1ZXN0X2lkGBAgASgLMjgu",
-            "bWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJzLmludGVncmF0aW9uZXZlbnRz",
-            "LlV1aWRWYWx1ZRJZCgZiYXNrZXQYDyABKAsySS5taWNyb3NvZnQuZXNob3Bv",
-            "bmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMuYmFza2V0LkN1c3RvbWVy",
-            "QmFza2V0UHJvdG8ifAoTQ3VzdG9tZXJCYXNrZXRQcm90bxIPCgdCdXllcklk",
-            "GAEgASgJElQKBUl0ZW1zGAIgAygLMkUubWljcm9zb2Z0LmVzaG9wb25jb250",
-            "YWluZXJzLmludGVncmF0aW9uZXZlbnRzLmJhc2tldC5CYXNrZXRJdGVtUHJv",
-            "dG8ilAIKD0Jhc2tldEl0ZW1Qcm90bxIKCgJpZBgBIAEoCRISCgpwcm9kdWN0",
-            "X2lkGAIgASgFEhQKDHByb2R1Y3RfbmFtZRgDIAEoCRJPCgp1bml0X3ByaWNl",
-            "GAQgASgLMjsubWljcm9zb2Z0LmVzaG9wb25jb250YWluZXJzLmludGVncmF0",
-            "aW9uZXZlbnRzLkRlY2ltYWxWYWx1ZRJTCg5vbGRfdW5pdF9wcmljZRgFIAEo",
-            "CzI7Lm1pY3Jvc29mdC5lc2hvcG9uY29udGFpbmVycy5pbnRlZ3JhdGlvbmV2",
-            "ZW50cy5EZWNpbWFsVmFsdWUSEAoIcXVhbnRpdHkYBiABKAUSEwoLcGljdHVy",
-            "ZV91cmwYByABKAlCT6oCTE1pY3Jvc29mdC5lU2hvcE9uQ29udGFpbmVycy5T",
-            "ZXJ2aWNlcy5LYWZrYS5Qcm90b2J1Zi5JbnRlZ3JhdGlvbkV2ZW50cy5CYXNr",
-            "ZXRiBnByb3RvMw=="));
+            "Z29vZ2xlL3Byb3RvYnVmL3RpbWVzdGFtcC5wcm90byL1AwoZVXNlckNoZWNr",
+            "b3V0QWNjZXB0ZWRQcm90bxIPCgd1c2VyX2lkGAEgASgJEhEKCXVzZXJfbmFt",
+            "ZRgCIAEoCRIUCgxvcmRlcl9udW1iZXIYAyABKAUSDAoEY2l0eRgEIAEoCRIO",
+            "CgZzdHJlZXQYBSABKAkSDQoFc3RhdGUYBiABKAkSDwoHY291bnRyeRgHIAEo",
+            "CRIQCgh6aXBfY29kZRgIIAEoCRITCgtjYXJkX251bWJlchgJIAEoCRIYChBj",
+            "YXJkX2hvbGRlcl9uYW1lGAogASgJEjMKD2NhcmRfZXhwaXJhdGlvbhgLIAEo",
+            "CzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASHAoUY2FyZF9zZWN1cml0",
+            "eV9udW1iZXIYDCABKAkSFAoMY2FyZF90eXBlX2lkGA0gASgFEg0KBWJ1eWVy",
+            "GA4gASgJEkwKCnJlcXVlc3RfaWQYECABKAsyOC5taWNyb3NvZnQuZXNob3Bv",
+            "bmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMuVXVpZFZhbHVlElkKBmJh",
+            "c2tldBgPIAEoCzJJLm1pY3Jvc29mdC5lc2hvcG9uY29udGFpbmVycy5pbnRl",
+            "Z3JhdGlvbmV2ZW50cy5iYXNrZXQuQ3VzdG9tZXJCYXNrZXRQcm90byJ8ChND",
+            "dXN0b21lckJhc2tldFByb3RvEg8KB0J1eWVySWQYASABKAkSVAoFSXRlbXMY",
+            "AiADKAsyRS5taWNyb3NvZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50ZWdyYXRp",
+            "b25ldmVudHMuYmFza2V0LkJhc2tldEl0ZW1Qcm90byKUAgoPQmFza2V0SXRl",
+            "bVByb3RvEgoKAmlkGAEgASgJEhIKCnByb2R1Y3RfaWQYAiABKAUSFAoMcHJv",
+            "ZHVjdF9uYW1lGAMgASgJEk8KCnVuaXRfcHJpY2UYBCABKAsyOy5taWNyb3Nv",
+            "ZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50ZWdyYXRpb25ldmVudHMuRGVjaW1h",
+            "bFZhbHVlElMKDm9sZF91bml0X3ByaWNlGAUgASgLMjsubWljcm9zb2Z0LmVz",
+            "aG9wb25jb250YWluZXJzLmludGVncmF0aW9uZXZlbnRzLkRlY2ltYWxWYWx1",
+            "ZRIQCghxdWFudGl0eRgGIAEoBRITCgtwaWN0dXJlX3VybBgHIAEoCUJPqgJM",
+            "TWljcm9zb2Z0LmVTaG9wT25Db250YWluZXJzLlNlcnZpY2VzLkthZmthLlBy",
+            "b3RvYnVmLkludGVncmF0aW9uRXZlbnRzLkJhc2tldGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.DecimalValueReflection.Descriptor, global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.UuidValueReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.UserCheckoutAcceptedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.UserCheckoutAcceptedIntegrationEventProto.Parser, new[]{ "UserId", "UserName", "OrderNumber", "City", "Street", "State", "Country", "ZipCode", "CardNumber", "CardHolderName", "CardExpiration", "CardSecurityNumber", "CardTypeId", "Buyer", "RequestId", "Basket" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.UserCheckoutAcceptedProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.UserCheckoutAcceptedProto.Parser, new[]{ "UserId", "UserName", "OrderNumber", "City", "Street", "State", "Country", "ZipCode", "CardNumber", "CardHolderName", "CardExpiration", "CardSecurityNumber", "CardTypeId", "Buyer", "RequestId", "Basket" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.CustomerBasketProto.Parser, new[]{ "BuyerId", "Items" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket.BasketItemProto.Parser, new[]{ "Id", "ProductId", "ProductName", "UnitPrice", "OldUnitPrice", "Quantity", "PictureUrl" }, null, null, null, null)
           }));
@@ -64,16 +63,16 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
   }
   #region Messages
-  public sealed partial class UserCheckoutAcceptedIntegrationEventProto : pb::IMessage<UserCheckoutAcceptedIntegrationEventProto>
+  public sealed partial class UserCheckoutAcceptedProto : pb::IMessage<UserCheckoutAcceptedProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<UserCheckoutAcceptedIntegrationEventProto> _parser = new pb::MessageParser<UserCheckoutAcceptedIntegrationEventProto>(() => new UserCheckoutAcceptedIntegrationEventProto());
+    private static readonly pb::MessageParser<UserCheckoutAcceptedProto> _parser = new pb::MessageParser<UserCheckoutAcceptedProto>(() => new UserCheckoutAcceptedProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<UserCheckoutAcceptedIntegrationEventProto> Parser { get { return _parser; } }
+    public static pb::MessageParser<UserCheckoutAcceptedProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -89,7 +88,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public UserCheckoutAcceptedIntegrationEventProto() {
+    public UserCheckoutAcceptedProto() {
       OnConstruction();
     }
 
@@ -97,7 +96,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public UserCheckoutAcceptedIntegrationEventProto(UserCheckoutAcceptedIntegrationEventProto other) : this() {
+    public UserCheckoutAcceptedProto(UserCheckoutAcceptedProto other) : this() {
       userId_ = other.userId_;
       userName_ = other.userName_;
       orderNumber_ = other.orderNumber_;
@@ -119,8 +118,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public UserCheckoutAcceptedIntegrationEventProto Clone() {
-      return new UserCheckoutAcceptedIntegrationEventProto(this);
+    public UserCheckoutAcceptedProto Clone() {
+      return new UserCheckoutAcceptedProto(this);
     }
 
     /// <summary>Field number for the "user_id" field.</summary>
@@ -318,12 +317,12 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as UserCheckoutAcceptedIntegrationEventProto);
+      return Equals(other as UserCheckoutAcceptedProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(UserCheckoutAcceptedIntegrationEventProto other) {
+    public bool Equals(UserCheckoutAcceptedProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -591,7 +590,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(UserCheckoutAcceptedIntegrationEventProto other) {
+    public void MergeFrom(UserCheckoutAcceptedProto other) {
       if (other == null) {
         return;
       }

@@ -8,6 +8,6 @@ import "google/api/annotations.proto";
 
 option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering";
 
-message OrderStockConfirmedIntegrationEventProto {  
+message OrderStockConfirmedProto {  
   int32 order_id = 1; 
 }

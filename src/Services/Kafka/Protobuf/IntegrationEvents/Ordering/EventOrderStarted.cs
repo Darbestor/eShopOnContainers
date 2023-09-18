@@ -26,30 +26,30 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
           string.Concat(
             "CjRJbnRlZ3JhdGlvbkV2ZW50cy9PcmRlcmluZy9ldmVudF9vcmRlcl9zdGFy",
             "dGVkLnByb3RvEjZtaWNyb3NvZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50ZWdy",
-            "YXRpb25ldmVudHMub3JkZXJpbmciNAohT3JkZXJTdGFydGVkSW50ZWdyYXRp",
-            "b25FdmVudFByb3RvEg8KB3VzZXJfaWQYASABKAVCUaoCTk1pY3Jvc29mdC5l",
-            "U2hvcE9uQ29udGFpbmVycy5TZXJ2aWNlcy5LYWZrYS5Qcm90b2J1Zi5JbnRl",
-            "Z3JhdGlvbkV2ZW50cy5PcmRlcmluZ2IGcHJvdG8z"));
+            "YXRpb25ldmVudHMub3JkZXJpbmciJAoRT3JkZXJTdGFydGVkUHJvdG8SDwoH",
+            "dXNlcl9pZBgBIAEoBUJRqgJOTWljcm9zb2Z0LmVTaG9wT25Db250YWluZXJz",
+            "LlNlcnZpY2VzLkthZmthLlByb3RvYnVmLkludGVncmF0aW9uRXZlbnRzLk9y",
+            "ZGVyaW5nYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStartedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStartedIntegrationEventProto.Parser, new[]{ "UserId" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStartedProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStartedProto.Parser, new[]{ "UserId" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
-  public sealed partial class OrderStartedIntegrationEventProto : pb::IMessage<OrderStartedIntegrationEventProto>
+  public sealed partial class OrderStartedProto : pb::IMessage<OrderStartedProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<OrderStartedIntegrationEventProto> _parser = new pb::MessageParser<OrderStartedIntegrationEventProto>(() => new OrderStartedIntegrationEventProto());
+    private static readonly pb::MessageParser<OrderStartedProto> _parser = new pb::MessageParser<OrderStartedProto>(() => new OrderStartedProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<OrderStartedIntegrationEventProto> Parser { get { return _parser; } }
+    public static pb::MessageParser<OrderStartedProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -65,7 +65,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStartedIntegrationEventProto() {
+    public OrderStartedProto() {
       OnConstruction();
     }
 
@@ -73,15 +73,15 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStartedIntegrationEventProto(OrderStartedIntegrationEventProto other) : this() {
+    public OrderStartedProto(OrderStartedProto other) : this() {
       userId_ = other.userId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStartedIntegrationEventProto Clone() {
-      return new OrderStartedIntegrationEventProto(this);
+    public OrderStartedProto Clone() {
+      return new OrderStartedProto(this);
     }
 
     /// <summary>Field number for the "user_id" field.</summary>
@@ -99,12 +99,12 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as OrderStartedIntegrationEventProto);
+      return Equals(other as OrderStartedProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(OrderStartedIntegrationEventProto other) {
+    public bool Equals(OrderStartedProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -177,7 +177,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(OrderStartedIntegrationEventProto other) {
+    public void MergeFrom(OrderStartedProto other) {
       if (other == null) {
         return;
       }

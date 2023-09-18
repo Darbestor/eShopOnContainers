@@ -9,7 +9,7 @@ import "google/api/annotations.proto";
 option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering";
 
 // Event must be at the top of a file
-message OrderStockRejectedIntegrationEventProto {
+message OrderStockRejectedProto {
   int32 order_id = 1;
   repeated ConfirmedOrderStockItemProto order_stock_items = 2;
 }

@@ -26,31 +26,30 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
           string.Concat(
             "Cj9JbnRlZ3JhdGlvbkV2ZW50cy9PcmRlcmluZy9ldmVudF9vcmRlcmluZ19z",
             "dG9ja19jb25maXJtZWQucHJvdG8SNm1pY3Jvc29mdC5lc2hvcG9uY29udGFp",
-            "bmVycy5pbnRlZ3JhdGlvbmV2ZW50cy5vcmRlcmluZyI8CihPcmRlclN0b2Nr",
-            "Q29uZmlybWVkSW50ZWdyYXRpb25FdmVudFByb3RvEhAKCG9yZGVyX2lkGAEg",
-            "ASgFQlGqAk5NaWNyb3NvZnQuZVNob3BPbkNvbnRhaW5lcnMuU2VydmljZXMu",
-            "S2Fma2EuUHJvdG9idWYuSW50ZWdyYXRpb25FdmVudHMuT3JkZXJpbmdiBnBy",
-            "b3RvMw=="));
+            "bmVycy5pbnRlZ3JhdGlvbmV2ZW50cy5vcmRlcmluZyIsChhPcmRlclN0b2Nr",
+            "Q29uZmlybWVkUHJvdG8SEAoIb3JkZXJfaWQYASABKAVCUaoCTk1pY3Jvc29m",
+            "dC5lU2hvcE9uQ29udGFpbmVycy5TZXJ2aWNlcy5LYWZrYS5Qcm90b2J1Zi5J",
+            "bnRlZ3JhdGlvbkV2ZW50cy5PcmRlcmluZ2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStockConfirmedIntegrationEventProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStockConfirmedIntegrationEventProto.Parser, new[]{ "OrderId" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStockConfirmedProto), global::Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering.OrderStockConfirmedProto.Parser, new[]{ "OrderId" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Messages
-  public sealed partial class OrderStockConfirmedIntegrationEventProto : pb::IMessage<OrderStockConfirmedIntegrationEventProto>
+  public sealed partial class OrderStockConfirmedProto : pb::IMessage<OrderStockConfirmedProto>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<OrderStockConfirmedIntegrationEventProto> _parser = new pb::MessageParser<OrderStockConfirmedIntegrationEventProto>(() => new OrderStockConfirmedIntegrationEventProto());
+    private static readonly pb::MessageParser<OrderStockConfirmedProto> _parser = new pb::MessageParser<OrderStockConfirmedProto>(() => new OrderStockConfirmedProto());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<OrderStockConfirmedIntegrationEventProto> Parser { get { return _parser; } }
+    public static pb::MessageParser<OrderStockConfirmedProto> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -66,7 +65,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockConfirmedIntegrationEventProto() {
+    public OrderStockConfirmedProto() {
       OnConstruction();
     }
 
@@ -74,15 +73,15 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockConfirmedIntegrationEventProto(OrderStockConfirmedIntegrationEventProto other) : this() {
+    public OrderStockConfirmedProto(OrderStockConfirmedProto other) : this() {
       orderId_ = other.orderId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public OrderStockConfirmedIntegrationEventProto Clone() {
-      return new OrderStockConfirmedIntegrationEventProto(this);
+    public OrderStockConfirmedProto Clone() {
+      return new OrderStockConfirmedProto(this);
     }
 
     /// <summary>Field number for the "order_id" field.</summary>
@@ -100,12 +99,12 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as OrderStockConfirmedIntegrationEventProto);
+      return Equals(other as OrderStockConfirmedProto);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(OrderStockConfirmedIntegrationEventProto other) {
+    public bool Equals(OrderStockConfirmedProto other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -178,7 +177,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(OrderStockConfirmedIntegrationEventProto other) {
+    public void MergeFrom(OrderStockConfirmedProto other) {
       if (other == null) {
         return;
       }

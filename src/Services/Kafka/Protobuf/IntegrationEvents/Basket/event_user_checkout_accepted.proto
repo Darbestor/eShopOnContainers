@@ -12,7 +12,7 @@ import "CustomTypes/decimal_value.proto";
 import "CustomTypes/uuid_value.proto";
 import "google/protobuf/timestamp.proto";
 
-message UserCheckoutAcceptedIntegrationEventProto {
+message UserCheckoutAcceptedProto {
   string user_id = 1;
 
   string user_name = 2;
