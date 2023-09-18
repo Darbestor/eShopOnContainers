@@ -105,7 +105,7 @@ internal static class Extensions
                     var assembly = Assembly.GetExecutingAssembly();
                     var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
                     var handlerTypes = assembly.GetTypes()
-                        .Where(x => x.Namespace == $"{rootNamespace}.IntegrationEvents.EventHandling.Ordering")
+                        .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.Ordering")
                         .ToArray();
                     m.AddSchemaRegistryProtobufCustomSerializer()
                         .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
@@ -127,7 +127,7 @@ internal static class Extensions
                     var assembly = Assembly.GetExecutingAssembly();
                     var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
                     var handlerTypes = assembly.GetTypes()
-                        .Where(x => x.Namespace == $"{rootNamespace}.IntegrationEvents.EventHandling.Basket")
+                        .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.Basket")
                         .ToArray();
                     m.AddSchemaRegistryProtobufCustomSerializer()
                         .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
