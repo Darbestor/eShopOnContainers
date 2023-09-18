@@ -8,6 +8,7 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
+builder.Services.AddKafka(builder.Configuration);
 
 builder.Services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
 builder.Services.AddTransient<OrderStartedIntegrationEventHandler>();

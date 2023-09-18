@@ -17,3 +17,4 @@ global using Microsoft.eShopOnContainers.Services.Basket.API.Model;
 global using Microsoft.eShopOnContainers.Services.Basket.API.Services;
 global using Services.Common;
 global using StackExchange.Redis;
+global using Microsoft.eShopOnContainers.Services.Basket.API;
