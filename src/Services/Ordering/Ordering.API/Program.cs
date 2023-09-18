@@ -9,6 +9,7 @@ builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
+builder.Services.AddKafka(builder.Configuration);
 
 var services = builder.Services;
 
@@ -38,14 +39,9 @@ services.AddScoped<IBuyerRepository, BuyerRepository>();
 services.AddScoped<IOrderRepository, OrderRepository>();
 services.AddScoped<IRequestManager, RequestManager>();
 
-// Add integration event handlers.
-services.AddTransient<IIntegrationEventHandler<GracePeriodConfirmedIntegrationEvent>, GracePeriodConfirmedIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>, OrderPaymentFailedIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>, OrderPaymentSucceededIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<OrderStockConfirmedIntegrationEvent>, OrderStockConfirmedIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>, OrderStockRejectedIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>, UserCheckoutAcceptedIntegrationEventHandler>();
 var app = builder.Build();
+var bus = app.Services.CreateKafkaBus();
+await bus.StartAsync();
 
 app.UseServiceDefaults();
 
