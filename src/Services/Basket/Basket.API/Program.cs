@@ -10,22 +10,17 @@ builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
 builder.Services.AddKafka(builder.Configuration);
 
-builder.Services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
-builder.Services.AddTransient<OrderStartedIntegrationEventHandler>();
-
 builder.Services.AddTransient<IBasketRepository, RedisBasketRepository>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 
 var app = builder.Build();
+var bus = app.Services.CreateKafkaBus();
+await bus.StartAsync();
 
 app.UseServiceDefaults();
 
 app.MapGrpcService<BasketService>();
 app.MapControllers();
 
-var eventBus = app.Services.GetRequiredService<IEventBus>();
-
-eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
-eventBus.Subscribe<OrderStartedIntegrationEvent, OrderStartedIntegrationEventHandler>();
 
 await app.RunAsync();
