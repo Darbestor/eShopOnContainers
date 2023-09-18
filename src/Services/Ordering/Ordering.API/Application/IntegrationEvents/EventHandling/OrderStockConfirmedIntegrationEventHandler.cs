@@ -1,7 +1,9 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStock;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
 
 public class OrderStockConfirmedIntegrationEventHandler :
-    IIntegrationEventHandler<OrderStockConfirmedIntegrationEvent>
+    KafkaConsumerEventHandler<OrderStockConfirmedProto>
 {
     private readonly IMediator _mediator;
     private readonly ILogger<OrderStockConfirmedIntegrationEventHandler> _logger;
@@ -9,27 +11,23 @@ public class OrderStockConfirmedIntegrationEventHandler :
     public OrderStockConfirmedIntegrationEventHandler(
         IMediator mediator,
         ILogger<OrderStockConfirmedIntegrationEventHandler> logger)
+        : base(logger)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _logger = logger;
     }
 
-    public async Task Handle(OrderStockConfirmedIntegrationEvent @event)
+    protected override async Task HandleInternal(IMessageContext context, OrderStockConfirmedProto @event)
     {
-        using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new ("IntegrationEventContext", @event.Id) }))
-        {
-            _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
+        var command = new SetStockConfirmedOrderStatusCommand(@event.OrderId);
 
-            var command = new SetStockConfirmedOrderStatusCommand(@event.OrderId);
+        _logger.LogInformation(
+            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+            command.GetGenericTypeName(),
+            nameof(command.OrderNumber),
+            command.OrderNumber,
+            command);
 
-            _logger.LogInformation(
-                "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-                command.GetGenericTypeName(),
-                nameof(command.OrderNumber),
-                command.OrderNumber,
-                command);
-
-            await _mediator.Send(command);
-        }
+        await _mediator.Send(command);
     }
 }

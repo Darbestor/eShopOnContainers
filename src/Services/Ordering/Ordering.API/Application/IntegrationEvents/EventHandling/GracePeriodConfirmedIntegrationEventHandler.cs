@@ -1,6 +1,8 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
 
-public class GracePeriodConfirmedIntegrationEventHandler : IIntegrationEventHandler<GracePeriodConfirmedIntegrationEvent>
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+
+public class GracePeriodConfirmedIntegrationEventHandler : KafkaConsumerEventHandler<GracePeriodConfirmedProto>
 {
     private readonly IMediator _mediator;
     private readonly ILogger<GracePeriodConfirmedIntegrationEventHandler> _logger;
@@ -8,9 +10,10 @@ public class GracePeriodConfirmedIntegrationEventHandler : IIntegrationEventHand
     public GracePeriodConfirmedIntegrationEventHandler(
         IMediator mediator,
         ILogger<GracePeriodConfirmedIntegrationEventHandler> logger)
+        : base(logger)
     {
         _mediator = mediator;
-        _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
+        _logger = logger;
     }
 
     /// <summary>
@@ -18,25 +21,21 @@ public class GracePeriodConfirmedIntegrationEventHandler : IIntegrationEventHand
     /// has been completed and order will not initially be cancelled.
     /// Therefore, the order process continues for validation. 
     /// </summary>
+    /// <param name="context">KafkaFlow message context</param>
     /// <param name="event">       
     /// </param>
     /// <returns></returns>
-    public async Task Handle(GracePeriodConfirmedIntegrationEvent @event)
+    protected override async Task HandleInternal(IMessageContext context, GracePeriodConfirmedProto @event)
     {
-        using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new ("IntegrationEventContext", @event.Id) }))
-        {
-            _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
+        var command = new SetAwaitingValidationOrderStatusCommand(@event.OrderId);
 
-            var command = new SetAwaitingValidationOrderStatusCommand(@event.OrderId);
+        _logger.LogInformation(
+            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+            command.GetGenericTypeName(),
+            nameof(command.OrderNumber),
+            command.OrderNumber,
+            command);
 
-            _logger.LogInformation(
-                "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-                command.GetGenericTypeName(),
-                nameof(command.OrderNumber),
-                command.OrderNumber,
-                command);
-
-            await _mediator.Send(command);
-        }
+        await _mediator.Send(command);
     }
 }

@@ -13,7 +13,7 @@ public class UserCheckoutAcceptedIntegrationEventHandler : KafkaConsumerEventHan
     :base(logger)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _logger = logger;
     }
 
     /// <summary>

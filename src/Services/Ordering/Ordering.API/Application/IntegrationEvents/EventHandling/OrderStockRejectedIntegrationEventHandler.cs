@@ -1,5 +1,8 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
-public class OrderStockRejectedIntegrationEventHandler : IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderPayment;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+
+public class OrderStockRejectedIntegrationEventHandler : KafkaConsumerEventHandler<OrderStockRejectedProto>
 {
     private readonly IMediator _mediator;
     private readonly ILogger<OrderStockRejectedIntegrationEventHandler> _logger;
@@ -7,32 +10,28 @@ public class OrderStockRejectedIntegrationEventHandler : IIntegrationEventHandle
     public OrderStockRejectedIntegrationEventHandler(
         IMediator mediator,
         ILogger<OrderStockRejectedIntegrationEventHandler> logger)
+        : base(logger)
     {
         _mediator = mediator;
-        _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
+        _logger = logger;
     }
 
-    public async Task Handle(OrderStockRejectedIntegrationEvent @event)
+    protected override async Task HandleInternal(IMessageContext context, OrderStockRejectedProto @event)
     {
-        using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new ("IntegrationEventContext", @event.Id) }))
-        {
-            _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
+        var orderStockRejectedItems = @event.OrderStockItems
+            .Where(c => !c.HasStock)
+            .Select(c => c.ProductId)
+            .ToList();
 
-            var orderStockRejectedItems = @event.OrderStockItems
-                .FindAll(c => !c.HasStock)
-                .Select(c => c.ProductId)
-                .ToList();
+        var command = new SetStockRejectedOrderStatusCommand(@event.OrderId, orderStockRejectedItems);
 
-            var command = new SetStockRejectedOrderStatusCommand(@event.OrderId, orderStockRejectedItems);
+        _logger.LogInformation(
+            "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
+            command.GetGenericTypeName(),
+            nameof(command.OrderNumber),
+            command.OrderNumber,
+            command);
 
-            _logger.LogInformation(
-                "Sending command: {CommandName} - {IdProperty}: {CommandId} ({@Command})",
-                command.GetGenericTypeName(),
-                nameof(command.OrderNumber),
-                command.OrderNumber,
-                command);
-
-            await _mediator.Send(command);
-        }
+        await _mediator.Send(command);
     }
 }
