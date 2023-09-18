@@ -61,7 +61,25 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\BuildingBlocks\EventBus\EventBus\EventBus.csproj" />
+
+
+
+
+
+
+
+
+
+
+
+
     </ItemGroup>
+
+
+
+
+
+
 
 
 

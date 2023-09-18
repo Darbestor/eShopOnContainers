@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package microsoft.eshoponcontainers.integrationevents.order.status;
+
+option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus";
+
+/* >>
+import "google/api/annotations.proto";
+<< */
+
+import "IntegrationEvents/OrderStatus/event_ordering_common.proto";
+
+message OrderStatusChangedToCancelledProto {
+  int32 order_id = 1;
+  string order_status = 2;
+  string buyer_name = 3;
+}
