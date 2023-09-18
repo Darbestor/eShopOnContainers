@@ -1,5 +1,4 @@
-﻿using Microsoft.eShopOnContainers.Kafka.Consumers;
-using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket;
 
 namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling.Basket;
 
