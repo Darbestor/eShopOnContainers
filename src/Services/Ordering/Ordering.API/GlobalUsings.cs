@@ -37,6 +37,7 @@ global using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure;
 global using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Idempotency;
 global using Microsoft.eShopOnContainers.Services.Ordering.Infrastructure.Repositories;
 global using Microsoft.Extensions.Options;
+global using KafkaFlow;
 global using Polly;
 global using Polly.Retry;
 global using Services.Common;

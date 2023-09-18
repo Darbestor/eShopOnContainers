@@ -1,4 +1,8 @@
-﻿using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
+﻿using System.Reflection;
+using KafkaFlow.TypedHandler;
+using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
+using Microsoft.Extensions.Localization;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 internal static class Extensions
 {
@@ -69,6 +73,70 @@ internal static class Extensions
             };
         });
 
+        return services;
+    }
+    
+    public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddKafkaFlow(configuration, (cluster, config) =>
+        {
+            if (!config.Consumers.TryGetValue(KafkaConstants.OrderingTopicName, out var orderingConsumerConfig))
+            {
+                throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
+                    KafkaConstants.OrderingTopicName);
+            }
+            if (!config.Consumers.TryGetValue(KafkaConstants.BasketTopicName, out var basketConsumerConfig))
+            {
+                throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
+                    KafkaConstants.BasketTopicName);
+            }
+            cluster.CreateTopicIfNotExists(KafkaConstants.OrderingTopicName, 3, 1);
+            cluster.AddConsumer(cb =>
+            {
+                cb.Topic(KafkaConstants.OrderingTopicName)
+                    .WithName($"Ordering.API-{KafkaConstants.OrderingTopicName}")
+                    .WithConsumerConfig(orderingConsumerConfig)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(3)
+                    .WithAutoOffsetReset(AutoOffsetReset.Earliest)
+                    .WithManualStoreOffsets();
+                cb.AddMiddlewares(m =>
+                {
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
+                    var handlerTypes = assembly.GetTypes()
+                        .Where(x => x.Namespace == $"{rootNamespace}.IntegrationEvents.EventHandling.Ordering")
+                        .ToArray();
+                    m.AddSchemaRegistryProtobufCustomSerializer()
+                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                            .AddHandlersFromAssemblyOf(handlerTypes)
+                            .WithHandlerLifetime(InstanceLifetime.Transient));
+                });
+            });
+            cluster.AddConsumer(cb =>
+            {
+                cb.Topic(KafkaConstants.BasketTopicName)
+                    .WithName($"Ordering.API-{KafkaConstants.BasketTopicName}")
+                    .WithConsumerConfig(basketConsumerConfig)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(3)
+                    .WithAutoOffsetReset(AutoOffsetReset.Latest)
+                    .WithManualStoreOffsets();
+                cb.AddMiddlewares(m =>
+                {
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
+                    var handlerTypes = assembly.GetTypes()
+                        .Where(x => x.Namespace == $"{rootNamespace}.IntegrationEvents.EventHandling.Basket")
+                        .ToArray();
+                    m.AddSchemaRegistryProtobufCustomSerializer()
+                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                            .AddHandlersFromAssemblyOf(handlerTypes)
+                            .WithHandlerLifetime(InstanceLifetime.Transient));
+                });
+            });
+        });
+        
         return services;
     }
 }
