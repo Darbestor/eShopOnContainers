@@ -17,6 +17,7 @@ public static class CustomExtensionMethods
                     KafkaTopics.OrderStatus);
             }
 
+            cluster.CreateTopicIfNotExists(KafkaTopics.OrderPayment, 3, 1);
             cluster.AddConsumer(cb =>
             {
                 cb.Topic(KafkaTopics.OrderStatus)

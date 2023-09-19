@@ -16,6 +16,4 @@ app.UseServiceDefaults();
 
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 
-eventBus.Subscribe<OrderStatusChangedToStockConfirmedIntegrationEvent, OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
-
 await app.RunAsync();
