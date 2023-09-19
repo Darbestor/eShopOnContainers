@@ -2,7 +2,7 @@
 
 namespace Microsoft.eShopOnContainers.Services.Ordering.SignalrHub.IntegrationEvents.EventHandling;
 
-public class OrderStatusChangedToPaidIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>
+public class OrderStatusChangedToPaidIntegrationEventHandler : KafkaConsumerEventHandler<OrderStatusChangedToPaidProto>
 {
     private readonly IHubContext<NotificationsHub> _hubContext;
     private readonly ILogger<OrderStatusChangedToPaidIntegrationEventHandler> _logger;
@@ -10,21 +10,17 @@ public class OrderStatusChangedToPaidIntegrationEventHandler : IIntegrationEvent
     public OrderStatusChangedToPaidIntegrationEventHandler(
         IHubContext<NotificationsHub> hubContext,
         ILogger<OrderStatusChangedToPaidIntegrationEventHandler> logger)
+        : base(logger)
     {
         _hubContext = hubContext ?? throw new ArgumentNullException(nameof(hubContext));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _logger = logger;
     }
 
 
-    public async Task Handle(OrderStatusChangedToPaidIntegrationEvent @event)
+    protected override async Task HandleInternal(IMessageContext context, OrderStatusChangedToPaidProto @event)
     {
-        using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new ("IntegrationEventContext", @event.Id) }))
-        {
-            _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
-
-            await _hubContext.Clients
-                .Group(@event.BuyerName)
-                .SendAsync("UpdatedOrderState", new { OrderId = @event.OrderId, Status = @event.OrderStatus });
-        }
+        await _hubContext.Clients
+            .Group(@event.BuyerName)
+            .SendAsync("UpdatedOrderState", new { OrderId = @event.OrderId, Status = @event.OrderStatus });
     }
 }
