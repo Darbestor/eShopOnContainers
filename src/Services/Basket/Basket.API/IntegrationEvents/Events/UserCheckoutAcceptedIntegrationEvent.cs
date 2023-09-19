@@ -29,11 +29,11 @@ public record UserCheckoutAcceptedIntegrationEvent : KafkaIntegrationEvent
         var proto = new UserCheckoutAcceptedProto
         {
             UserId = userId,
-            CardExpiration = Timestamp.FromDateTime(cardExpiration),
+            CardExpiration = Timestamp.FromDateTime(cardExpiration.ToUniversalTime()),
             CardNumber = cardNumber,
             UserName = userName,
             RequestId = requestId,
-            Buyer = buyer,
+            Buyer = buyer ?? "",
             CardHolderName = cardHolderName,
             CardSecurityNumber = cardSecurityNumber,
             CardTypeId = cardTypeId,
@@ -42,7 +42,8 @@ public record UserCheckoutAcceptedIntegrationEvent : KafkaIntegrationEvent
             Country = country,
             State = state,
             Street = street,
-            Basket = basket
+            Basket = basket,
+            
         };
 
         return proto;

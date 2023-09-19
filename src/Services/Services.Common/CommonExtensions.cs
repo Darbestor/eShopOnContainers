@@ -467,7 +467,7 @@ public static class CommonExtensions
             throw new ArgumentException("Required Kafka producer configuration not found");
         }
 
-        services.AddScoped<IEShopOnContainersProducer, EShopOnContainersProducer>();
+        services.AddSingleton<IEShopOnContainersProducer, EShopOnContainersProducer>();
         
         services.AddKafka(builder =>
         {

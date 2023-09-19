@@ -5,7 +5,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Eve
 public record KafkaOrderStockRejectedIntegrationEvent : KafkaIntegrationEvent
 {
     public KafkaOrderStockRejectedIntegrationEvent(int orderId, IEnumerable<ConfirmedOrderStockItemProto> stockItems)
-        : base(KafkaTopics.OrderStatus, orderId.ToString(), BuildPayload(orderId, stockItems),
+        : base(KafkaTopics.OrderStock, orderId.ToString(), BuildPayload(orderId, stockItems),
             Array.Empty<KeyValuePair<string, string>>()) {}
 
     private static OrderStockRejectedProto BuildPayload(int orderId,

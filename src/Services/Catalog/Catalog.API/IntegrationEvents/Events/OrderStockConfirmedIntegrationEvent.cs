@@ -5,7 +5,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Eve
 public record KafkaOrderStockConfirmedIntegrationEvent : KafkaIntegrationEvent
 {
     public KafkaOrderStockConfirmedIntegrationEvent(int orderId)
-        : base(KafkaTopics.OrderStatus, orderId.ToString(), BuildPayload(orderId),
+        : base(KafkaTopics.OrderStock, orderId.ToString(), BuildPayload(orderId),
             Array.Empty<KeyValuePair<string, string>>()) {}
 
     private static OrderStockConfirmedProto BuildPayload(int orderId) => new() { OrderId = orderId };

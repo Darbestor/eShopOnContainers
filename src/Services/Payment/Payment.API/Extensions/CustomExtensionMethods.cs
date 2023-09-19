@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Microsoft.eShopOnContainers.Payment.API.Extensions;
 
-public static class CustomExtensionMethods
+internal static class CustomExtensionMethods
 {
     public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
     {

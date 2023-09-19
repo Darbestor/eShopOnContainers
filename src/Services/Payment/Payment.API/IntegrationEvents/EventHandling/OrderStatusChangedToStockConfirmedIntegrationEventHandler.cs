@@ -38,13 +38,11 @@ public class OrderStatusChangedToStockConfirmedIntegrationEventHandler :
 
         if (_settings.PaymentSucceeded)
         {
-            orderPaymentIntegrationEvent = new KafkaIntegrationEvent(KafkaTopics.OrderPayment,
-                @event.OrderId.ToString(), new OrderPaymentSucceededProto { OrderId = @event.OrderId });
+            orderPaymentIntegrationEvent = new OrderPaymentSucceededIntegrationEvent(@event.OrderId);
         }
         else
         {
-            orderPaymentIntegrationEvent = new KafkaIntegrationEvent(KafkaTopics.OrderPayment,
-                @event.OrderId.ToString(), new OrderPaymentFailedProto { OrderId = @event.OrderId });
+            orderPaymentIntegrationEvent = new OrderPaymentFailedIntegrationEvent(@event.OrderId);
         }
 
         _producer.Produce(orderPaymentIntegrationEvent);
