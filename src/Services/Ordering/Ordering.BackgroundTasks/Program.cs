@@ -1,4 +1,6 @@
 ﻿
+using KafkaFlow;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -12,6 +14,8 @@ builder.Services.AddKafkaFlow(builder.Configuration, (cluster, config) =>
 });
 
 var app = builder.Build();
+var bus = app.Services.CreateKafkaBus();
+await bus.StartAsync();
 
 app.UseServiceDefaults();
 
