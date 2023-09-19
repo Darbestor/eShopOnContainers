@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
+using Microsoft.eShopOnContainers.Kafka.Producers;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using Ordering.BackgroundTasks.Events;
@@ -14,12 +15,12 @@ namespace Ordering.BackgroundTasks.Services
     {
         private readonly ILogger<GracePeriodManagerService> _logger;
         private readonly BackgroundTaskSettings _settings;
-        private readonly IEventBus _eventBus;
+        private readonly IEShopOnContainersProducer _producer;
 
-        public GracePeriodManagerService(IOptions<BackgroundTaskSettings> settings, IEventBus eventBus, ILogger<GracePeriodManagerService> logger)
+        public GracePeriodManagerService(IOptions<BackgroundTaskSettings> settings, IEShopOnContainersProducer producer, ILogger<GracePeriodManagerService> logger)
         {
             _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
-            _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
+            _producer = producer ?? throw new ArgumentNullException(nameof(producer));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -50,9 +51,9 @@ namespace Ordering.BackgroundTasks.Services
             {
                 var confirmGracePeriodEvent = new GracePeriodConfirmedIntegrationEvent(orderId);
 
-                _logger.LogInformation("Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", confirmGracePeriodEvent.Id, confirmGracePeriodEvent);
+                _logger.LogInformation("Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", confirmGracePeriodEvent.Key, confirmGracePeriodEvent);
 
-                _eventBus.Publish(confirmGracePeriodEvent);
+                _producer.Produce(confirmGracePeriodEvent);
             }
         }
 

@@ -25,7 +25,7 @@ services.AddMediatR(cfg =>
     // executing main method
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
     cfg.AddOpenBehavior(typeof(ValidatorBehavior<,>));
-    cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));
+    // cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));
 });
 
 // Register the command validators for the validator behavior (validators based on FluentValidation library)
