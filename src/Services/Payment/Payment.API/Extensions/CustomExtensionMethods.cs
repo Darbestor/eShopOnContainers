@@ -3,45 +3,10 @@ using KafkaFlow.TypedHandler;
 using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
 using Microsoft.Extensions.Localization;
 
-internal static class Extensions
+namespace Microsoft.eShopOnContainers.Payment.API.Extensions;
+
+public static class CustomExtensionMethods
 {
-    public static IServiceCollection AddSignalR(this IServiceCollection services, IConfiguration configuration)
-    {
-        if (configuration.GetConnectionString("redis") is string redisConnection)
-        {
-            // TODO: Add a redis health check
-            services.AddSignalR().AddStackExchangeRedis(redisConnection);
-        }
-        else
-        {
-            services.AddSignalR();
-        }
-
-        // Configure hub auth (grab the token from the query string)
-        return services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
-        {
-            options.Events = new JwtBearerEvents
-            {
-                OnMessageReceived = context =>
-                {
-                    var accessToken = context.Request.Query["access_token"];
-
-                    var endpoint = context.HttpContext.GetEndpoint();
-
-                    // Make sure this is a Hub endpoint.
-                    if (endpoint?.Metadata.GetMetadata<HubMetadata>() is null)
-                    {
-                        return Task.CompletedTask;
-                    }
-
-                    context.Token = accessToken;
-
-                    return Task.CompletedTask;
-                }
-            };
-        });
-    }
-    
     public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddKafkaFlow(configuration, (cluster, config) =>
@@ -55,7 +20,7 @@ internal static class Extensions
             cluster.AddConsumer(cb =>
             {
                 cb.Topic(KafkaTopics.OrderStatus)
-                    .WithName($"Ordering.SignalR-{KafkaTopics.OrderStatus}")
+                    .WithName($"Payment.API-{KafkaTopics.OrderStatus}")
                     .WithConsumerConfig(consumerConfig)
                     .WithBufferSize(100)
                     .WithWorkersCount(3)
@@ -79,5 +44,4 @@ internal static class Extensions
 
         return services;
     }
-
 }
