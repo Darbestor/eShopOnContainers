@@ -27,7 +27,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
             "CjRJbnRlZ3JhdGlvbkV2ZW50cy9PcmRlcmluZy9ldmVudF9vcmRlcl9zdGFy",
             "dGVkLnByb3RvEjZtaWNyb3NvZnQuZXNob3BvbmNvbnRhaW5lcnMuaW50ZWdy",
             "YXRpb25ldmVudHMub3JkZXJpbmciJAoRT3JkZXJTdGFydGVkUHJvdG8SDwoH",
-            "dXNlcl9pZBgBIAEoBUJRqgJOTWljcm9zb2Z0LmVTaG9wT25Db250YWluZXJz",
+            "dXNlcl9pZBgBIAEoCUJRqgJOTWljcm9zb2Z0LmVTaG9wT25Db250YWluZXJz",
             "LlNlcnZpY2VzLkthZmthLlByb3RvYnVmLkludGVncmF0aW9uRXZlbnRzLk9y",
             "ZGVyaW5nYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
@@ -86,13 +86,13 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
 
     /// <summary>Field number for the "user_id" field.</summary>
     public const int UserIdFieldNumber = 1;
-    private int userId_;
+    private string userId_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int UserId {
+    public string UserId {
       get { return userId_; }
       set {
-        userId_ = value;
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -119,7 +119,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (UserId != 0) hash ^= UserId.GetHashCode();
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -138,9 +138,9 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (UserId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(UserId);
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -152,9 +152,9 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (UserId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(UserId);
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -166,8 +166,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (UserId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(UserId);
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -181,7 +181,7 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
       if (other == null) {
         return;
       }
-      if (other.UserId != 0) {
+      if (other.UserId.Length != 0) {
         UserId = other.UserId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -199,8 +199,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            UserId = input.ReadInt32();
+          case 10: {
+            UserId = input.ReadString();
             break;
           }
         }
@@ -218,8 +218,8 @@ namespace Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 8: {
-            UserId = input.ReadInt32();
+          case 10: {
+            UserId = input.ReadString();
             break;
           }
         }

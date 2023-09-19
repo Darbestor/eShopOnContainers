@@ -1,20 +1,20 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.Events;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
 
-public record OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.Events;
+
+public record OrderStatusChangedToAwaitingValidationIntegrationEvent : KafkaIntegrationEvent
 {
-    public int OrderId { get; }
-    public string OrderStatus { get; }
-    public string BuyerName { get; }
-    public IEnumerable<OrderStockItem> OrderStockItems { get; }
-
     public OrderStatusChangedToAwaitingValidationIntegrationEvent(int orderId, string orderStatus, string buyerName,
-        IEnumerable<OrderStockItem> orderStockItems)
-    {
-        OrderId = orderId;
-        OrderStockItems = orderStockItems;
-        OrderStatus = orderStatus;
-        BuyerName = buyerName;
-    }
+        IEnumerable<OrderStockItemProto> orderStockItems) :
+        base(KafkaConstants.OrderStatusTopicName, orderId.ToString(),
+            new OrderStatusChangedToAwaitingValidationProto
+            {
+                OrderId = orderId,
+                OrderStatus = orderStatus,
+                BuyerName = buyerName,
+                OrderStockItems = { orderStockItems }
+            })
+    { }
 }
 
 public record OrderStockItem

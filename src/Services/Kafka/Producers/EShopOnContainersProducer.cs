@@ -23,11 +23,14 @@ public class EShopOnContainersProducer : IEShopOnContainersProducer
         _logger.LogTrace(@"Producing integration event: {Event}", @event);
 
         var kafkaHeaders = new MessageHeaders();
-        foreach (var (headerKey, headerValue) in headers)
+        if (headers != null)
         {
-            kafkaHeaders.Add(headerKey, Encoding.ASCII.GetBytes(headerValue));
+            foreach (var (headerKey, headerValue) in headers)
+            {
+                kafkaHeaders.Add(headerKey, Encoding.ASCII.GetBytes(headerValue));
+            }
         }
-        
+
         _kafkaflowProducer.Produce(topic, key, message, kafkaHeaders);
     }
 }

@@ -1,15 +1,15 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.Events;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
 
-public record OrderStatusChangedToStockConfirmedIntegrationEvent : IntegrationEvent
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.Events;
+
+public record OrderStatusChangedToStockConfirmedIntegrationEvent : KafkaIntegrationEvent
 {
-    public int OrderId { get; }
-    public string OrderStatus { get; }
-    public string BuyerName { get; }
-
     public OrderStatusChangedToStockConfirmedIntegrationEvent(int orderId, string orderStatus, string buyerName)
+        : base(KafkaConstants.OrderStatusTopicName, orderId.ToString(),
+            new OrderStatusChangedToStockConfirmedProto
+            {
+                BuyerName = buyerName, OrderId = orderId, OrderStatus = orderStatus
+            })
     {
-        OrderId = orderId;
-        OrderStatus = orderStatus;
-        BuyerName = buyerName;
     }
 }

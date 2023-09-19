@@ -9,5 +9,5 @@ package microsoft.eshoponcontainers.integrationevents.ordering;
 option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Ordering";
 
 message OrderStartedProto {
-  int32 user_id = 1;
+  string user_id = 1;
 }
