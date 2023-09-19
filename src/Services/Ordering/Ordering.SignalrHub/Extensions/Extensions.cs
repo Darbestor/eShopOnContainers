@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
-using KafkaFlow;
 using KafkaFlow.TypedHandler;
-using Microsoft.AspNetCore.Http;
 using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
 using Microsoft.Extensions.Localization;
 
