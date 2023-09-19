@@ -7,6 +7,7 @@ builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddHttpClientServices();
 builder.Services.AddIntegrationServices();
+builder.Services.AddKafka(builder.Configuration);
 
 builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<IGrantUrlTesterService, GrantUrlTesterService>();
