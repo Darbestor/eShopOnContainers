@@ -462,12 +462,10 @@ public static class CommonExtensions
         KafkaConfig kafkaConfig = new();
         kafkaSection.Bind(kafkaConfig);
 
-        if (kafkaConfig.Producer is null)
+        if (kafkaConfig.Producer is not null)
         {
-            throw new ArgumentException("Required Kafka producer configuration not found");
+            services.AddSingleton<IEShopOnContainersProducer, EShopOnContainersProducer>();
         }
-
-        services.AddSingleton<IEShopOnContainersProducer, EShopOnContainersProducer>();
         
         services.AddKafka(builder =>
         {
@@ -484,15 +482,19 @@ public static class CommonExtensions
                     }
                 });
 
-                cluster.AddProducer<EShopOnContainersProducer>(pb =>
+                if (kafkaConfig.Producer is not null)
                 {
-                    pb.WithProducerConfig(kafkaConfig.Producer);
-                    pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
-                        new ProtobufSerializerConfig
-                        {
-                            SubjectNameStrategy = SubjectNameStrategy.TopicRecord, NormalizeSchemas = true,
-                        }));
-                });
+                    cluster.AddProducer<EShopOnContainersProducer>(pb =>
+                    {
+                        pb.WithProducerConfig(kafkaConfig.Producer);
+                        pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
+                            new ProtobufSerializerConfig
+                            {
+                                SubjectNameStrategy = SubjectNameStrategy.TopicRecord, NormalizeSchemas = true,
+                            }));
+                    });
+                }
+                
                 consumers(cluster, kafkaConfig);
             });
         });

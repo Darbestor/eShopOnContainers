@@ -162,7 +162,7 @@ internal static class Extensions
                     var assembly = Assembly.GetExecutingAssembly();
                     var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
                     var handlerTypes = assembly.GetTypes()
-                        .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.OrderStock")
+                        .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.Stock")
                         .ToArray();
                     m.AddSchemaRegistryProtobufCustomSerializer()
                         .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
