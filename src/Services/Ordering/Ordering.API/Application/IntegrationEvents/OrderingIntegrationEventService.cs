@@ -25,6 +25,21 @@ public class OrderingIntegrationEventService : IOrderingIntegrationEventService
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    public void PublishEvent(KafkaIntegrationEvent evt)
+    {
+        try
+        {
+            _logger.LogInformation("Publishing integration event: {IntegrationEventId_published} - ({@IntegrationEvent})", evt.Topic, evt.Message.GetGenericTypeName());
+
+            _producer.Produce(evt);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", evt.Topic, evt.Message.GetGenericTypeName());
+            throw;
+        }
+    }
+    
     public async Task PublishEventsThroughEventBusAsync(Guid transactionId)
     {
         var pendingLogEvents = await _eventLogService.RetrieveEventLogsPendingToPublishAsync(transactionId);

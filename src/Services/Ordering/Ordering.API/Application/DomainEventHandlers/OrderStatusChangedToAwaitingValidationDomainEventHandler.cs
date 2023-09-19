@@ -37,6 +37,6 @@ public class OrderStatusChangedToAwaitingValidationDomainEventHandler
             });
 
         var integrationEvent = new OrderStatusChangedToAwaitingValidationIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name, orderStockList);
-        await _orderingIntegrationEventService.AddAndSaveEventAsync(integrationEvent);
+        _orderingIntegrationEventService.PublishEvent(integrationEvent);
     }
 }

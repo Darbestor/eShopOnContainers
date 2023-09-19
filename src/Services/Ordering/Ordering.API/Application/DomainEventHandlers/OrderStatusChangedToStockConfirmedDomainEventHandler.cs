@@ -28,6 +28,6 @@ public class OrderStatusChangedToStockConfirmedDomainEventHandler
         var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
 
         var integrationEvent = new OrderStatusChangedToStockConfirmedIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name);
-        await _orderingIntegrationEventService.AddAndSaveEventAsync(integrationEvent);
+        _orderingIntegrationEventService.PublishEvent(integrationEvent);
     }
 }

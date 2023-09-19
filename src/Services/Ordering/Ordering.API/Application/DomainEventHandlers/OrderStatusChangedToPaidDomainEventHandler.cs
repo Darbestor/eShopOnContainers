@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers;
 
 public class OrderStatusChangedToPaidDomainEventHandler : INotificationHandler<OrderStatusChangedToPaidDomainEvent>
 {
@@ -27,7 +29,10 @@ public class OrderStatusChangedToPaidDomainEventHandler : INotificationHandler<O
         var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
 
         var orderStockList = domainEvent.OrderItems
-            .Select(orderItem => new OrderStockItem(orderItem.ProductId, orderItem.GetUnits()));
+            .Select(orderItem => new OrderStockItemProto
+            {
+                ProductId = orderItem.ProductId, Units = orderItem.GetUnits()
+            });
 
         var integrationEvent = new OrderStatusChangedToPaidIntegrationEvent(
             domainEvent.OrderId,
@@ -35,6 +40,6 @@ public class OrderStatusChangedToPaidDomainEventHandler : INotificationHandler<O
             buyer.Name,
             orderStockList);
 
-        await _orderingIntegrationEventService.AddAndSaveEventAsync(integrationEvent);
+        _orderingIntegrationEventService.PublishEvent(integrationEvent);
     }
 }
