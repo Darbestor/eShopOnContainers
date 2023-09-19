@@ -1,6 +1,6 @@
 ﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStock;
 
-namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling.Stock;
 
 public class OrderStockConfirmedIntegrationEventHandler :
     KafkaConsumerEventHandler<OrderStockConfirmedProto>

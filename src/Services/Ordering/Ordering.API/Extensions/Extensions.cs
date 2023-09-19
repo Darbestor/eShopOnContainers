@@ -80,39 +80,30 @@ internal static class Extensions
     {
         services.AddKafkaFlow(configuration, (cluster, config) =>
         {
-            if (!config.Consumers.TryGetValue(KafkaConstants.OrderingTopicName, out var orderingConsumerConfig))
+            if (!config.Consumers.TryGetValue(KafkaConstants.OrderGracePeriodTopicName, out var gracePeriodConsumerConfig))
             {
                 throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
-                    KafkaConstants.OrderingTopicName);
+                    KafkaConstants.OrderGracePeriodTopicName);
             }
             if (!config.Consumers.TryGetValue(KafkaConstants.BasketTopicName, out var basketConsumerConfig))
             {
                 throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
                     KafkaConstants.BasketTopicName);
             }
-            cluster.CreateTopicIfNotExists(KafkaConstants.OrderingTopicName, 3, 1);
-            cluster.AddConsumer(cb =>
+            if (!config.Consumers.TryGetValue(KafkaConstants.OrderStockTopicName, out var stockConsumerConfig))
             {
-                cb.Topic(KafkaConstants.OrderingTopicName)
-                    .WithName($"Ordering.API-{KafkaConstants.OrderingTopicName}")
-                    .WithConsumerConfig(orderingConsumerConfig)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(3)
-                    .WithAutoOffsetReset(AutoOffsetReset.Earliest)
-                    .WithManualStoreOffsets();
-                cb.AddMiddlewares(m =>
-                {
-                    var assembly = Assembly.GetExecutingAssembly();
-                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
-                    var handlerTypes = assembly.GetTypes()
-                        .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.Ordering")
-                        .ToArray();
-                    m.AddSchemaRegistryProtobufCustomSerializer()
-                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
-                            .AddHandlersFromAssemblyOf(handlerTypes)
-                            .WithHandlerLifetime(InstanceLifetime.Transient));
-                });
-            });
+                throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
+                    KafkaConstants.OrderStockTopicName);
+            }
+            if (!config.Consumers.TryGetValue(KafkaConstants.OrderPaymentTopicName, out var paymentConsumerConfig))
+            {
+                throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
+                    KafkaConstants.OrderPaymentTopicName);
+            }
+            
+            cluster.CreateTopicIfNotExists(KafkaConstants.OrderingTopicName, 3, 1);
+            cluster.CreateTopicIfNotExists(KafkaConstants.OrderStatusTopicName, 10, 3);
+            
             cluster.AddConsumer(cb =>
             {
                 cb.Topic(KafkaConstants.BasketTopicName)
@@ -128,6 +119,72 @@ internal static class Extensions
                     var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
                     var handlerTypes = assembly.GetTypes()
                         .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.Basket")
+                        .ToArray();
+                    m.AddSchemaRegistryProtobufCustomSerializer()
+                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                            .AddHandlersFromAssemblyOf(handlerTypes)
+                            .WithHandlerLifetime(InstanceLifetime.Transient));
+                });
+            });
+            cluster.AddConsumer(cb =>
+            {
+                cb.Topic(KafkaConstants.OrderGracePeriodTopicName)
+                    .WithName($"Ordering.API-{KafkaConstants.OrderGracePeriodTopicName}")
+                    .WithConsumerConfig(basketConsumerConfig)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(1)
+                    .WithAutoOffsetReset(AutoOffsetReset.Latest)
+                    .WithManualStoreOffsets();
+                cb.AddMiddlewares(m =>
+                {
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
+                    var handlerTypes = assembly.GetTypes()
+                        .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.GracePeriod")
+                        .ToArray();
+                    m.AddSchemaRegistryProtobufCustomSerializer()
+                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                            .AddHandlersFromAssemblyOf(handlerTypes)
+                            .WithHandlerLifetime(InstanceLifetime.Transient));
+                });
+            });
+            cluster.AddConsumer(cb =>
+            {
+                cb.Topic(KafkaConstants.OrderStockTopicName)
+                    .WithName($"Ordering.API-{KafkaConstants.OrderStockTopicName}")
+                    .WithConsumerConfig(basketConsumerConfig)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(1)
+                    .WithAutoOffsetReset(AutoOffsetReset.Latest)
+                    .WithManualStoreOffsets();
+                cb.AddMiddlewares(m =>
+                {
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
+                    var handlerTypes = assembly.GetTypes()
+                        .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.OrderStock")
+                        .ToArray();
+                    m.AddSchemaRegistryProtobufCustomSerializer()
+                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                            .AddHandlersFromAssemblyOf(handlerTypes)
+                            .WithHandlerLifetime(InstanceLifetime.Transient));
+                });
+            });
+            cluster.AddConsumer(cb =>
+            {
+                cb.Topic(KafkaConstants.OrderPaymentTopicName)
+                    .WithName($"Ordering.API-{KafkaConstants.OrderPaymentTopicName}")
+                    .WithConsumerConfig(basketConsumerConfig)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(1)
+                    .WithAutoOffsetReset(AutoOffsetReset.Latest)
+                    .WithManualStoreOffsets();
+                cb.AddMiddlewares(m =>
+                {
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
+                    var handlerTypes = assembly.GetTypes()
+                        .Where(x => x.Namespace == $"{rootNamespace}.Application.IntegrationEvents.EventHandling.Payment")
                         .ToArray();
                     m.AddSchemaRegistryProtobufCustomSerializer()
                         .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()

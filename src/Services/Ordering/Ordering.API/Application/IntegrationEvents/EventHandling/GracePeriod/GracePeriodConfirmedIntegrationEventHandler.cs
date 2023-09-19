@@ -1,6 +1,6 @@
-﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderGracePeriod;
 
-namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling.GracePeriod;
 
 public class GracePeriodConfirmedIntegrationEventHandler : KafkaConsumerEventHandler<GracePeriodConfirmedProto>
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderPayment;
 
-namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents.EventHandling.Payment;
 
 public class OrderPaymentSucceededIntegrationEventHandler :
     KafkaConsumerEventHandler<OrderPaymentSucceededProto>
