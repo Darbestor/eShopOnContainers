@@ -1,18 +1,22 @@
-﻿namespace Webhooks.API.IntegrationEvents;
+﻿using Microsoft.eShopOnContainers.Kafka.Consumers;
+using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
 
-public class OrderStatusChangedToPaidIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToPaidIntegrationEvent>
+namespace Webhooks.API.IntegrationEvents.OrderStatus;
+
+public class OrderStatusChangedToPaidIntegrationEventHandler : KafkaConsumerEventHandler<OrderStatusChangedToPaidProto>
 {
     private readonly IWebhooksRetriever _retriever;
     private readonly IWebhooksSender _sender;
     private readonly ILogger _logger;
-    public OrderStatusChangedToPaidIntegrationEventHandler(IWebhooksRetriever retriever, IWebhooksSender sender, ILogger<OrderStatusChangedToShippedIntegrationEventHandler> logger)
+    public OrderStatusChangedToPaidIntegrationEventHandler(IWebhooksRetriever retriever, IWebhooksSender sender, ILogger<OrderStatusChangedToPaidIntegrationEventHandler> logger)
+    :base(logger)
     {
         _retriever = retriever;
         _sender = sender;
         _logger = logger;
     }
 
-    public async Task Handle(OrderStatusChangedToPaidIntegrationEvent @event)
+    protected override async Task HandleInternal(IMessageContext context, OrderStatusChangedToPaidProto @event)
     {
         var subscriptions = await _retriever.GetSubscriptionsOfType(WebhookType.OrderPaid);
         _logger.LogInformation("Received OrderStatusChangedToShippedIntegrationEvent and got {SubscriptionsCount} subscriptions to process", subscriptions.Count());

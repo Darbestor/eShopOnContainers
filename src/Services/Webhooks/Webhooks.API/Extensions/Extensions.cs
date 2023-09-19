@@ -68,11 +68,6 @@ internal static class Extensions
                 throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
                     KafkaTopics.OrderStatus);
             }
-            if (!config.Consumers.TryGetValue(KafkaTopics.Catalog, out var catalogConsumerConfig))
-            {
-                throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
-                    KafkaTopics.Catalog);
-            }
 
             cluster.AddConsumer(cb =>
             {
@@ -90,29 +85,6 @@ internal static class Extensions
                     var handlerTypes = assembly.GetTypes()
                         .Where(x => x.Namespace ==
                                     $"{rootNamespace}.IntegrationEvents.EventHandling.OrderStatus")
-                        .ToArray();
-                    m.AddSchemaRegistryProtobufCustomSerializer()
-                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
-                            .AddHandlersFromAssemblyOf(handlerTypes)
-                            .WithHandlerLifetime(InstanceLifetime.Transient));
-                });
-            });
-            cluster.AddConsumer(cb =>
-            {
-                cb.Topic(KafkaTopics.Catalog)
-                    .WithName($"Webhooks.API-{KafkaTopics.Catalog}")
-                    .WithConsumerConfig(orderStatusConsumerConfig)
-                    .WithBufferSize(100)
-                    .WithWorkersCount(3)
-                    .WithAutoOffsetReset(AutoOffsetReset.Latest)
-                    .WithManualStoreOffsets();
-                cb.AddMiddlewares(m =>
-                {
-                    var assembly = Assembly.GetExecutingAssembly();
-                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
-                    var handlerTypes = assembly.GetTypes()
-                        .Where(x => x.Namespace ==
-                                    $"{rootNamespace}.IntegrationEvents.EventHandling.Catalog")
                         .ToArray();
                     m.AddSchemaRegistryProtobufCustomSerializer()
                         .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
