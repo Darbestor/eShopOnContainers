@@ -1,5 +1,4 @@
 ﻿using KafkaFlow;
-using Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling.Ordering;
 
 var builder = WebApplication.CreateBuilder(args);
 

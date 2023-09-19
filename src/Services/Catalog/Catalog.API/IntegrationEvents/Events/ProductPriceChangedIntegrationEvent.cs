@@ -8,7 +8,7 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Eve
 public record KafkaProductPriceChangedIntegrationEvent : KafkaIntegrationEvent
 {
     public KafkaProductPriceChangedIntegrationEvent(int productId, decimal newPrice, decimal oldPrice)
-        : base(KafkaConstants.CatalogTopicName, productId.ToString(),
+        : base(KafkaTopics.Catalog, productId.ToString(),
             new ProductPriceChangedProto { ProductId = productId, NewPrice = newPrice, OldPrice = oldPrice },
             Array.Empty<KeyValuePair<string, string>>()) {}
 }

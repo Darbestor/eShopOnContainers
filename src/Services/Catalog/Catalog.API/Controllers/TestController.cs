@@ -29,7 +29,7 @@ public class TestController : ControllerBase
     public void ProduceCatalogIntegrationEvent()
     {
         var message = new ProductPriceChangedProto { ProductId = 1, NewPrice = 10, OldPrice = 5 };
-        var kafkaEvent = new KafkaIntegrationEvent(KafkaConstants.CatalogTopicName, "2", message, Array.Empty<KeyValuePair<string, string>>());
+        var kafkaEvent = new KafkaIntegrationEvent(KafkaTopics.Catalog, "2", message, Array.Empty<KeyValuePair<string, string>>());
         _producer.Produce(kafkaEvent);
     }
 
@@ -101,7 +101,7 @@ public class TestController : ControllerBase
         {
             OrderId = 1
         };
-        var message = new KafkaIntegrationEvent(KafkaConstants.OrderingTopicName, "1", protoEvent, Array.Empty<KeyValuePair<string, string>>());
+        var message = new KafkaIntegrationEvent(KafkaTopics.OrderStatus, "1", protoEvent, Array.Empty<KeyValuePair<string, string>>());
         _producer.Produce(message);
     }
     

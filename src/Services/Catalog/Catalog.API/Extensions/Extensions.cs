@@ -85,16 +85,16 @@ public static class Extensions
     {
         services.AddKafkaFlow(configuration, (cluster, config) =>
         {
-            if (!config.Consumers.TryGetValue(KafkaConstants.OrderingTopicName, out var orderingConsumerConfig))
+            if (!config.Consumers.TryGetValue(KafkaTopics.OrderStatus, out var orderingConsumerConfig))
             {
                 throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
-                    KafkaConstants.OrderingTopicName);
+                    KafkaTopics.OrderStatus);
             }
-            cluster.CreateTopicIfNotExists(KafkaConstants.CatalogTopicName, 3, 1);
+            cluster.CreateTopicIfNotExists(KafkaTopics.Catalog, 3, 1);
             cluster.AddConsumer(cb =>
             {
-                cb.Topic(KafkaConstants.OrderingTopicName)
-                    .WithName($"Catalog.API-{KafkaConstants.OrderingTopicName}")
+                cb.Topic(KafkaTopics.OrderStatus)
+                    .WithName($"Catalog.API-{KafkaTopics.OrderStatus}")
                     .WithConsumerConfig(orderingConsumerConfig)
                     .WithBufferSize(100)
                     .WithWorkersCount(1)
@@ -105,7 +105,7 @@ public static class Extensions
                     var assembly = Assembly.GetExecutingAssembly();
                     var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
                     var orderingHandlerTypes = assembly.GetTypes()
-                        .Where(x => x.Namespace == $"{rootNamespace}.IntegrationEvents.EventHandling.Ordering")
+                        .Where(x => x.Namespace == $"{rootNamespace}.IntegrationEvents.EventHandling.OrderStatus")
                         .ToArray();
                     m.AddSchemaRegistryProtobufCustomSerializer()
                         .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
