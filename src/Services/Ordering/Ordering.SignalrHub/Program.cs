@@ -3,6 +3,7 @@
 builder.AddServiceDefaults();
 
 builder.Services.AddSignalR(builder.Configuration);
+builder.Services.AddKafka(builder.Configuration);
 
 builder.Services.AddSingleton<IIntegrationEventHandler<OrderStatusChangedToAwaitingValidationIntegrationEvent>, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
 builder.Services.AddSingleton<IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>, OrderStatusChangedToCancelledIntegrationEventHandler>();
