@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using Azure.Identity;
 using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
@@ -313,26 +314,21 @@ public static class CommonExtensions
         //   }
         // }
 
-        var eventBusSection = configuration.GetSection("EventBus");
+        var kafkaSection = configuration.GetSection("Kafka");
 
-        if (!eventBusSection.Exists())
+        if (!kafkaSection.Exists())
         {
             return hcBuilder;
         }
 
-        return eventBusSection["ProviderName"]?.ToLowerInvariant() switch
-        {
-            "servicebus" => hcBuilder.AddAzureServiceBusTopic(
-                    _ => configuration.GetRequiredConnectionString("EventBus"),
-                    _ => "eshop_event_bus",
-                    name: "servicebus",
-                    tags: new string[] { "ready" }),
-
-            _ => hcBuilder.AddRabbitMQ(
-                    _ => $"amqp://{configuration.GetRequiredConnectionString("EventBus")}",
-                    name: "rabbitmq",
-                    tags: new string[] { "ready" })
-        };
+        return hcBuilder.AddKafka(pc =>
+            {
+                pc.BootstrapServers = kafkaSection.GetRequiredValue("BootstrapServers");
+            },
+            name: "kafka",
+            tags: new[] { "ready" },
+            timeout: TimeSpan.FromSeconds(5)
+        );
     }
 
     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
@@ -461,7 +457,7 @@ public static class CommonExtensions
 
         KafkaConfig kafkaConfig = new();
         kafkaSection.Bind(kafkaConfig);
-
+        
         if (kafkaConfig.Producer is not null)
         {
             services.AddSingleton<IKafkaProducer, KafkaProducer>();

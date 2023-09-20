@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using HealthChecks.Kafka;
 using KafkaFlow.TypedHandler;
 using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
 using Microsoft.Extensions.Localization;
