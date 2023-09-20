@@ -15,9 +15,9 @@ namespace Ordering.BackgroundTasks.Services
     {
         private readonly ILogger<GracePeriodManagerService> _logger;
         private readonly BackgroundTaskSettings _settings;
-        private readonly IEShopOnContainersProducer _producer;
+        private readonly IKafkaProducer _producer;
 
-        public GracePeriodManagerService(IOptions<BackgroundTaskSettings> settings, IEShopOnContainersProducer producer, ILogger<GracePeriodManagerService> logger)
+        public GracePeriodManagerService(IOptions<BackgroundTaskSettings> settings, IKafkaProducer producer, ILogger<GracePeriodManagerService> logger)
         {
             _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
             _producer = producer ?? throw new ArgumentNullException(nameof(producer));

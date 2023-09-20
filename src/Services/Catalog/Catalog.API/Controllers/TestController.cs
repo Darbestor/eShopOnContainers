@@ -15,9 +15,9 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.Controllers;
 [ApiController]
 public class TestController : ControllerBase
 {
-    private readonly IEShopOnContainersProducer _producer;
+    private readonly IKafkaProducer _producer;
 
-    public TestController(IEShopOnContainersProducer producer)
+    public TestController(IKafkaProducer producer)
     {
         _producer = producer ?? throw new ArgumentNullException(nameof(producer));
     }

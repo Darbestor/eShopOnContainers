@@ -1,5 +1,4 @@
-﻿global using Basket.API.IntegrationEvents.Events;
-global using Basket.API.Model;
+﻿global using Basket.API.Model;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.eShopOnContainers.Kafka.Producers;
+using Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.Events;
 
 namespace UnitTest.Basket.Application;
 
@@ -8,14 +9,14 @@ public class BasketWebApiTest
 {
     private readonly Mock<IBasketRepository> _basketRepositoryMock;
     private readonly Mock<IBasketIdentityService> _identityServiceMock;
-    private readonly Mock<IEShopOnContainersProducer> _producerMock;
+    private readonly Mock<IKafkaProducer> _producerMock;
     private readonly Mock<ILogger<BasketController>> _loggerMock;
 
     public BasketWebApiTest()
     {
         _basketRepositoryMock = new Mock<IBasketRepository>();
         _identityServiceMock = new Mock<IBasketIdentityService>();
-        _producerMock = new Mock<IEShopOnContainersProducer>();
+        _producerMock = new Mock<IKafkaProducer>();
         _loggerMock = new Mock<ILogger<BasketController>>();
     }
 

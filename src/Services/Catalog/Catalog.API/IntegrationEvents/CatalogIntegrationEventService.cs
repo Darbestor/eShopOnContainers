@@ -5,13 +5,13 @@ namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents;
 
 public class CatalogIntegrationEventService : ICatalogIntegrationEventService
 {
-    private readonly IEShopOnContainersProducer _kafkaProducer;
+    private readonly IKafkaProducer _kafkaProducer;
     private readonly CatalogContext _catalogContext;
     private readonly ILogger<CatalogIntegrationEventService> _logger;
 
     public CatalogIntegrationEventService(
         ILogger<CatalogIntegrationEventService> logger,
-        IEShopOnContainersProducer kafkaProducer,
+        IKafkaProducer kafkaProducer,
         CatalogContext catalogContext)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

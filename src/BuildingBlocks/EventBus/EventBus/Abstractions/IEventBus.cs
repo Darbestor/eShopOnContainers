@@ -4,6 +4,7 @@
 /// Абстракция для общего интерфейса
 /// брокеров сообщений
 /// </summary>
+[Obsolete]
 public interface IEventBus
 {
     /// <summary>

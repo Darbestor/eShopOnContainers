@@ -1,5 +1,6 @@
 ﻿namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 
+[Obsolete("Old integration event used with combination of IMessageBus. KafkaIntegrationEvent should used")]
 public record IntegrationEvent
 {
     public IntegrationEvent()

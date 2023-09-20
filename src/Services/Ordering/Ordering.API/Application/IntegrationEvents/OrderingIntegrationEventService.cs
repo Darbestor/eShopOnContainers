@@ -7,13 +7,13 @@ public class OrderingIntegrationEventService : IOrderingIntegrationEventService
     private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
     private readonly IEventBus _eventBus;
     private readonly OrderingContext _orderingContext;
-    private readonly IEShopOnContainersProducer _producer;
+    private readonly IKafkaProducer _producer;
     private readonly IIntegrationEventLogService _eventLogService;
     private readonly ILogger<OrderingIntegrationEventService> _logger;
 
     public OrderingIntegrationEventService(IEventBus eventBus,
         OrderingContext orderingContext,
-        IEShopOnContainersProducer producer,
+        IKafkaProducer producer,
         Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory,
         ILogger<OrderingIntegrationEventService> logger)
     {

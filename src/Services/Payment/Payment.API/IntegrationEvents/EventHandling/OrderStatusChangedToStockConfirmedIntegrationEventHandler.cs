@@ -9,11 +9,11 @@ public class OrderStatusChangedToStockConfirmedIntegrationEventHandler :
     KafkaConsumerEventHandler<OrderStatusChangedToStockConfirmedProto>
 {
     private readonly PaymentSettings _settings;
-    private readonly IEShopOnContainersProducer _producer;
+    private readonly IKafkaProducer _producer;
     private readonly ILogger<OrderStatusChangedToStockConfirmedIntegrationEventHandler> _logger;
 
     public OrderStatusChangedToStockConfirmedIntegrationEventHandler(
-        IEShopOnContainersProducer producer,
+        IKafkaProducer producer,
         IOptionsSnapshot<PaymentSettings> settings,
         ILogger<OrderStatusChangedToStockConfirmedIntegrationEventHandler> logger)
         : base(logger)

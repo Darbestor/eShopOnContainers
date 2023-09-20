@@ -2,7 +2,7 @@
 
 namespace Microsoft.eShopOnContainers.Kafka.Producers;
 
-public interface IEShopOnContainersProducer
+public interface IKafkaProducer
 {
     void Produce(KafkaIntegrationEvent @event);
 }

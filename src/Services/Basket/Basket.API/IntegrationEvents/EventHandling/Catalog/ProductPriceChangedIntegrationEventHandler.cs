@@ -13,7 +13,7 @@ public class ProductPriceChangedIntegrationEventHandler : KafkaConsumerEventHand
         IBasketRepository repository)
     : base(logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _logger = logger;
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 

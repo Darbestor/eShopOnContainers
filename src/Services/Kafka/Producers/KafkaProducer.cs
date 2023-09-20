@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Microsoft.eShopOnContainers.Kafka.Producers;
 
-public class EShopOnContainersProducer : IEShopOnContainersProducer
+public class KafkaProducer : IKafkaProducer
 {
-    private readonly ILogger<EShopOnContainersProducer> _logger;
-    private readonly IMessageProducer<EShopOnContainersProducer> _kafkaflowProducer;
+    private readonly ILogger<KafkaProducer> _logger;
+    private readonly IMessageProducer<KafkaProducer> _kafkaflowProducer;
 
-    public EShopOnContainersProducer(ILogger<EShopOnContainersProducer> logger, IMessageProducer<EShopOnContainersProducer> kafkaflowProducer)
+    public KafkaProducer(ILogger<KafkaProducer> logger, IMessageProducer<KafkaProducer> kafkaflowProducer)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _kafkaflowProducer = kafkaflowProducer ?? throw new ArgumentNullException(nameof(kafkaflowProducer));

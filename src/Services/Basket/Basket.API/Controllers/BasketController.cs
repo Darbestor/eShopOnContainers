@@ -1,4 +1,5 @@
 ﻿using Microsoft.eShopOnContainers.Kafka.Producers;
+using Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.Events;
 
 namespace Microsoft.eShopOnContainers.Services.Basket.API.Controllers;
 
@@ -9,14 +10,14 @@ public class BasketController : ControllerBase
 {
     private readonly IBasketRepository _repository;
     private readonly IIdentityService _identityService;
-    private readonly IEShopOnContainersProducer _producer;
+    private readonly IKafkaProducer _producer;
     private readonly ILogger<BasketController> _logger;
 
     public BasketController(
         ILogger<BasketController> logger,
         IBasketRepository repository,
         IIdentityService identityService,
-        IEShopOnContainersProducer producer)
+        IKafkaProducer producer)
     {
         _logger = logger;
         _repository = repository;

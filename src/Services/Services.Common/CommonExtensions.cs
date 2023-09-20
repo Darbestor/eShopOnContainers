@@ -464,7 +464,7 @@ public static class CommonExtensions
 
         if (kafkaConfig.Producer is not null)
         {
-            services.AddSingleton<IEShopOnContainersProducer, EShopOnContainersProducer>();
+            services.AddSingleton<IKafkaProducer, KafkaProducer>();
         }
         
         services.AddKafka(builder =>
@@ -484,7 +484,7 @@ public static class CommonExtensions
 
                 if (kafkaConfig.Producer is not null)
                 {
-                    cluster.AddProducer<EShopOnContainersProducer>(pb =>
+                    cluster.AddProducer<KafkaProducer>(pb =>
                     {
                         pb.WithProducerConfig(kafkaConfig.Producer);
                         pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(

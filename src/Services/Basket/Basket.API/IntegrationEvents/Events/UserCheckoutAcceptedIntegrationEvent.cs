@@ -1,8 +1,7 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket;
-using CustomerBasket = Microsoft.eShopOnContainers.Services.Basket.API.Model.CustomerBasket;
 
-namespace Basket.API.IntegrationEvents.Events;
+namespace Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.Events;
 
 public record UserCheckoutAcceptedIntegrationEvent : KafkaIntegrationEvent
 {
