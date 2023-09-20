@@ -1,6 +1,4 @@
-﻿using KafkaFlow;
-
-namespace Microsoft.eShopOnContainers.Kafka.Consumers;
+﻿namespace Microsoft.eShopOnContainers.Kafka.Consumers;
 
 public class DeserializerConsumerMiddleware : IMessageMiddleware
 {
@@ -8,18 +6,18 @@ public class DeserializerConsumerMiddleware : IMessageMiddleware
     private readonly IAsyncMessageTypeResolver _typeResolver;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SerializerConsumerMiddleware"/> class.
+    ///     Initializes a new instance of the <see cref="SerializerConsumerMiddleware" /> class.
     /// </summary>
-    /// <param name="serializer">Instance of <see cref="ISerializer"/></param>
-    /// <param name="typeResolver">Instance of <see cref="IAsyncMessageTypeResolver"/></param>
+    /// <param name="serializer">Instance of <see cref="ISerializer" /></param>
+    /// <param name="typeResolver">Instance of <see cref="IAsyncMessageTypeResolver" /></param>
     public DeserializerConsumerMiddleware(
         ISerializer serializer,
         IAsyncMessageTypeResolver typeResolver)
     {
-        this._serializer = serializer;
-        this._typeResolver = typeResolver;
+        _serializer = serializer;
+        _typeResolver = typeResolver;
     }
-    
+
     public async Task Invoke(IMessageContext context, MiddlewareDelegate next)
     {
         if (context.Message.Value is null)
@@ -40,7 +38,7 @@ public class DeserializerConsumerMiddleware : IMessageMiddleware
             return;
         }
 
-        var messageType = await this._typeResolver.OnConsumeAsync(context);
+        var messageType = await _typeResolver.OnConsumeAsync(context);
 
         if (messageType is null)
         {
@@ -50,7 +48,7 @@ public class DeserializerConsumerMiddleware : IMessageMiddleware
 
         using var stream = new MemoryStream(rawData);
 
-        var data = await this._serializer
+        var data = await _serializer
             .DeserializeAsync(
                 stream,
                 messageType,

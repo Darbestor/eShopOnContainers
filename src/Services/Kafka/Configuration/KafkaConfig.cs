@@ -2,16 +2,17 @@
 
 namespace Microsoft.eShopOnContainers.Kafka.Configuration;
 
-public class SchemaRegistryConf: SchemaRegistryConfig
-{
-    public string Url { get; set; }
-}
-
 public class KafkaConfig
 {
-    public KafkaProducerConfig? Producer { get; set; }
-    public Dictionary<string, KafkaConsumerConfig> Consumers { get; set; }
-    public SchemaRegistryConf SchemaRegistry { get; set; }
-    public ICollection<string> BootstrapServers { get; set; }
-    public string Debug { get; set; }
+    public ProducerConfig? Producer { get; init; }
+
+    // ReSharper disable once CollectionNeverUpdated.Global
+    public Dictionary<string, ConsumerConfig> Consumers { get; init; } = new();
+
+    public SchemaRegistryConfig SchemaRegistry { get; init; } = new();
+
+    // ReSharper disable once CollectionNeverUpdated.Global
+    public ICollection<string> BootstrapServers { get; init; } = new List<string>();
+
+    public string Debug { get; init; } = "";
 }

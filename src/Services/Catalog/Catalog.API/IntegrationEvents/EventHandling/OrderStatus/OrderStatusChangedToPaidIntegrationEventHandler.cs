@@ -1,5 +1,4 @@
-﻿using KafkaFlow;
-using Microsoft.eShopOnContainers.Kafka.Consumers;
+﻿using Microsoft.eShopOnContainers.Kafka.Consumers;
 using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
 
 namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.EventHandling.OrderStatus;

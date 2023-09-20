@@ -2,7 +2,6 @@
 using Confluent.SchemaRegistry;
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
-using KafkaFlow;
 
 namespace Microsoft.eShopOnContainers.Kafka.Consumers;
 
@@ -17,7 +16,7 @@ public class ProtobufTypeNameResolver : IAsyncSchemaRegistryTypeNameResolver
 
     public async Task<string> ResolveAsync(int id)
     {
-        var schemaString = (await this.client.GetSchemaAsync(id, "serialized")).SchemaString;
+        var schemaString = (await client.GetSchemaAsync(id, "serialized")).SchemaString;
 
         var protoFields = FileDescriptorProto.Parser.ParseFrom(ByteString.FromBase64(schemaString));
 

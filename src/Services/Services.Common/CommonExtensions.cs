@@ -39,9 +39,6 @@ public static class CommonExtensions
         // Default health checks assume the event bus and self health checks
         builder.Services.AddDefaultHealthChecks(builder.Configuration);
 
-        // Add the event bus
-        builder.Services.AddEventBus(builder.Configuration);
-
         builder.Services.AddDefaultAuthentication(builder.Configuration);
 
         builder.Services.AddDefaultOpenApi(builder.Configuration);

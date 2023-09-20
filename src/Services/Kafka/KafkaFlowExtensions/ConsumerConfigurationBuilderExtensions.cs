@@ -1,18 +1,14 @@
 ﻿using Confluent.SchemaRegistry;
-using KafkaFlow;
 using KafkaFlow.Configuration;
 using KafkaFlow.Serializer.SchemaRegistry;
 using Microsoft.eShopOnContainers.Kafka.Consumers;
 
 namespace Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
 
-/// <summary>
-/// No needed
-/// </summary>
 public static class ConsumerConfigurationBuilderExtensions
 {
     /// <summary>
-    /// Registers a middleware to deserialize protobuf messages using schema registry
+    ///     Registers a middleware to deserialize protobuf messages using schema registry
     /// </summary>
     /// <param name="middlewares">The middleware configuration builder</param>
     /// <returns></returns>

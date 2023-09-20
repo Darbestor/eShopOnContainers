@@ -1,4 +1,3 @@
-using KafkaFlow;
 using KafkaFlow.TypedHandler;
 using Microsoft.Extensions.Logging;
 

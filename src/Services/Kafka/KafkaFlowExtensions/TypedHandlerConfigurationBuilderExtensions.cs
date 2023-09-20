@@ -1,11 +1,11 @@
-﻿using KafkaFlow;
-using KafkaFlow.TypedHandler;
+﻿using KafkaFlow.TypedHandler;
 
 namespace Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
 
 public static class TypedHandlerConfigurationBuilderExtensions
 {
-    public static TypedHandlerConfigurationBuilder AddNoHandlerFoundLogging(this TypedHandlerConfigurationBuilder builder)
+    public static TypedHandlerConfigurationBuilder AddNoHandlerFoundLogging(
+        this TypedHandlerConfigurationBuilder builder)
     {
         builder.WhenNoHandlerFound(mc =>
         {

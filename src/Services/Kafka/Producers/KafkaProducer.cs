@@ -1,6 +1,4 @@
 ﻿using System.Text;
-using Confluent.Kafka;
-using KafkaFlow;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 using Microsoft.Extensions.Logging;
 
@@ -8,8 +6,8 @@ namespace Microsoft.eShopOnContainers.Kafka.Producers;
 
 public class KafkaProducer : IKafkaProducer
 {
-    private readonly ILogger<KafkaProducer> _logger;
     private readonly IMessageProducer<KafkaProducer> _kafkaflowProducer;
+    private readonly ILogger<KafkaProducer> _logger;
 
     public KafkaProducer(ILogger<KafkaProducer> logger, IMessageProducer<KafkaProducer> kafkaflowProducer)
     {
