@@ -16,9 +16,6 @@ builder.Services.AddTransient<IGrantUrlTesterService, GrantUrlTesterService>();
 builder.Services.AddTransient<IWebhooksRetriever, WebhooksRetriever>();
 builder.Services.AddTransient<IWebhooksSender, WebhooksSender>();
 
-builder.Services.AddTransient<OrderStatusChangedToShippedIntegrationEventHandler>();
-builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
-
 var app = builder.Build();
 var bus = app.Services.CreateKafkaBus();
 await bus.StartAsync();
@@ -26,8 +23,6 @@ await bus.StartAsync();
 app.UseServiceDefaults();
 
 app.MapControllers();
-
-var eventBus = app.Services.GetRequiredService<IEventBus>();
 
 app.Services.MigrateDbContext<WebhooksContext>((_, __) => { });
 

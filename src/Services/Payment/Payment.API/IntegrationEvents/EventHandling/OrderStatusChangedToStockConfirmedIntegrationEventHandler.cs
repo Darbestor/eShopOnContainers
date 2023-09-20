@@ -1,6 +1,5 @@
 ﻿using Microsoft.eShopOnContainers.Kafka.Consumers;
 using Microsoft.eShopOnContainers.Kafka.Producers;
-using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderPayment;
 using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
 
 namespace Microsoft.eShopOnContainers.Payment.API.IntegrationEvents.EventHandling;

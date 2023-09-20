@@ -18,7 +18,7 @@ public class OrderStatusChangedToPaidIntegrationEventHandler : KafkaConsumerEven
 
     protected override async Task HandleInternal(IMessageContext context, OrderStatusChangedToPaidProto @event)
     {
-        var subscriptions = await _retriever.GetSubscriptionsOfType(WebhookType.OrderPaid);
+        var subscriptions = (await _retriever.GetSubscriptionsOfType(WebhookType.OrderPaid)).ToArray();
         _logger.LogInformation("Received OrderStatusChangedToShippedIntegrationEvent and got {SubscriptionsCount} subscriptions to process", subscriptions.Count());
         var whook = new WebhookData(WebhookType.OrderPaid, @event);
         await _sender.SendAll(subscriptions, whook);

@@ -14,6 +14,4 @@ await bus.StartAsync();
 
 app.UseServiceDefaults();
 
-var eventBus = app.Services.GetRequiredService<IEventBus>();
-
 await app.RunAsync();

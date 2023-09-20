@@ -24,11 +24,6 @@ internal static class Extensions
             options.UseNpgsql(configuration.GetRequiredConnectionString("WebHooksDB"),
                 npgsqlOptionsAction: ConfigurePgOptions);
         });
-        services.AddDbContext<IntegrationEventLogContext>(options =>
-        {
-            options.UseNpgsql(configuration.GetRequiredConnectionString("WebHooksDB"),
-                npgsqlOptionsAction: ConfigurePgOptions);
-        });
         return services;
     }
 
