@@ -304,13 +304,7 @@ public static class CommonExtensions
 
         // Health check for the application itself
         hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
-
-        // {
-        //   "EventBus": {
-        //     "ProviderName": "ServiceBus | RabbitMQ",
-        //   }
-        // }
-
+        
         var kafkaSection = configuration.GetSection("Kafka");
 
         if (!kafkaSection.Exists())

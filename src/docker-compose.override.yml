@@ -56,7 +56,7 @@ services:
       - KAFKA_KRAFT_CLUSTER_ID=M2UwYmM2NzYwOTA3NDg4Nj
     volumes:
       - kafka1:/bitnami/kafka
-  
+
   kafka2:
     environment:
       # KRaft settings
@@ -73,7 +73,7 @@ services:
       - KAFKA_KRAFT_CLUSTER_ID=M2UwYmM2NzYwOTA3NDg4Nj
     volumes:
       - kafka2:/bitnami/kafka
-  
+
   kafka3:
     environment:
       # KRaft settings
@@ -90,7 +90,7 @@ services:
       - KAFKA_KRAFT_CLUSTER_ID=M2UwYmM2NzYwOTA3NDg4Nj
     volumes:
       - kafka3:/bitnami/kafka
-  
+
   kafka-schema-registry:
     ports:
       - 8085:8085
@@ -100,7 +100,7 @@ services:
       - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8085
       - SCHEMA_REGISTRY_DEBUG=true
       - KAFKA_LOG_CLEANUP_POLICY=compact
-  
+
   ui:
     image: provectuslabs/kafka-ui:master
     ports:
@@ -147,8 +147,6 @@ services:
       - Kafka__SchemaRegistry__Url=kafka-schema-registry:8085
       - Identity__Url=http://identity-api
       - Identity__ExternalUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
       - UseLoadTest=${USE_LOADTEST:-False}
@@ -372,7 +370,7 @@ services:
   webhooks-client:
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - Token=6168DB8D-DC58-4094-AF24-483278923590      # Webhooks are registered with this token (any value is valid) but the client won't check it
+      - Token=6168DB8D-DC58-4094-AF24-483278923590 # Webhooks are registered with this token (any value is valid) but the client won't check it
       - IdentityUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - CallBackUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5114
       - WebhooksUrl=http://webhooks-api
