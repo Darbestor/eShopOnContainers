@@ -57,8 +57,8 @@ using (var scope = app.Services.CreateScope())
     await context.Database.MigrateAsync();
 
     await new OrderingContextSeed().SeedAsync(context, env, settings, logger);
-    var integEventContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
-    await integEventContext.Database.MigrateAsync();
+    // var integEventContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
+    // await integEventContext.Database.MigrateAsync();
 }
 
 await app.RunAsync();

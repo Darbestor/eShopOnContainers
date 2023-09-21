@@ -33,7 +33,6 @@ services:
     depends_on:
       - basketdata
       - identity-api
-      - rabbitmq
 
   catalog-api:
     image: ${REGISTRY:-eshop}/catalog.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -42,7 +41,6 @@ services:
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
     depends_on:
       - postgres
-      - rabbitmq
 
   ordering-api:
     image: ${REGISTRY:-eshop}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -52,7 +50,6 @@ services:
     depends_on:
       - identity-api
       - postgres
-      - rabbitmq
 
   ordering-backgroundtasks:
     image: ${REGISTRY:-eshop}/ordering.backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
@@ -61,23 +58,19 @@ services:
       dockerfile: Services/Ordering/Ordering.BackgroundTasks/Dockerfile
     depends_on:
       - postgres
-      - rabbitmq
 
   payment-api:
     image: ${REGISTRY:-eshop}/payment.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Services/Payment/Payment.API/Dockerfile
-    depends_on:
-      - rabbitmq
 
   webhooks-api:
     image: ${REGISTRY:-eshop}/webhooks.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Services/Webhooks/Webhooks.API/Dockerfile
-    depends_on:
-      - postgres
+
 
   mobileshoppingagg:
     image: ${REGISTRY:-eshop}/mobileshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
@@ -88,7 +81,6 @@ services:
       - nosqldata
       - postgres
       - identity-api
-      - rabbitmq
       - ordering-api
       - catalog-api
       - basket-api
@@ -102,7 +94,6 @@ services:
       - nosqldata
       - postgres
       - identity-api
-      - rabbitmq
       - ordering-api
       - catalog-api
       - basket-api
@@ -116,7 +107,6 @@ services:
       - nosqldata
       - postgres
       - identity-api
-      - rabbitmq
       - ordering-api
       - catalog-api
       - basket-api

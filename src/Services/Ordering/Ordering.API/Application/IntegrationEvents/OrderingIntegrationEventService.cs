@@ -4,22 +4,17 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.Integrat
 
 public class OrderingIntegrationEventService : IOrderingIntegrationEventService
 {
-    private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
     private readonly OrderingContext _orderingContext;
     private readonly IKafkaProducer _producer;
-    private readonly IIntegrationEventLogService _eventLogService;
     private readonly ILogger<OrderingIntegrationEventService> _logger;
 
     public OrderingIntegrationEventService(
         OrderingContext orderingContext,
         IKafkaProducer producer,
-        Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory,
         ILogger<OrderingIntegrationEventService> logger)
     {
         _orderingContext = orderingContext ?? throw new ArgumentNullException(nameof(orderingContext));
         _producer = producer ?? throw new ArgumentNullException(nameof(producer));
-        _integrationEventLogServiceFactory = integrationEventLogServiceFactory ?? throw new ArgumentNullException(nameof(integrationEventLogServiceFactory));
-        _eventLogService = _integrationEventLogServiceFactory(_orderingContext.Database.GetDbConnection());
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
