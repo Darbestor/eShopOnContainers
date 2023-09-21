@@ -1,38 +1,46 @@
 ﻿using Hangfire;
-using KafkaFlow;
 using Microsoft.eShopOnContainers.Kafka.Consumers;
-using Microsoft.eShopOnContainers.Kafka.Producers;
 using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
-using Ordering.BackgroundTasks.Events;
+using Microsoft.Extensions.Options;
 
 namespace Ordering.BackgroundTasks.IntegrationEvents.EventHandling;
 
 public class UserCheckoutAcceptedIntegrationEventHandler : KafkaConsumerEventHandler<OrderStatusChangedToSubmittedProto>
 {
+    private readonly GracePeriodService _gracePeriodService;
     private readonly ILogger<UserCheckoutAcceptedIntegrationEventHandler> _logger;
-    private readonly IKafkaProducer _producer;
+    private readonly BackgroundTaskSettings _settings;
 
     public UserCheckoutAcceptedIntegrationEventHandler(
         ILogger<UserCheckoutAcceptedIntegrationEventHandler> logger,
-        IKafkaProducer producer)
-    :base(logger)
+        IOptions<BackgroundTaskSettings> settings,
+        GracePeriodService gracePeriodService)
+        : base(logger)
     {
         _logger = logger;
-        _producer = producer ?? throw new ArgumentNullException(nameof(producer));
+        _gracePeriodService = gracePeriodService ?? throw new ArgumentNullException(nameof(gracePeriodService));
+        _settings = settings?.Value ?? throw new ArgumentNullException(nameof(settings));
     }
 
     /// <summary>
-    /// Integration event handler which starts the create order process
+    ///     Integration event handler which schedules grace period for order
     /// </summary>
     /// <param name="context">KafkaFlow message context</param>
     /// <param name="message">
-    /// Integration event message which is sent by the
-    /// basket.api once it has successfully process the 
-    /// order items.</param>
+    ///     Integration event message which is sent by the
+    ///     basket.api once it has successfully process the
+    ///     order items.
+    /// </param>
     /// <returns></returns>
-    protected override async Task HandleInternal(IMessageContext context, OrderStatusChangedToSubmittedProto message)
+    protected override Task HandleInternal(IMessageContext context, OrderStatusChangedToSubmittedProto message)
     {
-        BackgroundJob.Schedule(() => _producer.Produce(new GracePeriodConfirmedIntegrationEvent(message.OrderId)),
-            TimeSpan.FromMinutes(1));
+        var deadline = context.ConsumerContext.MessageTimestamp.AddMinutes(_settings.GracePeriodTime);
+
+        _logger.LogInformation("Scheduling grace period: OrderId [{OrderId}], Deadline [{Deadline}]", message.OrderId,
+            deadline);
+
+
+        BackgroundJob.Schedule(() => _gracePeriodService.SendIntegrationEvent(message.OrderId), deadline);
+        return Task.CompletedTask;
     }
 }

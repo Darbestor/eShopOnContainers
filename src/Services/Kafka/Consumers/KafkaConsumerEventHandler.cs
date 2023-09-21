@@ -21,7 +21,15 @@ public abstract class KafkaConsumerEventHandler<T> : IMessageHandler<T>
             {
                 _logger.LogInformation("Handling integration event: ({@IntegrationEvent})", message);
 
-                await HandleInternal(context, message);
+                try
+                {
+                    await HandleInternal(context, message);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error consuming integration event");
+                    throw;
+                }
                 context.ConsumerContext.StoreOffset();
             }
         }

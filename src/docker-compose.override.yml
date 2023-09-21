@@ -127,8 +127,7 @@ services:
 
   ordering-backgroundtasks:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - NETCORE_ENVIRONMENT=Development
       - ConnectionStrings__OrderingDb=Host=postgres;Database=ordering;Username=eshop;Password=Pass@word
       - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
       - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}

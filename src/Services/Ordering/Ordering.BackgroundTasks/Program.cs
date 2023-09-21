@@ -1,22 +1,35 @@
-﻿
-using KafkaFlow;
+﻿using Ordering.BackgroundTasks.Hangfire;
 
-var builder = WebApplication.CreateBuilder(args);
+var environmentName = Environment.GetEnvironmentVariable("NETCORE_ENVIRONMENT");
 
-builder.AddServiceDefaults();
+var configuration = new ConfigurationBuilder()
+    .AddCommandLine(args)
+    .AddEnvironmentVariables("NETCORE_")
+    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile($"appsettings.{environmentName}.json", true, true)
+    .Build();
 
-builder.Services.AddHealthChecks(builder.Configuration);
-builder.Services.AddApplicationOptions(builder.Configuration);
-builder.Services.AddHostedService<GracePeriodManagerService>();
-builder.Services.AddKafkaFlow(builder.Configuration, (cluster, config) =>
+var services = new ServiceCollection();
+services.AddSingleton(configuration);
+services.AddSingleton<GracePeriodService>();
+
+services.AddLogging(x =>
 {
-    cluster.CreateTopicIfNotExists(KafkaConstants.OrderGracePeriodTopicName, 3, 1);
+    x.AddConfiguration(configuration)
+        .AddConsole();
 });
+// Shared app insights configuration
+services.AddApplicationInsights(configuration);
+// Default health checks assume the event bus and self health checks
+services.AddDefaultHealthChecks(configuration);
+services.AddHealthChecks(configuration);
+services.AddApplicationOptions(configuration);
+services.AddKafka(configuration);
+services.AddHangfireServer();
 
-var app = builder.Build();
-var bus = app.Services.CreateKafkaBus();
+var provider = services.BuildServiceProvider();
+var bus = provider.CreateKafkaBus();
+var hangfireServer = provider.GetRequiredService<IHangfireServer>();
+
 await bus.StartAsync();
-
-app.UseServiceDefaults();
-
-await app.RunAsync();
+await hangfireServer.RunServerAsync();
