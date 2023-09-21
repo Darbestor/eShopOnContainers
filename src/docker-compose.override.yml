@@ -38,6 +38,83 @@ services:
       - "15672:15672"
       - "5672:5672"
 
+  kafka1:
+    ports:
+      - "9092:9092"
+    environment:
+      # KRaft settings
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka1:9092
+      - KAFKA_NODE_ID=1
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_KRAFT_CLUSTER_ID=M2UwYmM2NzYwOTA3NDg4Nj
+    volumes:
+      - kafka1:/bitnami/kafka
+  
+  kafka2:
+    environment:
+      # KRaft settings
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka2:9092
+      - KAFKA_NODE_ID=2
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_KRAFT_CLUSTER_ID=M2UwYmM2NzYwOTA3NDg4Nj
+    volumes:
+      - kafka2:/bitnami/kafka
+  
+  kafka3:
+    environment:
+      # KRaft settings
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka3:9092
+      - KAFKA_NODE_ID=3
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_KRAFT_CLUSTER_ID=M2UwYmM2NzYwOTA3NDg4Nj
+    volumes:
+      - kafka3:/bitnami/kafka
+  
+  kafka-schema-registry:
+    ports:
+      - 8085:8085
+    environment:
+      - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9092
+      - SCHEMA_REGISTRY_HOST_NAME=kafka-schema-registry
+      - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8085
+      - SCHEMA_REGISTRY_DEBUG=true
+      - KAFKA_LOG_CLEANUP_POLICY=compact
+  
+  ui:
+    image: provectuslabs/kafka-ui:master
+    ports:
+      - 8081:8080
+    depends_on:
+      - kafka3
+      - kafka2
+      - kafka1
+      - kafka-schema-registry
+    environment:
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka1:9092
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_SCHEMAREGISTRY=http://kafka-schema-registry:8085
+
   identity-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -65,7 +142,9 @@ services:
       - Kestrel__Endpoints__GRPC__Url=http://0.0.0.0:81
       - Kestrel__Endpoints__GRPC__Protocols=Http2
       - ConnectionStrings__Redis=${ESHOP_AZURE_REDIS_BASKET_DB:-basketdata}
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - Kafka__BootstrapServers__0=kafka1:9092
+      - Kafka__BootstrapServers__1=kafka2:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry:8085
       - Identity__Url=http://identity-api
       - Identity__ExternalUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -85,7 +164,9 @@ services:
       - Kestrel__Endpoints__GRPC__Url=http://0.0.0.0:81
       - Kestrel__Endpoints__GRPC__Protocols=Http2
       - ConnectionStrings__CatalogDb=Host=postgres;Database=catalog;Username=eshop;Password=Pass@word
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - Kafka__BootstrapServers__0=kafka1:9092
+      - Kafka__BootstrapServers__1=kafka2:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry:8085
       - PicBaseUrl=${ESHOP_STORAGE_CATALOG_URL}
       - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
       - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
@@ -107,7 +188,9 @@ services:
       - Kestrel__Endpoints__GRPC__Url=http://0.0.0.0:81
       - Kestrel__Endpoints__GRPC__Protocols=Http2
       - ConnectionStrings__OrderingDb=Host=postgres;Database=ordering;Username=eshop;Password=Pass@word
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
+      - Kafka__BootstrapServers__0=kafka1:9092
+      - Kafka__BootstrapServers__1=kafka2:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry:8085
       - Identity__Url=http://identity-api
       - Identity__ExternalUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
@@ -129,9 +212,9 @@ services:
     environment:
       - NETCORE_ENVIRONMENT=Development
       - ConnectionStrings__OrderingDb=Host=postgres;Database=ordering;Username=eshop;Password=Pass@word
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka1:9092
+      - Kafka__BootstrapServers__1=kafka2:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry:8085
       - UseCustomizationData=True
       - AzureServiceBusEnabled=False
       - CheckUpdateTime=30000
@@ -146,9 +229,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka1:9092
+      - Kafka__BootstrapServers__1=kafka2:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry:8085
       - AzureServiceBusEnabled=False
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
@@ -160,9 +243,9 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionStrings__WebhooksDb=Host=postgres;Database=webhooks;Username=eshop;Password=Pass@word
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka1:9092
+      - Kafka__BootstrapServers__1=kafka2:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry:8085
       - Identity__Url=http://identity-api
       - Identity__ExternalUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
     ports:
@@ -216,9 +299,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq}
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka1:9092
+      - Kafka__BootstrapServers__1=kafka2:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry:8085
       - AzureServiceBusEnabled=False
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
@@ -305,3 +388,9 @@ volumes:
     external: false
   eshop-postgres:
     external: false
+  kafka1:
+    driver: local
+  kafka2:
+    driver: local
+  kafka3:
+    driver: local

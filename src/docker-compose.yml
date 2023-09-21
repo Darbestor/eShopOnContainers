@@ -2,6 +2,22 @@ version: '3.4'
 
 services:
 
+  kafka1:
+    image: 'bitnami/kafka:latest'
+    
+  kafka2:
+    image: 'bitnami/kafka:latest'
+  
+  kafka3:
+    image: 'bitnami/kafka:latest'
+  
+  kafka-schema-registry:
+    image: confluentinc/cp-schema-registry:7.5.0
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+
   seq:
     image: datalust/seq:latest
 
@@ -33,6 +49,7 @@ services:
     depends_on:
       - basketdata
       - identity-api
+      - kafka-schema-registry
 
   catalog-api:
     image: ${REGISTRY:-eshop}/catalog.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -41,6 +58,7 @@ services:
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
     depends_on:
       - postgres
+      - kafka-schema-registry
 
   ordering-api:
     image: ${REGISTRY:-eshop}/ordering.api:${PLATFORM:-linux}-${TAG:-latest}
@@ -50,6 +68,7 @@ services:
     depends_on:
       - identity-api
       - postgres
+      - kafka-schema-registry
 
   ordering-backgroundtasks:
     image: ${REGISTRY:-eshop}/ordering.backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
@@ -58,19 +77,23 @@ services:
       dockerfile: Services/Ordering/Ordering.BackgroundTasks/Dockerfile
     depends_on:
       - postgres
+      - kafka-schema-registry
 
   payment-api:
     image: ${REGISTRY:-eshop}/payment.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Services/Payment/Payment.API/Dockerfile
+    depends_on: 
+      - kafka-schema-registry
 
   webhooks-api:
     image: ${REGISTRY:-eshop}/webhooks.api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Services/Webhooks/Webhooks.API/Dockerfile
-
+    depends_on: 
+      - kafka-schema-registry
 
   mobileshoppingagg:
     image: ${REGISTRY:-eshop}/mobileshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
