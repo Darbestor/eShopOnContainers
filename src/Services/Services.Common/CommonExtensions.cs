@@ -318,9 +318,10 @@ public static class CommonExtensions
             return hcBuilder;
         }
 
+        var boostrapServers = String.Join(',', kafkaSection.GetSection("BootstrapServers").GetRequired<List<string>>());
         return hcBuilder.AddKafka(pc =>
             {
-                pc.BootstrapServers = kafkaSection.GetRequiredValue("BootstrapServers");
+                pc.BootstrapServers = boostrapServers;
             },
             name: "kafka",
             tags: new[] { "ready" },
