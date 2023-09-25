@@ -327,13 +327,6 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Infrastructure.Migra
                                 .HasColumnType("text")
                                 .HasColumnName("address_zip_code");
 
-                            b1.Property<int>("id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer")
-                                .HasColumnName("address_id");
-
-                            NpgsqlPropertyBuilderExtensions.UseHiLo(b1.Property<int>("id"), "orderseq");
-
                             b1.HasKey("OrderId");
 
                             b1.ToTable("orders");

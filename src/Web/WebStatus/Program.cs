@@ -15,7 +15,7 @@ builder.Services.AddMvc();
 builder.Services.AddHealthChecks()
     .AddCheck("self", () => HealthCheckResult.Healthy());
 builder.Services
-    .AddHealthChecksUI()
+    .AddHealthChecksUI(opt => opt.SetEvaluationTimeInSeconds(3))
     .AddInMemoryStorage();
 
 var app = builder.Build();

@@ -1,50 +1,65 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents;
+﻿using Microsoft.eShopOnContainers.Kafka.Producers;
+
+namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.IntegrationEvents;
 
 public class OrderingIntegrationEventService : IOrderingIntegrationEventService
 {
-    private readonly IEventBus _eventBus;
     private readonly OrderingContext _orderingContext;
-    private readonly IIntegrationEventLogService _eventLogService;
+    private readonly IKafkaProducer _producer;
     private readonly ILogger<OrderingIntegrationEventService> _logger;
 
-    public OrderingIntegrationEventService(IEventBus eventBus,
+    public OrderingIntegrationEventService(
         OrderingContext orderingContext,
-        IIntegrationEventLogService eventLogService,
+        IKafkaProducer producer,
         ILogger<OrderingIntegrationEventService> logger)
     {
         _orderingContext = orderingContext ?? throw new ArgumentNullException(nameof(orderingContext));
-        _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
-        _eventLogService = eventLogService ?? throw new ArgumentNullException(nameof(eventLogService));
+        _producer = producer ?? throw new ArgumentNullException(nameof(producer));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
-    public async Task PublishEventsThroughEventBusAsync(Guid transactionId)
+    public void PublishEvent(KafkaIntegrationEvent evt)
     {
-        var pendingLogEvents = await _eventLogService.RetrieveEventLogsPendingToPublishAsync(transactionId);
-
-        foreach (var logEvt in pendingLogEvents)
+        try
         {
-            _logger.LogInformation("Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", logEvt.EventId, logEvt.IntegrationEvent);
+            _logger.LogInformation("Publishing integration event: {IntegrationEventId_published} - ({@IntegrationEvent})", evt.Topic, evt.Message.GetGenericTypeName());
 
-            try
-            {
-                await _eventLogService.MarkEventAsInProgressAsync(logEvt.EventId);
-                _eventBus.Publish(logEvt.IntegrationEvent);
-                await _eventLogService.MarkEventAsPublishedAsync(logEvt.EventId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error publishing integration event: {IntegrationEventId}", logEvt.EventId);
-
-                await _eventLogService.MarkEventAsFailedAsync(logEvt.EventId);
-            }
+            _producer.Produce(evt);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", evt.Topic, evt.Message.GetGenericTypeName());
+            throw;
         }
     }
-
-    public async Task AddAndSaveEventAsync(IntegrationEvent evt)
-    {
-        _logger.LogInformation("Enqueuing integration event {IntegrationEventId} to repository ({@IntegrationEvent})", evt.Id, evt);
-
-        await _eventLogService.SaveEventAsync(evt, _orderingContext.GetCurrentTransaction());
-    }
+    
+    // public async Task PublishEventsThroughEventBusAsync(Guid transactionId)
+    // {
+    //     var pendingLogEvents = await _eventLogService.RetrieveEventLogsPendingToPublishAsync(transactionId);
+    //
+    //     foreach (var logEvt in pendingLogEvents)
+    //     {
+    //         _logger.LogInformation("Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", logEvt.EventId, logEvt.IntegrationEvent);
+    //
+    //         try
+    //         {
+    //             await _eventLogService.MarkEventAsInProgressAsync(logEvt.EventId);
+    //             _eventBus.Publish(logEvt.IntegrationEvent);
+    //             await _eventLogService.MarkEventAsPublishedAsync(logEvt.EventId);
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             _logger.LogError(ex, "Error publishing integration event: {IntegrationEventId}", logEvt.EventId);
+    //
+    //             await _eventLogService.MarkEventAsFailedAsync(logEvt.EventId);
+    //         }
+    //     }
+    // }
+    //
+    // public async Task AddAndSaveEventAsync(IntegrationEvent evt)
+    // {
+    //     _logger.LogInformation("Enqueuing integration event {IntegrationEventId} to repository ({@IntegrationEvent})", evt.Id, evt);
+    //
+    //     await _eventLogService.SaveEventAsync(evt, _orderingContext.GetCurrentTransaction());
+    // }
 }

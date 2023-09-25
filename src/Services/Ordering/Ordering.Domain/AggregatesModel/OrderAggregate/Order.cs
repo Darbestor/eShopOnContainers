@@ -52,7 +52,7 @@ public class Order
         _buyerId = buyerId;
         _paymentMethodId = paymentMethodId;
         _orderStatusId = OrderStatus.Submitted.Id;
-        _orderDate = DateTime.UtcNow;
+        _orderDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
         Address = address;
 
         // Add the OrderStarterDomainEvent to the domain events collection 

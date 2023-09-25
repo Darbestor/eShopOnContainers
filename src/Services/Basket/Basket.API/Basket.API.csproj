@@ -4,6 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
     <UserSecretsId>2964ec8e-0d48-4541-b305-94cab537f867</UserSecretsId>
+    <RootNamespace>Microsoft.eShopOnContainers.Services.Basket.API</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

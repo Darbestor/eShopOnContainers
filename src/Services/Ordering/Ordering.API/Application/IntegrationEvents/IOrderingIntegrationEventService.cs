@@ -2,6 +2,7 @@
 
 public interface IOrderingIntegrationEventService
 {
-    Task PublishEventsThroughEventBusAsync(Guid transactionId);
-    Task AddAndSaveEventAsync(IntegrationEvent evt);
+    void PublishEvent(KafkaIntegrationEvent evt);
+    // Task PublishEventsThroughEventBusAsync(Guid transactionId);
+    // Task AddAndSaveEventAsync(IntegrationEvent evt);
 }

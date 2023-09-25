@@ -1,10 +1,32 @@
 version: '3.4'
 
 services:
-  rabbitmq-test:
+  kafka-test:
     ports:
-      - "15672:15672"
-      - "5672:5672"
+      - "9092:9092"
+    environment:
+      # KRaft settings
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka-test:9093
+      # Listeners
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-test:9092
+      - KAFKA_NODE_ID=1
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_KRAFT_CLUSTER_ID=M2UwYmM2NzYwOTA3NDg4Nj
+
+  kafka-schema-registry-test:
+    ports:
+      - 8085:8085
+    environment:
+      - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=kafka-test:9092
+      - SCHEMA_REGISTRY_HOST_NAME=kafka-schema-registry
+      - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8085
+      - SCHEMA_REGISTRY_DEBUG=true
+      - KAFKA_LOG_CLEANUP_POLICY=compact
 
   basket-data-test:
     ports:
@@ -44,11 +66,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionStrings__Redis=${ESHOP_AZURE_REDIS_BASKET_DB:-basket-data-test}
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq-test}
       - identityUrl=http://identity-api
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka-test:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry-test:8085
       - AzureServiceBusEnabled=False
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
@@ -56,21 +77,20 @@ services:
     ports:
       - "5103:80"
     entrypoint:
-        - dotnet
-        - test
-        - --logger
-        - trx;LogFileName=/tests/basket-functional-test-results.xml
+      - dotnet
+      - test
+      - --logger
+      - trx;LogFileName=/tests/basket-functional-test-results.xml
 
   basket-api-unit-test:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionStrings__Redis=${ESHOP_AZURE_REDIS_BASKET_DB:-basket-data-test}
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq-test}
       - identityUrl=http://identity-api
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka-test:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry-test:8085
       - AzureServiceBusEnabled=False
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}
@@ -78,20 +98,19 @@ services:
     ports:
       - "5113:80"
     entrypoint:
-        - dotnet
-        - test
-        - --logger
-        - trx;LogFileName=/tests/basket-unit-test-results.xml
+      - dotnet
+      - test
+      - --logger
+      - trx;LogFileName=/tests/basket-unit-test-results.xml
 
   catalog-api-functional-test:
     environment:
       - ConnectionStrings__CatalogDb=Host=sql-data-test;Database=catalog;Username=eshop;Password=Pass@word
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq-test}
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - PicBaseUrl=${ESHOP_STORAGE_CATALOG_URL}
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka-test:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry-test:8085
       - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
       - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
       - UseCustomizationData=True
@@ -102,20 +121,19 @@ services:
     ports:
       - "5101:80"
     entrypoint:
-        - dotnet
-        - test
-        - --logger
-        - trx;LogFileName=/tests/catalog-functional-test-results.xml
+      - dotnet
+      - test
+      - --logger
+      - trx;LogFileName=/tests/catalog-functional-test-results.xml
 
   catalog-api-unit-test:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionStrings__CatalogDb=Host=sql-data-test;Database=catalog;Username=eshop;Password=Pass@word
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq-test}
       - PicBaseUrl=${ESHOP_STORAGE_CATALOG_URL}
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka-test:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry-test:8085
       - AzureStorageAccountName=${ESHOP_AZURE_STORAGE_CATALOG_NAME}
       - AzureStorageAccountKey=${ESHOP_AZURE_STORAGE_CATALOG_KEY}
       - UseCustomizationData=True
@@ -126,21 +144,20 @@ services:
     ports:
       - "5191:80"
     entrypoint:
-        - dotnet
-        - test
-        - --logger
-        - trx;LogFileName=/tests/catalog-unit-test-results.xml
+      - dotnet
+      - test
+      - --logger
+      - trx;LogFileName=/tests/catalog-unit-test-results.xml
 
   ordering-api-functional-test:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionStrings__OrderingDB=Host=sql-data-test;Database=ordering;Username=eshop;Password=Pass@word
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq-test}
       - identityUrl=http://identity-api
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka-test:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry-test:8085
       - UseCustomizationData=True
       - AzureServiceBusEnabled=False
       - CheckUpdateTime=30000
@@ -150,21 +167,20 @@ services:
     ports:
       - "5102:80"
     entrypoint:
-        - dotnet
-        - test
-        - --logger
-        - trx;LogFileName=/tests/ordering-functional-test-results.xml
+      - dotnet
+      - test
+      - --logger
+      - trx;LogFileName=/tests/ordering-functional-test-results.xml
 
   ordering-api-unit-test:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionStrings__OrderingDB=Host=sql-data-test;Database=ordering;Username=eshop;Password=Pass@word
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq-test}
       - identityUrl=http://identity-api
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka-test:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry-test:8085
       - UseCustomizationData=True
       - AzureServiceBusEnabled=False
       - CheckUpdateTime=30000
@@ -174,19 +190,17 @@ services:
     ports:
       - "5112:80"
     entrypoint:
-        - dotnet
-        - test
-        - --logger
-        - trx;LogFileName=/tests/ordering-unit-test-results.xml
-
+      - dotnet
+      - test
+      - --logger
+      - trx;LogFileName=/tests/ordering-unit-test-results.xml
 
   payment-api-test:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - ConnectionStrings__EventBus=${ESHOP_AZURE_SERVICE_BUS:-rabbitmq-test}
-      - EventBus__UserName=${ESHOP_SERVICE_BUS_USERNAME}
-      - EventBus__Password=${ESHOP_SERVICE_BUS_PASSWORD}
+      - Kafka__BootstrapServers__0=kafka-test:9092
+      - Kafka__SchemaRegistry__Url=kafka-schema-registry-test:8085
       - AzureServiceBusEnabled=False
       - ApplicationInsights__InstrumentationKey=${INSTRUMENTATION_KEY}
       - OrchestratorType=${ORCHESTRATOR_TYPE}

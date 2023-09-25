@@ -1,6 +1,11 @@
-﻿using Catalog.API.Infrastructure;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using System.Reflection;
+using HealthChecks.Kafka;
+using KafkaFlow.TypedHandler;
+using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
+using Microsoft.Extensions.Localization;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
+
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.Extensions;
 
 public static class Extensions
 {
@@ -9,9 +14,7 @@ public static class Extensions
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddNpgSql(_ => configuration.GetRequiredConnectionString("CatalogDB"),
-                name: "CatalogDB-check",
-                tags: new string[] { "ready" });
+            .AddDbContextCheck<CatalogContext>(name: "CatalogDB-check", tags: new string[] { "ready" });
 
         var accountName = configuration["AzureStorageAccountName"];
         var accountKey = configuration["AzureStorageAccountKey"];
@@ -36,8 +39,9 @@ public static class Extensions
 
             // Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
 
-            options.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorCodesToAdd: null);
-        };
+            options.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorCodesToAdd: null);
+        }
 
         services.AddDbContext<CatalogContext>(options =>
         {
@@ -46,18 +50,11 @@ public static class Extensions
             options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
         });
         
-        services.AddDbContext<IntegrationEventLogContext>(options =>
-        {
-            var connectionString = configuration.GetRequiredConnectionString("CatalogDB");
-
-            options.UseNpgsql(connectionString, ConfigureNpgsqlOptions);
-        });
-
-
         return services;
     }
 
-    public static IServiceCollection AddApplicationOptions(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplicationOptions(this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.Configure<CatalogSettings>(configuration);
 
@@ -83,11 +80,40 @@ public static class Extensions
         return services;
     }
 
-    public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
+    public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
-        services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
-
+        services.AddKafkaFlow(configuration, (cluster, config) =>
+        {
+            if (!config.Consumers.TryGetValue(KafkaTopics.OrderStatus, out var orderingConsumerConfig))
+            {
+                throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
+                    KafkaTopics.OrderStatus);
+            }
+            cluster.CreateTopicIfNotExists(KafkaTopics.Catalog, 3, 1);
+            cluster.AddConsumer(cb =>
+            {
+                cb.Topic(KafkaTopics.OrderStatus)
+                    .WithName($"Catalog.API-{KafkaTopics.OrderStatus}")
+                    .WithConsumerConfig(orderingConsumerConfig)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(1)
+                    .WithAutoOffsetReset(AutoOffsetReset.Earliest)
+                    .WithManualStoreOffsets();
+                cb.AddMiddlewares(m =>
+                {
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
+                    var orderingHandlerTypes = assembly.GetTypes()
+                        .Where(x => x.Namespace == $"{rootNamespace}.IntegrationEvents.EventHandling.OrderStatus")
+                        .ToArray();
+                    m.AddSchemaRegistryProtobufCustomSerializer()
+                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                            .AddHandlersFromAssemblyOf(orderingHandlerTypes)
+                            .WithHandlerLifetime(InstanceLifetime.Transient));
+                });
+            });
+        });
+        
         return services;
     }
 }

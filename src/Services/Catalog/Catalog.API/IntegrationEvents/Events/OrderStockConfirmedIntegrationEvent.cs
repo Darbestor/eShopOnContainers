@@ -1,8 +1,12 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStock;
 
-public record OrderStockConfirmedIntegrationEvent : IntegrationEvent
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
+
+public record KafkaOrderStockConfirmedIntegrationEvent : KafkaIntegrationEvent
 {
-    public int OrderId { get; }
+    public KafkaOrderStockConfirmedIntegrationEvent(int orderId)
+        : base(KafkaTopics.OrderStock, orderId.ToString(), BuildPayload(orderId),
+            Array.Empty<KeyValuePair<string, string>>()) {}
 
-    public OrderStockConfirmedIntegrationEvent(int orderId) => OrderId = orderId;
+    private static OrderStockConfirmedProto BuildPayload(int orderId) => new() { OrderId = orderId };
 }

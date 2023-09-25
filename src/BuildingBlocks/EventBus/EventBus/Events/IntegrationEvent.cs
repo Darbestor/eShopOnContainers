@@ -1,11 +1,12 @@
 ﻿namespace Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 
+[Obsolete("Old integration event used with combination of IMessageBus. KafkaIntegrationEvent should used")]
 public record IntegrationEvent
 {
     public IntegrationEvent()
     {
         Id = Guid.NewGuid();
-        CreationDate = DateTime.UtcNow;
+        CreationDate = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Utc);
     }
 
     [JsonConstructor]

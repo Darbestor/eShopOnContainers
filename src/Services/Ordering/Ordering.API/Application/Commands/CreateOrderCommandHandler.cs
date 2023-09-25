@@ -30,7 +30,7 @@ public class CreateOrderCommandHandler
     {
         // Add Integration event to clean the basket
         var orderStartedIntegrationEvent = new OrderStartedIntegrationEvent(message.UserId);
-        await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStartedIntegrationEvent);
+        _orderingIntegrationEventService.PublishEvent(orderStartedIntegrationEvent);
 
         // Add/Update the Buyer AggregateRoot
         // DDD patterns comment: Add child entities and value-objects through the Order Aggregate-Root

@@ -1,15 +1,21 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using Azure.Identity;
+using Confluent.SchemaRegistry;
+using Confluent.SchemaRegistry.Serdes;
 using HealthChecks.UI.Client;
+using KafkaFlow;
+using KafkaFlow.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusRabbitMQ;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBusServiceBus;
+using Microsoft.eShopOnContainers.Kafka.Configuration;
+using Microsoft.eShopOnContainers.Kafka.Producers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -32,9 +38,6 @@ public static class CommonExtensions
 
         // Default health checks assume the event bus and self health checks
         builder.Services.AddDefaultHealthChecks(builder.Configuration);
-
-        // Add the event bus
-        builder.Services.AddEventBus(builder.Configuration);
 
         builder.Services.AddDefaultAuthentication(builder.Configuration);
 
@@ -301,33 +304,23 @@ public static class CommonExtensions
 
         // Health check for the application itself
         hcBuilder.AddCheck("self", () => HealthCheckResult.Healthy());
+        
+        var kafkaSection = configuration.GetSection("Kafka");
 
-        // {
-        //   "EventBus": {
-        //     "ProviderName": "ServiceBus | RabbitMQ",
-        //   }
-        // }
-
-        var eventBusSection = configuration.GetSection("EventBus");
-
-        if (!eventBusSection.Exists())
+        if (!kafkaSection.Exists())
         {
             return hcBuilder;
         }
 
-        return eventBusSection["ProviderName"]?.ToLowerInvariant() switch
-        {
-            "servicebus" => hcBuilder.AddAzureServiceBusTopic(
-                    _ => configuration.GetRequiredConnectionString("EventBus"),
-                    _ => "eshop_event_bus",
-                    name: "servicebus",
-                    tags: new string[] { "ready" }),
-
-            _ => hcBuilder.AddRabbitMQ(
-                    _ => $"amqp://{configuration.GetRequiredConnectionString("EventBus")}",
-                    name: "rabbitmq",
-                    tags: new string[] { "ready" })
-        };
+        var boostrapServers = String.Join(',', kafkaSection.GetSection("BootstrapServers").GetRequired<List<string>>());
+        return hcBuilder.AddKafka(pc =>
+            {
+                pc.BootstrapServers = boostrapServers;
+            },
+            name: "kafka",
+            tags: new[] { "ready" },
+            timeout: TimeSpan.FromSeconds(5)
+        );
     }
 
     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
@@ -430,7 +423,7 @@ public static class CommonExtensions
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
         return services;
     }
-
+    
     public static void MapDefaultHealthChecks(this IEndpointRouteBuilder routes)
     {
         routes.MapHealthChecks("/hc", new HealthCheckOptions()
@@ -443,5 +436,56 @@ public static class CommonExtensions
         {
             Predicate = r => r.Name.Contains("self")
         });
+    }
+    
+    public static IServiceCollection AddKafkaFlow(this IServiceCollection services, IConfiguration configuration, Action<IClusterConfigurationBuilder, KafkaConfig> consumers)
+    {
+        var kafkaSection = configuration.GetSection("Kafka");
+
+        if (!kafkaSection.Exists())
+        {
+            return services;
+        }
+
+        KafkaConfig kafkaConfig = new();
+        kafkaSection.Bind(kafkaConfig);
+        
+        if (kafkaConfig.Producer is not null)
+        {
+            services.AddSingleton<IKafkaProducer, KafkaProducer>();
+        }
+        
+        services.AddKafka(builder =>
+        {
+            builder.UseMicrosoftLog();
+            builder.AddCluster(cluster =>
+            {
+                cluster.WithBrokers(kafkaConfig.BootstrapServers);
+              
+                cluster.WithSchemaRegistry(srb =>
+                {
+                    foreach (var (key, value) in kafkaConfig.SchemaRegistry)
+                    {
+                        srb.Set(key, value);
+                    }
+                });
+
+                if (kafkaConfig.Producer is not null)
+                {
+                    cluster.AddProducer<KafkaProducer>(pb =>
+                    {
+                        pb.WithProducerConfig(kafkaConfig.Producer);
+                        pb.AddMiddlewares(x => x.AddSchemaRegistryProtobufSerializer(
+                            new ProtobufSerializerConfig
+                            {
+                                SubjectNameStrategy = SubjectNameStrategy.TopicRecord, NormalizeSchemas = true,
+                            }));
+                    });
+                }
+                
+                consumers(cluster, kafkaConfig);
+            });
+        });
+        return services;
     }
 }

@@ -204,19 +204,16 @@ public class CatalogController : ControllerBase
         var raiseProductPriceChangedEvent = oldPrice != productToUpdate.Price;
 
         // Update current product
-        catalogItem = productToUpdate;
+        // catalogItem = productToUpdate;
+        catalogItem.Price = productToUpdate.Price;
         _catalogContext.CatalogItems.Update(catalogItem);
 
         if (raiseProductPriceChangedEvent) // Save product's data and publish integration event through the Event Bus if price has changed
         {
-            //Create Integration Event to be published through the Event Bus
-            var priceChangedEvent = new ProductPriceChangedIntegrationEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
-
-            // Achieving atomicity between original Catalog database operation and the IntegrationEventLog thanks to a local transaction
-            await _catalogIntegrationEventService.SaveEventAndCatalogContextChangesAsync(priceChangedEvent);
-
-            // Publish through the Event Bus and mark the saved event as published
-            await _catalogIntegrationEventService.PublishThroughEventBusAsync(priceChangedEvent);
+            // Create Integration Event to be published through the Event Bus
+            var evt = new KafkaProductPriceChangedIntegrationEvent(catalogItem.Id, productToUpdate.Price, oldPrice);
+            
+            await _catalogIntegrationEventService.PublishAndSaveCatalogContextAsync(evt);
         }
         else // Just save the updated product because the Product's Price hasn't changed.
         {

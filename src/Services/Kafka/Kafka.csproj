@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Microsoft.eShopOnContainers.Kafka</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.Tools">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="KafkaFlow"/>
+    <PackageReference Include="KafkaFlow.LogHandler.Microsoft"/>
+    <PackageReference Include="KafkaFlow.Microsoft.DependencyInjection"/>
+    <PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentProtobuf"/>
+    <PackageReference Include="KafkaFlow.TypedHandler"/>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Protobuf Include="Protobuf\**\*.proto">
+      <GrpcServices>None</GrpcServices>
+      <Access>Public</Access>
+      <ProtoRoot>Protobuf</ProtoRoot>
+      <ProtoCompile>True</ProtoCompile>
+      <CompileOutputs>False</CompileOutputs>
+      <OutputDir>Protobuf</OutputDir>
+      <Generator>MSBuild:Compile</Generator>
+    </Protobuf>
+    <!--      <Protobuf Include="Protobuf\IntegrationEvents\Catalog\event_catalog_product_price_changed.proto">-->
+    <!--        <Generator>MSBuild:Compile</Generator>-->
+    <!--        <GrpcServices>None</GrpcServices>-->
+    <!--        <Access>Public</Access>-->
+    <!--        <ProtoCompile>True</ProtoCompile>-->
+    <!--        <CompileOutputs>False</CompileOutputs>-->
+    <!--        <ProtoRoot>Protobuf\IntegrationEvents\Catalog</ProtoRoot>-->
+    <!--        <OutputDir>Protobuf\IntegrationEvents\Catalog</OutputDir>-->
+    <!--        <Generator>MSBuild:Compile</Generator>-->
+    <!--        <AdditionalImportDirs>Protobuf</AdditionalImportDirs>-->
+    <!--      </Protobuf>-->
+    <!--      <Protobuf Include="Protobuf\IntegrationEvents\Ordering\*.proto">-->
+    <!--        <Generator>MSBuild:Compile</Generator>-->
+    <!--        <GrpcServices>None</GrpcServices>-->
+    <!--        <Access>Public</Access>-->
+    <!--        <ProtoCompile>True</ProtoCompile>-->
+    <!--        <CompileOutputs>False</CompileOutputs>-->
+    <!--        <ProtoRoot>Protobuf\IntegrationEvents\Ordering</ProtoRoot>-->
+    <!--        <OutputDir>Protobuf\IntegrationEvents\Ordering</OutputDir>-->
+    <!--        <Generator>MSBuild:Compile</Generator>-->
+    <!--      </Protobuf>-->
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\EventBus\EventBus\EventBus.csproj"/>
+
+
+  </ItemGroup>
+
+
+</Project>

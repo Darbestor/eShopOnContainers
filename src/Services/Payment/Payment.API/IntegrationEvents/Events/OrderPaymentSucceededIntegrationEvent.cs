@@ -1,8 +1,11 @@
-﻿namespace Microsoft.eShopOnContainers.Payment.API.IntegrationEvents.Events;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderPayment;
 
-public record OrderPaymentSucceededIntegrationEvent : IntegrationEvent
+namespace Microsoft.eShopOnContainers.Payment.API.IntegrationEvents.Events;
+
+public record OrderPaymentSucceededIntegrationEvent : KafkaIntegrationEvent
 {
-    public int OrderId { get; }
-
-    public OrderPaymentSucceededIntegrationEvent(int orderId) => OrderId = orderId;
+    public OrderPaymentSucceededIntegrationEvent(int orderId) :
+        base(KafkaTopics.OrderPayment, orderId.ToString(), new OrderPaymentSucceededProto { OrderId = orderId })
+    {
+    }
 }

@@ -1,4 +1,6 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Basket.API.Model;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket;
+
+namespace Microsoft.eShopOnContainers.Services.Basket.API.Model;
 
 public class BasketItem : IValidatableObject
 {
@@ -21,4 +23,16 @@ public class BasketItem : IValidatableObject
 
         return results;
     }
+
+    public static implicit operator BasketItemProto(BasketItem item) => new()
+    {
+        Id = item.Id,
+        UnitPrice = item.UnitPrice,
+        Quantity = item.Quantity,
+        PictureUrl = item.PictureUrl,
+        ProductId = item.ProductId,
+        ProductName = item.ProductName,
+        OldUnitPrice = item.UnitPrice
+    };
+    
 }

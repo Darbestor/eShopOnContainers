@@ -1,12 +1,13 @@
-﻿namespace Ordering.BackgroundTasks.Events
+﻿using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
+using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderGracePeriod;
+
+namespace Ordering.BackgroundTasks.Events;
+
+public record GracePeriodConfirmedIntegrationEvent : KafkaIntegrationEvent
 {
-    using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
-
-    public record GracePeriodConfirmedIntegrationEvent : IntegrationEvent
+    public GracePeriodConfirmedIntegrationEvent(int orderId) :
+        base(KafkaTopics.OrderGracePeriod, orderId.ToString(),
+            new GracePeriodConfirmedProto { OrderId = orderId })
     {
-        public int OrderId { get; }
-
-        public GracePeriodConfirmedIntegrationEvent(int orderId) =>
-            OrderId = orderId;
     }
 }

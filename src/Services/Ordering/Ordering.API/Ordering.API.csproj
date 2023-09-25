@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
     <PackageReference Include="Dapper" />
     <PackageReference Include="FluentValidation.AspNetCore" />
     <PackageReference Include="Grpc.AspNetCore" />
@@ -39,6 +38,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
     <PackageReference Include="Polly" />
   </ItemGroup>
 
@@ -60,7 +60,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Infrastructure\IntegrationEventMigrations\" />
     <Folder Include="Infrastructure\Migrations\" />
   </ItemGroup>
 

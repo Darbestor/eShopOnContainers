@@ -9,23 +9,18 @@ builder.Services.AddControllers();
 builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
-builder.Services.AddIntegrationServices();
-
-builder.Services.AddTransient<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-builder.Services.AddTransient<OrderStatusChangedToPaidIntegrationEventHandler>();
+builder.Services.AddKafka(builder.Configuration);
+builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
 var app = builder.Build();
+var bus = app.Services.CreateKafkaBus();
+await bus.StartAsync();
 
 app.UseServiceDefaults();
 
 app.MapPicApi();
 app.MapControllers();
 app.MapGrpcService<CatalogService>();
-
-var eventBus = app.Services.GetRequiredService<IEventBus>();
-
-eventBus.Subscribe<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
-eventBus.Subscribe<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
 
 // REVIEW: This is done for development ease but shouldn't be here in production
 using (var scope = app.Services.CreateScope())
@@ -37,9 +32,5 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
         new CatalogContextSeed().SeedAsync(context, app.Environment, settings, logger).Wait();
     });
-    
-    var integrationEventLogContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
-    await integrationEventLogContext.Database.MigrateAsync();
 }
-
 await app.RunAsync();

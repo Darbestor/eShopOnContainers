@@ -9,6 +9,7 @@ builder.Services.AddHealthChecks(builder.Configuration);
 builder.Services.AddDbContexts(builder.Configuration);
 builder.Services.AddApplicationOptions(builder.Configuration);
 builder.Services.AddIntegrationServices();
+builder.Services.AddKafka(builder.Configuration);
 
 var services = builder.Services;
 
@@ -24,7 +25,7 @@ services.AddMediatR(cfg =>
     // executing main method
     cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
     cfg.AddOpenBehavior(typeof(ValidatorBehavior<,>));
-    cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));
+    // cfg.AddOpenBehavior(typeof(TransactionBehavior<,>));
 });
 
 // Register the command validators for the validator behavior (validators based on FluentValidation library)
@@ -38,29 +39,14 @@ services.AddScoped<IBuyerRepository, BuyerRepository>();
 services.AddScoped<IOrderRepository, OrderRepository>();
 services.AddScoped<IRequestManager, RequestManager>();
 
-// Add integration event handlers.
-services.AddTransient<IIntegrationEventHandler<GracePeriodConfirmedIntegrationEvent>, GracePeriodConfirmedIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>, OrderPaymentFailedIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>, OrderPaymentSucceededIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<OrderStockConfirmedIntegrationEvent>, OrderStockConfirmedIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>, OrderStockRejectedIntegrationEventHandler>();
-services.AddTransient<IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>, UserCheckoutAcceptedIntegrationEventHandler>();
-
 var app = builder.Build();
+var bus = app.Services.CreateKafkaBus();
+await bus.StartAsync();
 
 app.UseServiceDefaults();
 
 app.MapGrpcService<OrderingService>();
 app.MapControllers();
-
-var eventBus = app.Services.GetRequiredService<IEventBus>();
-
-eventBus.Subscribe<UserCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>>();
-eventBus.Subscribe<GracePeriodConfirmedIntegrationEvent, IIntegrationEventHandler<GracePeriodConfirmedIntegrationEvent>>();
-eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, IIntegrationEventHandler<OrderStockConfirmedIntegrationEvent>>();
-eventBus.Subscribe<OrderStockRejectedIntegrationEvent, IIntegrationEventHandler<OrderStockRejectedIntegrationEvent>>();
-eventBus.Subscribe<OrderPaymentFailedIntegrationEvent, IIntegrationEventHandler<OrderPaymentFailedIntegrationEvent>>();
-eventBus.Subscribe<OrderPaymentSucceededIntegrationEvent, IIntegrationEventHandler<OrderPaymentSucceededIntegrationEvent>>();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -71,8 +57,8 @@ using (var scope = app.Services.CreateScope())
     await context.Database.MigrateAsync();
 
     await new OrderingContextSeed().SeedAsync(context, env, settings, logger);
-    var integEventContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
-    await integEventContext.Database.MigrateAsync();
+    // var integEventContext = scope.ServiceProvider.GetRequiredService<IntegrationEventLogContext>();
+    // await integEventContext.Database.MigrateAsync();
 }
 
 await app.RunAsync();

@@ -1,27 +1,22 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
+﻿using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderPayment;
 
-public record OrderStockRejectedIntegrationEvent : IntegrationEvent
+namespace Microsoft.eShopOnContainers.Services.Catalog.API.IntegrationEvents.Events;
+
+public record KafkaOrderStockRejectedIntegrationEvent : KafkaIntegrationEvent
 {
-    public int OrderId { get; }
+    public KafkaOrderStockRejectedIntegrationEvent(int orderId, IEnumerable<ConfirmedOrderStockItemProto> stockItems)
+        : base(KafkaTopics.OrderStock, orderId.ToString(), BuildPayload(orderId, stockItems),
+            Array.Empty<KeyValuePair<string, string>>()) {}
 
-    public List<ConfirmedOrderStockItem> OrderStockItems { get; }
-
-    public OrderStockRejectedIntegrationEvent(int orderId,
-        List<ConfirmedOrderStockItem> orderStockItems)
+    private static OrderStockRejectedProto BuildPayload(int orderId,
+        IEnumerable<ConfirmedOrderStockItemProto> stockItems)
     {
-        OrderId = orderId;
-        OrderStockItems = orderStockItems;
-    }
-}
-
-public record ConfirmedOrderStockItem
-{
-    public int ProductId { get; }
-    public bool HasStock { get; }
-
-    public ConfirmedOrderStockItem(int productId, bool hasStock)
-    {
-        ProductId = productId;
-        HasStock = hasStock;
+        var proto = new OrderStockRejectedProto { OrderId = orderId };
+        proto.OrderStockItems.AddRange(stockItems.Select(x => new ConfirmedOrderStockItemProto()
+        {
+            ProductId = x.ProductId,
+            HasStock = x.HasStock
+        }));
+        return proto;
     }
 }

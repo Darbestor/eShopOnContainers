@@ -10,8 +10,13 @@ services:
   basket-data-test:
     image: redis:alpine
 
-  rabbitmq-test:
-    image: rabbitmq:3-management-alpine
+  kafka-test:
+    image: 'bitnami/kafka:latest'
+
+  kafka-schema-registry-test:
+    image: confluentinc/cp-schema-registry:7.5.0
+    depends_on:
+      - kafka-test
 
   identity-api-test:
     image: ${REGISTRY:-eshop}/identity-api-test:${TAG:-latest}
@@ -30,7 +35,7 @@ services:
     depends_on:
       - basket-data-test
       - identity-api-test
-      - rabbitmq-test
+      - kafka-schema-registry-test
     volumes:
       - ${BUILD_ARTIFACTSTAGINGDIRECTORY:-./tests-results/}:/tests
 
@@ -43,7 +48,7 @@ services:
     depends_on:
       - basket-data-test
       - identity-api-test
-      - rabbitmq-test
+      - kafka-schema-registry-test
     volumes:
       - ${BUILD_ARTIFACTSTAGINGDIRECTORY:-./tests-results/}:/tests
 
@@ -55,7 +60,7 @@ services:
       target: functionaltest
     depends_on:
       - sql-data-test
-      - rabbitmq-test
+      - kafka-schema-registry-test
     volumes:
       - ${BUILD_ARTIFACTSTAGINGDIRECTORY:-./tests-results/}:/tests
 
@@ -67,7 +72,7 @@ services:
       target: unittest
     depends_on:
       - sql-data-test
-      - rabbitmq-test
+      - kafka-schema-registry-test
     volumes:
       - ${BUILD_ARTIFACTSTAGINGDIRECTORY:-./tests-results/}:/tests
 
@@ -79,7 +84,7 @@ services:
       target: functionaltest
     depends_on:
       - sql-data-test
-      - rabbitmq-test
+      - kafka-schema-registry-test
     volumes:
       - ${BUILD_ARTIFACTSTAGINGDIRECTORY:-./tests-results/}:/tests
 
@@ -91,10 +96,9 @@ services:
       target: unittest
     depends_on:
       - sql-data-test
-      - rabbitmq-test
+      - kafka-schema-registry-test
     volumes:
       - ${BUILD_ARTIFACTSTAGINGDIRECTORY:-./tests-results/}:/tests
-
 
   payment-api-test:
     image: ${REGISTRY:-eshop}/payment-api-test:${TAG:-latest}
@@ -102,4 +106,4 @@ services:
       context: .
       dockerfile: Services/Payment/Payment.API/Dockerfile
     depends_on:
-      - rabbitmq-test
+      - kafka-schema-registry-test

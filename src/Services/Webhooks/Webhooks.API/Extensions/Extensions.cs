@@ -1,4 +1,8 @@
-﻿using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF;
+﻿using System.Reflection;
+using KafkaFlow.TypedHandler;
+using Microsoft.eShopOnContainers.BuildingBlocks.IntegrationEventLogEF;
+using Microsoft.eShopOnContainers.Kafka.KafkaFlowExtensions;
+using Microsoft.Extensions.Localization;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 internal static class Extensions
@@ -20,11 +24,6 @@ internal static class Extensions
             options.UseNpgsql(configuration.GetRequiredConnectionString("WebHooksDB"),
                 npgsqlOptionsAction: ConfigurePgOptions);
         });
-        services.AddDbContext<IntegrationEventLogContext>(options =>
-        {
-            options.UseNpgsql(configuration.GetRequiredConnectionString("WebHooksDB"),
-                npgsqlOptionsAction: ConfigurePgOptions);
-        });
         return services;
     }
 
@@ -33,8 +32,7 @@ internal static class Extensions
         var hcBuilder = services.AddHealthChecks();
 
         hcBuilder
-            .AddNpgSql(_ =>
-                configuration.GetRequiredConnectionString("WebHooksDB"),
+            .AddDbContextCheck<WebhooksContext>(
             name: "WebhooksApiDb-check",
             tags: new string[] { "ready" });
 
@@ -52,6 +50,45 @@ internal static class Extensions
 
     public static IServiceCollection AddIntegrationServices(this IServiceCollection services)
     {
-        return services.AddTransient<IIntegrationEventLogService, IntegrationEventLogService>();
+        return services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+                sp => (DbConnection c) => new IntegrationEventLogService(c));
+    }
+    
+    public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddKafkaFlow(configuration, (cluster, config) =>
+        {
+            if (!config.Consumers.TryGetValue(KafkaTopics.OrderStatus, out var orderStatusConsumerConfig))
+            {
+                throw new ArgumentException("Kafka consumer '{Name}' not found in the configuration",
+                    KafkaTopics.OrderStatus);
+            }
+
+            cluster.AddConsumer(cb =>
+            {
+                cb.Topic(KafkaTopics.OrderStatus)
+                    .WithName($"Webhooks.API-{KafkaTopics.OrderStatus}")
+                    .WithConsumerConfig(orderStatusConsumerConfig)
+                    .WithBufferSize(100)
+                    .WithWorkersCount(3)
+                    .WithAutoOffsetReset(AutoOffsetReset.Latest)
+                    .WithManualStoreOffsets();
+                cb.AddMiddlewares(m =>
+                {
+                    var assembly = Assembly.GetExecutingAssembly();
+                    var rootNamespace = assembly.GetCustomAttribute<RootNamespaceAttribute>()!.RootNamespace;
+                    var handlerTypes = assembly.GetTypes()
+                        .Where(x => x.Namespace ==
+                                    $"{rootNamespace}.IntegrationEvents.EventHandling.OrderStatus")
+                        .ToArray();
+                    m.AddSchemaRegistryProtobufCustomSerializer()
+                        .AddTypedHandlers(x => x.AddNoHandlerFoundLogging()
+                            .AddHandlersFromAssemblyOf(handlerTypes)
+                            .WithHandlerLifetime(InstanceLifetime.Transient));
+                });
+            });
+        });
+
+        return services;
     }
 }

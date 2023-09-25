@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package microsoft.eshoponcontainers.integrationevents.order.payment;
+
+option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderPayment";
+
+/* >>
+import "google/api/annotations.proto";
+<< */
+
+// Event must be at the top of a file
+message OrderStockRejectedProto {
+  int32 order_id = 1;
+  repeated ConfirmedOrderStockItemProto order_stock_items = 2;
+}
+
+message ConfirmedOrderStockItemProto {
+  int32 product_id = 1;
+  bool has_stock = 2;
+}
+

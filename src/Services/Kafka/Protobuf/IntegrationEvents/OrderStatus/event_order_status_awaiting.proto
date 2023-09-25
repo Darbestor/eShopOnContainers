@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package microsoft.eshoponcontainers.integrationevents.order.status;
+
+option csharp_namespace="Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus";
+
+/* >>
+import "google/api/annotations.proto";
+<< */
+
+import "IntegrationEvents/OrderStatus/event_ordering_common.proto";
+
+message OrderStatusChangedToAwaitingValidationProto {
+  int32 order_id = 1;
+  repeated OrderStockItemProto order_stock_items = 2;
+  string order_status = 3;
+  string buyer_name = 4;
+}

@@ -1,59 +1,51 @@
-﻿namespace Basket.API.IntegrationEvents.Events;
+﻿using Google.Protobuf.WellKnownTypes;
+using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.Basket;
 
-public record UserCheckoutAcceptedIntegrationEvent : IntegrationEvent
+namespace Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.Events;
+
+public record UserCheckoutAcceptedIntegrationEvent : KafkaIntegrationEvent
 {
-    public string UserId { get; }
-
-    public string UserName { get; }
-
-    public int OrderNumber { get; init; }
-
-    public string City { get; init; }
-
-    public string Street { get; init; }
-
-    public string State { get; init; }
-
-    public string Country { get; init; }
-
-    public string ZipCode { get; init; }
-
-    public string CardNumber { get; init; }
-
-    public string CardHolderName { get; init; }
-
-    public DateTime CardExpiration { get; init; }
-
-    public string CardSecurityNumber { get; init; }
-
-    public int CardTypeId { get; init; }
-
-    public string Buyer { get; init; }
-
-    public Guid RequestId { get; init; }
-
-    public CustomerBasket Basket { get; }
-
     public UserCheckoutAcceptedIntegrationEvent(string userId, string userName, string city, string street,
+        string state, string country, string zipCode, string cardNumber, string cardHolderName,
+        DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer, Guid requestId,
+        CustomerBasket basket) :
+        base(
+            "Basket",
+            userId,
+            BuildProto(userId, userName, city, street,
+                state, country, zipCode, cardNumber, cardHolderName,
+                cardExpiration, cardSecurityNumber, cardTypeId, buyer, requestId, basket),
+            Array.Empty<KeyValuePair<string, string>>())
+    {
+    }
+
+    private static UserCheckoutAcceptedProto BuildProto(string userId, string userName, string city,
+        string street,
         string state, string country, string zipCode, string cardNumber, string cardHolderName,
         DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer, Guid requestId,
         CustomerBasket basket)
     {
-        UserId = userId;
-        UserName = userName;
-        City = city;
-        Street = street;
-        State = state;
-        Country = country;
-        ZipCode = zipCode;
-        CardNumber = cardNumber;
-        CardHolderName = cardHolderName;
-        CardExpiration = cardExpiration;
-        CardSecurityNumber = cardSecurityNumber;
-        CardTypeId = cardTypeId;
-        Buyer = buyer;
-        Basket = basket;
-        RequestId = requestId;
+        var proto = new UserCheckoutAcceptedProto
+        {
+            UserId = userId,
+            CardExpiration = Timestamp.FromDateTime(cardExpiration.ToUniversalTime()),
+            CardNumber = cardNumber,
+            UserName = userName,
+            RequestId = requestId,
+            Buyer = buyer ?? "",
+            CardHolderName = cardHolderName,
+            CardSecurityNumber = cardSecurityNumber,
+            CardTypeId = cardTypeId,
+            City = city,
+            ZipCode = zipCode,
+            Country = country,
+            State = state,
+            Street = street,
+            Basket = basket,
+            
+        };
+
+        return proto;
     }
 
 }

@@ -1,4 +1,7 @@
-﻿namespace UnitTest.Basket.Application;
+﻿using Microsoft.eShopOnContainers.Kafka.Producers;
+using Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.Events;
+
+namespace UnitTest.Basket.Application;
 
 using Microsoft.eShopOnContainers.Services.Basket.API.Model;
 
@@ -6,14 +9,14 @@ public class BasketWebApiTest
 {
     private readonly Mock<IBasketRepository> _basketRepositoryMock;
     private readonly Mock<IBasketIdentityService> _identityServiceMock;
-    private readonly Mock<IEventBus> _serviceBusMock;
+    private readonly Mock<IKafkaProducer> _producerMock;
     private readonly Mock<ILogger<BasketController>> _loggerMock;
 
     public BasketWebApiTest()
     {
         _basketRepositoryMock = new Mock<IBasketRepository>();
         _identityServiceMock = new Mock<IBasketIdentityService>();
-        _serviceBusMock = new Mock<IEventBus>();
+        _producerMock = new Mock<IKafkaProducer>();
         _loggerMock = new Mock<ILogger<BasketController>>();
     }
 
@@ -28,14 +31,14 @@ public class BasketWebApiTest
             .Returns(Task.FromResult(fakeCustomerBasket));
         _identityServiceMock.Setup(x => x.GetUserIdentity()).Returns(fakeCustomerId);
 
-        _serviceBusMock.Setup(x => x.Publish(It.IsAny<UserCheckoutAcceptedIntegrationEvent>()));
+        _producerMock.Setup(x => x.Produce(It.IsAny<UserCheckoutAcceptedIntegrationEvent>()));
 
         //Act
         var basketController = new BasketController(
             _loggerMock.Object,
             _basketRepositoryMock.Object,
             _identityServiceMock.Object,
-            _serviceBusMock.Object);
+            _producerMock.Object);
 
         var actionResult = await basketController.GetBasketByIdAsync(fakeCustomerId);
 
@@ -54,14 +57,14 @@ public class BasketWebApiTest
         _basketRepositoryMock.Setup(x => x.UpdateBasketAsync(It.IsAny<CustomerBasket>()))
             .Returns(Task.FromResult(fakeCustomerBasket));
         _identityServiceMock.Setup(x => x.GetUserIdentity()).Returns(fakeCustomerId);
-        _serviceBusMock.Setup(x => x.Publish(It.IsAny<UserCheckoutAcceptedIntegrationEvent>()));
-
+        _producerMock.Setup(x => x.Produce(It.IsAny<UserCheckoutAcceptedIntegrationEvent>()));
+        
         //Act
         var basketController = new BasketController(
             _loggerMock.Object,
             _basketRepositoryMock.Object,
             _identityServiceMock.Object,
-            _serviceBusMock.Object);
+            _producerMock.Object);
 
         var actionResult = await basketController.UpdateBasketAsync(fakeCustomerBasket);
 
@@ -83,7 +86,7 @@ public class BasketWebApiTest
             _loggerMock.Object,
             _basketRepositoryMock.Object,
             _identityServiceMock.Object,
-            _serviceBusMock.Object);
+            _producerMock.Object);
 
         var result = await basketController.CheckoutAsync(new BasketCheckout(), Guid.NewGuid().ToString()) as BadRequestResult;
         Assert.NotNull(result);
@@ -104,7 +107,7 @@ public class BasketWebApiTest
             _loggerMock.Object,
             _basketRepositoryMock.Object,
             _identityServiceMock.Object,
-            _serviceBusMock.Object);
+            _producerMock.Object);
 
         basketController.ControllerContext = new ControllerContext()
         {
@@ -122,7 +125,7 @@ public class BasketWebApiTest
         //Act
         var result = await basketController.CheckoutAsync(new BasketCheckout(), Guid.NewGuid().ToString()) as AcceptedResult;
 
-        _serviceBusMock.Verify(mock => mock.Publish(It.IsAny<UserCheckoutAcceptedIntegrationEvent>()), Times.Once);
+        _producerMock.Verify(x => x.Produce(It.IsAny<UserCheckoutAcceptedIntegrationEvent>()), Times.Once);
 
         Assert.NotNull(result);
     }

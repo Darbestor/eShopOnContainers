@@ -1,4 +1,7 @@
-﻿namespace Microsoft.eShopOnContainers.Services.Basket.API.Controllers;
+﻿using Microsoft.eShopOnContainers.Kafka.Producers;
+using Microsoft.eShopOnContainers.Services.Basket.API.IntegrationEvents.Events;
+
+namespace Microsoft.eShopOnContainers.Services.Basket.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [Authorize]
@@ -7,19 +10,19 @@ public class BasketController : ControllerBase
 {
     private readonly IBasketRepository _repository;
     private readonly IIdentityService _identityService;
-    private readonly IEventBus _eventBus;
+    private readonly IKafkaProducer _producer;
     private readonly ILogger<BasketController> _logger;
 
     public BasketController(
         ILogger<BasketController> logger,
         IBasketRepository repository,
         IIdentityService identityService,
-        IEventBus eventBus)
+        IKafkaProducer producer)
     {
         _logger = logger;
         _repository = repository;
         _identityService = identityService;
-        _eventBus = eventBus;
+        _producer = producer;
     }
 
     [HttpGet("{id}")]
@@ -65,11 +68,11 @@ public class BasketController : ControllerBase
         // order creation process
         try
         {
-            _eventBus.Publish(eventMessage);
+            _producer.Produce(eventMessage);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error Publishing integration event: {IntegrationEventId}", eventMessage.Id);
+            _logger.LogError(ex, "Error Publishing integration event: {IntegrationEventId}", eventMessage.Key);
 
             throw;
         }

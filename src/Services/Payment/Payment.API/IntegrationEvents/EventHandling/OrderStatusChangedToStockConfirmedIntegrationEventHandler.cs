@@ -1,54 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.eShopOnContainers.Kafka.Consumers;
+using Microsoft.eShopOnContainers.Kafka.Producers;
+using Microsoft.eShopOnContainers.Services.Kafka.Protobuf.IntegrationEvents.OrderStatus;
 
 namespace Microsoft.eShopOnContainers.Payment.API.IntegrationEvents.EventHandling;
 
 public class OrderStatusChangedToStockConfirmedIntegrationEventHandler :
-    IIntegrationEventHandler<OrderStatusChangedToStockConfirmedIntegrationEvent>
+    KafkaConsumerEventHandler<OrderStatusChangedToStockConfirmedProto>
 {
-    private readonly IEventBus _eventBus;
     private readonly PaymentSettings _settings;
+    private readonly IKafkaProducer _producer;
     private readonly ILogger<OrderStatusChangedToStockConfirmedIntegrationEventHandler> _logger;
 
     public OrderStatusChangedToStockConfirmedIntegrationEventHandler(
-        IEventBus eventBus,
+        IKafkaProducer producer,
         IOptionsSnapshot<PaymentSettings> settings,
         ILogger<OrderStatusChangedToStockConfirmedIntegrationEventHandler> logger)
+        : base(logger)
     {
-        _eventBus = eventBus;
         _settings = settings.Value;
-        _logger = logger ?? throw new System.ArgumentNullException(nameof(logger));
+        _producer = producer;
+        _logger = logger;
 
         _logger.LogTrace("PaymentSettings: {@PaymentSettings}", _settings);
     }
 
-    public async Task Handle(OrderStatusChangedToStockConfirmedIntegrationEvent @event)
+    protected override async Task HandleInternal(IMessageContext context,
+        OrderStatusChangedToStockConfirmedProto @event)
     {
-        using (_logger.BeginScope(new List<KeyValuePair<string, object>> { new ("IntegrationEventContext", @event.Id) }))
+        KafkaIntegrationEvent orderPaymentIntegrationEvent;
+
+        //Business feature comment:
+        // When OrderStatusChangedToStockConfirmed Integration Event is handled.
+        // Here we're simulating that we'd be performing the payment against any payment gateway
+        // Instead of a real payment we just take the env. var to simulate the payment 
+        // The payment can be successful or it can fail
+
+        if (_settings.PaymentSucceeded)
         {
-            _logger.LogInformation("Handling integration event: {IntegrationEventId} - ({@IntegrationEvent})", @event.Id, @event);
-
-            IntegrationEvent orderPaymentIntegrationEvent;
-
-            //Business feature comment:
-            // When OrderStatusChangedToStockConfirmed Integration Event is handled.
-            // Here we're simulating that we'd be performing the payment against any payment gateway
-            // Instead of a real payment we just take the env. var to simulate the payment 
-            // The payment can be successful or it can fail
-
-            if (_settings.PaymentSucceeded)
-            {
-                orderPaymentIntegrationEvent = new OrderPaymentSucceededIntegrationEvent(@event.OrderId);
-            }
-            else
-            {
-                orderPaymentIntegrationEvent = new OrderPaymentFailedIntegrationEvent(@event.OrderId);
-            }
-
-            _logger.LogInformation("Publishing integration event: {IntegrationEventId} - ({@IntegrationEvent})", orderPaymentIntegrationEvent.Id, orderPaymentIntegrationEvent);
-
-            _eventBus.Publish(orderPaymentIntegrationEvent);
-
-            await Task.CompletedTask;
+            orderPaymentIntegrationEvent = new OrderPaymentSucceededIntegrationEvent(@event.OrderId);
         }
+        else
+        {
+            orderPaymentIntegrationEvent = new OrderPaymentFailedIntegrationEvent(@event.OrderId);
+        }
+
+        _producer.Produce(orderPaymentIntegrationEvent);
+
+        await Task.CompletedTask;
     }
 }
